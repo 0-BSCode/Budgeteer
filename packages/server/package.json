@@ -1,6 +1,9 @@
 {
   "name": "@budgeteer/server",
   "module": "index.ts",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -8,7 +11,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@budgeteer/types": "workspace:*"
+    "@budgeteer/types": "workspace:*",
+    "hono": "^4.6.9"
   },
   "type": "module"
 }
