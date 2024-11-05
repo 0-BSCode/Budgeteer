@@ -2,16 +2,19 @@
   "name": "@budgeteer/server",
   "module": "src/index.ts",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "lint": "eslint --fix src"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "eslint": "^9.14.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@budgeteer/types": "workspace:*",
+    "@hono/eslint-config": "^1.0.2",
     "hono": "^4.6.9"
   },
   "type": "module"
