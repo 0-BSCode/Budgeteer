@@ -3,7 +3,13 @@
   "module": "server/index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@eslint/js": "^9.14.0",
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "eslint": "^9.14.0",
+    "globals": "^15.12.0",
+    "typescript-eslint": "^8.13.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
