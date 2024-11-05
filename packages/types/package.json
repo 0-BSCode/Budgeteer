@@ -1,6 +1,6 @@
 {
   "name": "@budgeteer/types",
-  "module": "index.ts",
+  "module": "server/index.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
