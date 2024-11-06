@@ -4,11 +4,17 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "lint": "eslint --fix",
-    "format": "prettier --write \"**/*.+(js|ts|json)\""
+    "format": "prettier --write \"**/*.+(js|ts|json)\"",
+    "drizzle:generate": "drizzle-kit generate --config=\"./src/infrastructure/typeorm-data-service/drizzle.config.ts\"",
+    "drizzle:migrate": "drizzle-kit migrate --config=\"./src/infrastructure/typeorm-data-service/drizzle.config.ts\"",
+    "drizzle:push": "drizzle-kit push --config=\"./src/infrastructure/typeorm-data-service/drizzle.config.ts\""
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "eslint": "^8"
+    "@types/pg": "^8.11.10",
+    "drizzle-kit": "^0.27.1",
+    "eslint": "^8",
+    "tsx": "^4.19.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -16,7 +22,10 @@
   "dependencies": {
     "@budgeteer/types": "workspace:*",
     "@hono/eslint-config": "^1.0.2",
-    "hono": "^4.6.9"
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.36.0",
+    "hono": "^4.6.9",
+    "pg": "^8.13.1"
   },
   "type": "module"
 }

@@ -31,7 +31,10 @@
     "types:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/types/src/**/*.ts",
     "types:format": "prettier --write ./packages/types/src/**/*.ts|json",
     "db:up": "docker-compose -f .docker-compose.dev.yml up -d",
-    "db:down": "docker-compose -f .docker-compose.dev.yml down"
+    "db:down": "docker-compose -f .docker-compose.dev.yml down",
+    "db:migration-generate": "bun run --cwd=\"packages/server\" drizzle:generate",
+    "db:migration-migrate": "bun run --cwd=\"packages/server\" drizzle:migrate",
+    "db:migration-push": "bun run --cwd=\"packages/server\" drizzle:push"
   },
   "workspaces": [
     "packages/*"
