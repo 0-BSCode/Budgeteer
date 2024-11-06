@@ -34,7 +34,11 @@
     "db:down": "docker-compose -f .docker-compose.dev.yml down",
     "db:migration-generate": "bun run --cwd=\"packages/server\" drizzle:generate",
     "db:migration-migrate": "bun run --cwd=\"packages/server\" drizzle:migrate",
-    "db:migration-push": "bun run --cwd=\"packages/server\" drizzle:push"
+    "db:migration-push": "bun run --cwd=\"packages/server\" drizzle:push",
+    "client:dev": "bun run --cwd=\"packages/client\" dev",
+    "client:start": "bun run --cwd=\"packages/client\" start",
+    "server:dev": "bun run --cwd=\"packages/server\" dev",
+    "server:start": "bun run --cwd=\"packages/server\" start"
   },
   "workspaces": [
     "packages/*"
