@@ -24,11 +24,11 @@
   "scripts": {
     "prepare": "husky",
     "server:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/server/src/**/*.ts",
-    "server:format": "prettier --write ./packages/server/src/**/*.ts",
+    "server:format": "prettier --write ./packages/server/src/**/*.{ts|json}",
     "client:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/client/src/**/*.{ts,tsx}",
-    "client:format": "prettier --write ./packages/client/src/**/*.{ts,tsx,css,html,json}",
+    "client:format": "prettier --write ./packages/client/src/**/*.{ts|tsx|css|html|json}",
     "types:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/types/src/**/*.ts",
-    "types:format": "prettier --write ./packages/types/src/**/*.ts"
+    "types:format": "prettier --write ./packages/types/src/**/*.ts|json"
   },
   "workspaces": [
     "packages/*"
