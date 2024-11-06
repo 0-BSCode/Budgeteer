@@ -7,7 +7,8 @@
     "commitizen": "^4.3.1",
     "eslint": "^8",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.1.6"
+    "husky": "^9.1.6",
+    "prettier": "^3.3.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -16,7 +17,13 @@
     "packages/*"
   ],
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "server:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/server/src/**/*.ts",
+    "server:format": "prettier --write ./packages/server/src/**/*.ts",
+    "client:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/client/src/**/*.{ts,tsx}",
+    "client:format": "prettier --write ./packages/client/src/**/*.{ts,tsx,css,html,json}",
+    "types:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/types/src/**/*.ts",
+    "types:format": "prettier --write ./packages/types/src/**/*.ts"
   },
   "dependencies": {
     "@commitlint/cli": "^19.5.0",
