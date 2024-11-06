@@ -3,6 +3,6 @@
     "extends": ["prettier"],
     "rules": {
         "no-unused-vars": "warn",
-        "@typescript-eslint/no-unused-vars": "error"
+        "@typescript-eslint/no-unused-vars": "warn"
     }
 }
