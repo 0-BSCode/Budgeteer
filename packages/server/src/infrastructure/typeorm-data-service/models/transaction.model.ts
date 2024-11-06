@@ -3,7 +3,7 @@ import { enumToPgEnum } from "../utils/enumToPgEnum"
 import { TransactionTypeEnum } from "@budgeteer/types"
 
 const DESCRIPTION_LENGTH = 255
-const transactionTypeEnum = pgEnum("transaction_type", enumToPgEnum(TransactionTypeEnum))
+export const transactionTypeEnum = pgEnum("transaction_type", enumToPgEnum(TransactionTypeEnum))
 
 export const transactionsTable = pgTable("transactions", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
