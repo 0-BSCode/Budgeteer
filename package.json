@@ -1,8 +1,14 @@
 {
   "name": "budgeteer-monorepo",
   "version": "1.0.0",
-  "private": true,
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@types/bun": "latest",
     "commitizen": "^4.3.1",
     "eslint": "^8",
@@ -14,9 +20,7 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "private": true,
   "scripts": {
     "prepare": "husky",
     "server:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/server/src/**/*.ts",
@@ -26,15 +30,7 @@
     "types:lint": "eslint --no-error-on-unmatched-pattern --fix ./packages/types/src/**/*.ts",
     "types:format": "prettier --write ./packages/types/src/**/*.ts"
   },
-  "dependencies": {
-    "@commitlint/cli": "^19.5.0",
-    "@commitlint/config-conventional": "^19.5.0",
-    "@typescript-eslint/eslint-plugin": "^8.13.0",
-    "@typescript-eslint/parser": "^8.13.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }
