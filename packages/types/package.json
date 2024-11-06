@@ -1,6 +1,6 @@
 {
   "name": "@budgeteer/types",
-  "module": "server/index.ts",
+  "module": "src/index.ts",
   "type": "module",
   "scripts": {
     "lint": "eslint --fix",
