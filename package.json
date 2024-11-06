@@ -5,7 +5,8 @@
   "devDependencies": {
     "@types/bun": "latest",
     "commitizen": "^4.3.1",
-    "husky": "^9.1.6"
+    "husky": "^9.1.6",
+    "eslint": "^8"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
