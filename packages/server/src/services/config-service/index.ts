@@ -24,4 +24,4 @@ function loadEnvConfig() {
   return config
 }
 
-export const envConfig = Object.freeze(loadEnvConfig())
+export const ConfigService = Object.freeze(loadEnvConfig())
