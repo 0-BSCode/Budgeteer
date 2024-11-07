@@ -6,6 +6,7 @@ export * from './src/entities/transactions/transaction-update.dto';
 
 // Abstracts
 export * from './src/abstracts/repositories/transaction-repository.abstract';
+export * from './src/abstracts/services/data-service.abstract';
 
 // Enums
 export * from './src/enums/node-env.enum';
