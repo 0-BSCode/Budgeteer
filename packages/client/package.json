@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.+(jsx|tsx|js|ts|json|html|css)\""
+    "format": "prettier --write \"./src/**/*.+(jsx|tsx|js|ts|json|html|css)\""
   },
   "dependencies": {
     "react": "^18",
