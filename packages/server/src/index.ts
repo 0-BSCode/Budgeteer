@@ -1,9 +1,9 @@
 import { Hono } from "hono"
-import authorApp from "./routes/transaction.route"
+import transactionApi from "./router/transactions/transactions.router"
 
 const app = new Hono()
 app.get("/", c => c.text("OK!"))
 
-app.route("/api/transaction", authorApp)
+app.route("/api/transactions", transactionApi)
 
 export default app
