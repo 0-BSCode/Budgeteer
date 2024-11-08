@@ -12,6 +12,11 @@ export const transactionRepository: ITransactionRepository = {
   async findById(id: number): Promise<TransactionDto | null> {
     const records = await db.select().from(transactionsTable).where(eq(transactionsTable.id, id))
     const record: SelectTransaction = records[0]
+
+    if (!record) {
+      return null
+    }
+
     return this.convertToDto(record)
   },
   async create(dto: TransactionCreateDto): Promise<TransactionDto> {
