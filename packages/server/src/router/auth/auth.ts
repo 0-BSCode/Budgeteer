@@ -21,6 +21,7 @@ const authRequestSchema = z.object({
 auth.post("/register", zValidator("json", authRequestSchema), async c => {
   const { username, password } = c.req.valid("json")
 
+  // Username must be unique
   if (await userRepository.findByUsername(username)) {
     return c.json({ msg: `User with name ${username} already exists!` }, 400)
   }
@@ -48,11 +49,11 @@ auth.post("/login", zValidator("json", authRequestSchema), async c => {
     return c.json({ msg: `User with name ${username} not found!` }, 400)
   }
 
-  const { id } = queriedUserDetails
-
   if (!compareSync(password, queriedUserDetails.password)) {
     return c.json({ msg: "Incorrect password. Please try again!" }, 400)
   }
+
+  const { id } = queriedUserDetails
 
   const token = await sign(
     {

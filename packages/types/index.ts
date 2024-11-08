@@ -5,6 +5,7 @@ export * from "./src/entities/transactions/transaction-create.dto"
 export * from "./src/entities/transactions/transaction-update.dto"
 export * from "./src/entities/users/user-create.dto"
 export * from "./src/entities/users/user.dto"
+export * from "./src/entities/users/user-update.dto"
 
 // Abstracts
 export * from "./src/abstracts/repositories/user-repository.abstract"
