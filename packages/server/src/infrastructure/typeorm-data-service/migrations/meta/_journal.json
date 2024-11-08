@@ -15,6 +15,13 @@
       "when": 1730992607260,
       "tag": "0001_public_retro_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731045500194,
+      "tag": "0002_nosy_carmella_unuscione",
+      "breakpoints": true
     }
   ]
 }

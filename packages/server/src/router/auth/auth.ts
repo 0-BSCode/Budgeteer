@@ -9,4 +9,4 @@ auth.post("/login", c => c.json("list authors"))
 
 auth.post("/register", c => c.json("create an author", 201))
 
-export default auth
+// export default auth

@@ -1,14 +1,9 @@
 import { Hono } from "hono"
-import { db } from "./infrastructure/typeorm-data-service"
-import { transactionsTable } from "./infrastructure/typeorm-data-service/models/transaction.model"
+import auth from "./services/auth-service"
 
 const app = new Hono()
 app.get("/", c => c.text("Hello Bun!"))
 
-app.use("/test", async c => {
-  const users = await db.select().from(transactionsTable)
-
-  return c.json({ users }, 200)
-})
+app.route("/", auth)
 
 export default app
