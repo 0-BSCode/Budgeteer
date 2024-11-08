@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "start": "bun src/index.ts",
-    "lint": "eslint --fix",
-    "format": "prettier --write \"**/*.+(js|ts|json)\"",
+    "lint": "eslint --fix --no-error-on-unmatched-pattern ./src/**/*.ts",
+    "format": "prettier --write \"**/*.+(ts|json)\"",
     "drizzle:generate": "drizzle-kit generate --config=\"./src/infrastructure/typeorm-data-service/drizzle.config.ts\"",
     "drizzle:migrate": "drizzle-kit migrate --config=\"./src/infrastructure/typeorm-data-service/drizzle.config.ts\"",
     "drizzle:push": "drizzle-kit push --config=\"./src/infrastructure/typeorm-data-service/drizzle.config.ts\""

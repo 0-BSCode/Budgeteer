@@ -3,8 +3,8 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "lint": "eslint --fix",
-    "format": "prettier --write \"**/*.+(js|ts|json)"
+    "lint": "eslint --fix --no-error-on-unmatched-pattern ./src/**/*.ts",
+    "format": "prettier --write \"**/*.+(ts|json)\""
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
