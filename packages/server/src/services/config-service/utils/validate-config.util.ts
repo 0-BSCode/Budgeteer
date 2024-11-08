@@ -1,7 +1,15 @@
 import { type ConfigDto } from "@budgeteer/types"
 
 export const isConfigValid = (config: Partial<ConfigDto>): boolean => {
-  const requiredFields: (keyof ConfigDto)[] = ["NODE_ENV", "DB_DB", "DB_HOST", "DB_PASSWORD", "DB_PORT", "DB_USER"]
+  const requiredFields: (keyof ConfigDto)[] = [
+    "NODE_ENV",
+    "DB_DB",
+    "DB_HOST",
+    "DB_PASSWORD",
+    "DB_PORT",
+    "DB_USER",
+    "JWT_SECRET",
+  ]
 
   for (const field of requiredFields) {
     if (!(field in config)) {

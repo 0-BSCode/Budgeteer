@@ -15,6 +15,7 @@ function loadEnvConfig() {
     DB_DB: process.env["POSTGRES_DB"],
     DB_HOST: process.env["POSTGRES_HOST"],
     DB_PORT: Number(process.env["DB_PORT"]),
+    JWT_SECRET: process.env["JWT_SECRET"],
   }
 
   if (!isConfigValid(config)) {

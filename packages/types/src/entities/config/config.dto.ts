@@ -7,4 +7,5 @@ export type ConfigDto = {
   DB_DB: string
   DB_HOST: string
   DB_PORT: number
+  JWT_SECRET: string
 }
