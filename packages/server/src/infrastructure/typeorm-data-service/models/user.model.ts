@@ -1,9 +1,6 @@
-import { integer, pgTable, varchar, date, pgEnum } from "drizzle-orm/pg-core"
-import { enumToPgEnum } from "../utils/enumToPgEnum"
-import { TransactionTypeEnum } from "@budgeteer/types"
+import { integer, pgTable, varchar, date } from "drizzle-orm/pg-core"
 
 const MAX_VARCHAR_LENGTH = 255
-export const transactionTypeEnum = pgEnum("transaction_type", enumToPgEnum(TransactionTypeEnum))
 
 export const usersTable = pgTable("users", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
