@@ -4,10 +4,8 @@ import { zValidator } from "@hono/zod-validator"
 import { z } from "zod"
 import { genSaltSync, hashSync, compareSync } from "bcrypt"
 import { envConfig } from "~/services/config-service"
-import { db } from "~/infrastructure/typeorm-data-service"
-import { usersTable } from "~/infrastructure/typeorm-data-service/models/user.model"
-import { eq } from "drizzle-orm"
 import type { SignatureKey } from "hono/utils/jwt/jws"
+import { userRepository } from "~/infrastructure/typeorm-data-service/repositories/user.repository"
 
 const auth = new Hono().basePath("/auth")
 
@@ -23,10 +21,14 @@ const authRequestSchema = z.object({
 auth.post("/register", zValidator("json", authRequestSchema), async c => {
   const { username, password } = c.req.valid("json")
 
+  if (await userRepository.findByUsername(username)) {
+    return c.json({ msg: `User with name ${username} already exists!` }, 400)
+  }
+
   const salt = genSaltSync()
   const hashedPassword = hashSync(password, salt)
 
-  const newUser = await db.insert(usersTable).values({ username, password: hashedPassword, profile_picture: "" })
+  const newUser = await userRepository.create({ username, password: hashedPassword })
 
   return c.json(
     {
@@ -40,15 +42,15 @@ auth.post("/register", zValidator("json", authRequestSchema), async c => {
 auth.post("/login", zValidator("json", authRequestSchema), async c => {
   const { username, password } = c.req.valid("json")
 
-  const queriedUserDetails = await db.select().from(usersTable).where(eq(usersTable.username, username))
+  const queriedUserDetails = await userRepository.findByUsername(username)
 
-  if (queriedUserDetails.length === 0) {
+  if (!queriedUserDetails) {
     return c.json({ msg: `User with name ${username} not found!` }, 400)
   }
 
-  const { id } = queriedUserDetails[0]
+  const { id } = queriedUserDetails
 
-  if (!compareSync(password, queriedUserDetails[0].password)) {
+  if (!compareSync(password, queriedUserDetails.password)) {
     return c.json({ msg: "Incorrect password. Please try again!" }, 400)
   }
 
@@ -70,25 +72,5 @@ auth.post("/login", zValidator("json", authRequestSchema), async c => {
     200,
   )
 })
-
-// // JWT middleware
-// const jwtMiddleware = jwt({
-//   secret: envConfig.JWT_SECRET || "",
-// })
-
-// // Protected route to find user
-// auth.get("/user", jwtMiddleware, async c => {
-//   const { id } = c.get("jwtPayload")
-
-//   const user = User.findUserById(id)
-//   if (!user) {
-//     return c.json({ msg: `User with ID ${id} not found!` }, 404)
-//   }
-
-//   return c.json({
-//     msg: "Successfully found user",
-//     data: user,
-//   })
-// })
 
 export default auth

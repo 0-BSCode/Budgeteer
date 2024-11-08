@@ -1,3 +1,4 @@
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import { integer, pgTable, varchar, date } from "drizzle-orm/pg-core"
 
 const MAX_VARCHAR_LENGTH = 255
@@ -10,3 +11,6 @@ export const usersTable = pgTable("users", {
   profile_picture: varchar({ length: MAX_VARCHAR_LENGTH }).notNull(),
   createdAt: date().defaultNow().notNull(),
 })
+
+export type SelectUser = InferSelectModel<typeof usersTable>
+export type InsertUser = InferInsertModel<typeof usersTable>
