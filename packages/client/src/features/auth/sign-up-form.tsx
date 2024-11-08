@@ -54,7 +54,7 @@ export function SignUpForm({ className }: SignUpFormProps) {
           </div>
           <Button disabled={isLoading}>
             {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-            Log In
+            Sign Up
           </Button>
         </div>
       </form>
