@@ -1,5 +1,5 @@
 {
-  "id": "876247cb-e5d1-445c-bcc1-ef02d715fdbb",
+  "id": "55f3e1de-52e1-4f48-9238-a03cca673fc3",
   "prevId": "818f7890-3aa9-4283-9fcf-5ce75c898721",
   "version": "7",
   "dialect": "postgresql",
@@ -90,6 +90,12 @@
             "cycle": false
           }
         },
+        "username": {
+          "name": "username",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "password": {
           "name": "password",
           "type": "varchar(255)",
@@ -113,7 +119,13 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "nullsNotDistinct": false,
+          "columns": ["username"]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
