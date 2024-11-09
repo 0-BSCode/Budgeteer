@@ -11,6 +11,8 @@ export * from "./src/entities/users/user-update.dto"
 // Abstracts
 export * from "./src/abstracts/repositories/user-repository.abstract"
 export * from "./src/abstracts/services/data-service.abstract"
+export * from "./src/abstracts/use-cases/users-use-cases"
+export * from "./src/abstracts/use-cases/auth-use-cases"
 
 // Enums
 export * from "./src/enums/node-env.enum"
