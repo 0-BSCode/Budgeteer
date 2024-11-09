@@ -1,5 +1,5 @@
 {
-  "id": "55f3e1de-52e1-4f48-9238-a03cca673fc3",
+  "id": "f6fb30a7-3105-4de2-a840-1a146fe00e19",
   "prevId": "818f7890-3aa9-4283-9fcf-5ce75c898721",
   "version": "7",
   "dialect": "postgresql",
@@ -106,7 +106,8 @@
           "name": "profile_picture",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "''"
         },
         "createdAt": {
           "name": "createdAt",
