@@ -4,7 +4,7 @@ import type { TransactionUpdateDto } from "~/entities/transactions/transaction-u
 import type { TransactionDto } from "~/entities/transactions/transaction.dto"
 
 export type ITransactionUseCases = {
-  create: (dto: TransactionCreateDto) => Promise<ResponseDto<TransactionDto | null>>
+  create: (dto: TransactionCreateDto) => Promise<ResponseDto<TransactionDto>>
   findById: (id: number) => Promise<ResponseDto<TransactionDto>>
   update: (id: number, dto: TransactionUpdateDto) => Promise<ResponseDto<TransactionDto>>
   delete: (id: number) => Promise<ResponseDto<null>>

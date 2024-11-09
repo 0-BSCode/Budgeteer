@@ -6,23 +6,22 @@ import {
   HttpStatusEnum,
   type TransactionUpdateDto,
 } from "@budgeteer/types"
+import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
 
 export const TransactionUseCases: ITransactionUseCases = {
-  async findById(id: number): Promise<ResponseDto<TransactionDto | null>> {
+  async findById(id: number): Promise<ResponseDto<TransactionDto>> {
     const transaction = await DataService.transactions.findById(id)
 
-    const response: ResponseDto<TransactionDto | null> = {
-      status: HttpStatusEnum.NOT_FOUND,
-      data: null,
-    }
     if (!transaction) {
-      response.message = "Transaction not found"
-      return response
+      throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "Transaction not found" })
     }
 
-    response.status = HttpStatusEnum.OK
-    response.data = transaction
+    const response: ResponseDto<TransactionDto> = {
+      status: HttpStatusEnum.OK,
+      data: transaction,
+    }
+
     return response
   },
   // TODO: Error handling
@@ -36,17 +35,11 @@ export const TransactionUseCases: ITransactionUseCases = {
       }
       return response
     } catch (e) {
-      const response: ResponseDto<null> = {
-        status: HttpStatusEnum.INTERNAL_SERVER_ERROR,
-        data: null,
-      }
       if (e instanceof Error) {
-        response.message = e.message
-        return response
+        throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
       }
 
-      response.message = "Unknown error"
-      return response
+      throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to create transaction" })
     }
   },
   async update(id: number, dto: TransactionUpdateDto): Promise<ResponseDto<TransactionDto | null>> {
@@ -62,18 +55,11 @@ export const TransactionUseCases: ITransactionUseCases = {
 
       return response
     } catch (e) {
-      const response: ResponseDto<null> = {
-        status: HttpStatusEnum.INTERNAL_SERVER_ERROR,
-        data: null,
-      }
-
       if (e instanceof Error) {
-        response.message = e.message
-        return response
+        throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
       }
 
-      response.message = "Unknown error"
-      return response
+      throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to update transaction" })
     }
   },
   async delete(id: number): Promise<ResponseDto<null>> {
@@ -89,18 +75,11 @@ export const TransactionUseCases: ITransactionUseCases = {
 
       return response
     } catch (e) {
-      const response: ResponseDto<null> = {
-        status: HttpStatusEnum.INTERNAL_SERVER_ERROR,
-        data: null,
-      }
-
       if (e instanceof Error) {
-        response.message = e.message
-        return response
+        throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
       }
 
-      response.message = "Unknown error"
-      return response
+      throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to delete transaction" })
     }
   },
 }
