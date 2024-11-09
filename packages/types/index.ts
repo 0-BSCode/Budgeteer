@@ -20,4 +20,4 @@ export * from './src/enums/transaction-type.enum';
 export * from './src/enums/http-status.enum';
 
 // Constants
-export * from './src/constants/max-description-length';
+export * from './src/constants/db.constants';
