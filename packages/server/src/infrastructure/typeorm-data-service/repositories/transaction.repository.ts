@@ -1,12 +1,23 @@
-import type {
-  ITransactionRepository,
-  TransactionDto,
-  TransactionCreateDto,
-  TransactionUpdateDto,
+import {
+  type ITransactionRepository,
+  type TransactionDto,
+  type TransactionCreateDto,
+  type TransactionUpdateDto,
+  TransactionTypeEnum,
 } from "@budgeteer/types"
 import { db } from ".."
 import { transactionsTable, type InsertTransaction, type SelectTransaction } from "../models/transaction.model"
 import { eq } from "drizzle-orm"
+import { z } from "zod"
+
+const validateTransactionSchema = z.object({
+  id: z.number(),
+  description: z.string(),
+  type: z.nativeEnum(TransactionTypeEnum),
+  amount: z.number(),
+  createdAt: z.union([z.date(), z.string()]),
+  updatedAt: z.union([z.date(), z.string()]),
+})
 
 export const transactionRepository: ITransactionRepository = {
   async findById(id: number): Promise<TransactionDto | null> {
@@ -45,7 +56,8 @@ export const transactionRepository: ITransactionRepository = {
     await db.delete(transactionsTable).where(eq(transactionsTable.id, id))
   },
   convertToDto(data: unknown): TransactionDto {
-    const transactionData = data as SelectTransaction
+    const transactionData = validateTransactionSchema.parse(data)
+
     return {
       id: transactionData.id,
       description: transactionData.description,
