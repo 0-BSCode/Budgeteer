@@ -18,3 +18,6 @@ export * from './src/abstracts/services/data-service.abstract';
 export * from './src/enums/node-env.enum';
 export * from './src/enums/transaction-type.enum';
 export * from './src/enums/http-status.enum';
+
+// Constants
+export * from './src/constants/max-description-length';
