@@ -5,6 +5,9 @@ import {
   type TransactionCreateDto,
   HttpStatusEnum,
   type TransactionUpdateDto,
+  TransactionTypeEnum,
+  ExpenseCategoryEnum,
+  IncomeCategoryEnum,
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
@@ -24,9 +27,15 @@ export const TransactionUseCases: ITransactionUseCases = {
 
     return response
   },
-  // TODO: Error handling
   async create(dto: TransactionCreateDto): Promise<ResponseDto<TransactionDto | null>> {
     try {
+      if (
+        (dto.type === TransactionTypeEnum.EXPENSE && !Object.values(ExpenseCategoryEnum).includes(dto.category)) ||
+        (dto.type === TransactionTypeEnum.INCOME && !Object.values(IncomeCategoryEnum).includes(dto.category))
+      ) {
+        throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `Invalid category for type ${dto.type}` })
+      }
+
       const transaction = await DataService.transactions.create(dto)
 
       const response: ResponseDto<TransactionDto> = {
