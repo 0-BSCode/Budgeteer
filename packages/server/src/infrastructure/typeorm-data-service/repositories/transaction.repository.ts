@@ -4,6 +4,8 @@ import {
   type TransactionCreateDto,
   type TransactionUpdateDto,
   TransactionTypeEnum,
+  IncomeCategoryEnum,
+  ExpenseCategoryEnum,
 } from "@budgeteer/types"
 import { db } from ".."
 import { transactionsTable, type InsertTransaction, type SelectTransaction } from "../models/transaction.model"
@@ -14,6 +16,7 @@ const validateTransactionSchema = z.object({
   id: z.number(),
   description: z.string(),
   type: z.nativeEnum(TransactionTypeEnum),
+  category: z.union([z.nativeEnum(IncomeCategoryEnum), z.nativeEnum(ExpenseCategoryEnum)]),
   amount: z.number(),
   createdAt: z.union([z.date(), z.string()]),
   updatedAt: z.union([z.date(), z.string()]),
@@ -35,6 +38,7 @@ export const transactionRepository: ITransactionRepository = {
       description: dto.description,
       type: dto.type,
       amount: dto.amount,
+      category: dto.category,
     }
 
     const records = await db.insert(transactionsTable).values(data).returning()
@@ -45,7 +49,13 @@ export const transactionRepository: ITransactionRepository = {
   async update(id: number, dto: TransactionUpdateDto): Promise<TransactionDto> {
     const records = await db
       .update(transactionsTable)
-      .set({ description: dto.description, type: dto.type, amount: dto.amount })
+      .set({
+        description: dto.description,
+        type: dto.type,
+        amount: dto.amount,
+        category: dto.category,
+        updatedAt: new Date().toString(),
+      })
       .where(eq(transactionsTable.id, id))
       .returning()
     const record: SelectTransaction = records[0]
@@ -63,6 +73,7 @@ export const transactionRepository: ITransactionRepository = {
       description: transactionData.description,
       type: transactionData.type,
       amount: transactionData.amount,
+      category: transactionData.category,
       createdAt: new Date(transactionData.createdAt),
       updatedAt: new Date(transactionData.updatedAt),
     }
