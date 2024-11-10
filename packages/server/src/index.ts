@@ -1,4 +1,6 @@
 import { Hono } from "hono"
+import auth from "./router/auth/auth.router"
+import user from "./router/users/users.router"
 import transactionApi from "./router/transactions/transactions.router"
 import { HttpStatusEnum, type ResponseDto } from "@budgeteer/types"
 
@@ -15,6 +17,9 @@ app.onError((err, c) => {
 
 app.get("/", c => c.text("OK!"))
 
+// Routes
 app.route("/api/transactions", transactionApi)
+app.route("/", auth)
+app.route("/", user)
 
 export default app
