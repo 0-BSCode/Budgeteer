@@ -9,7 +9,7 @@ import { compareSync, genSaltSync, hashSync } from "bcrypt"
 import { HTTPException } from "hono/http-exception"
 import { sign } from "hono/jwt"
 import type { SignatureKey } from "hono/utils/jwt/jws"
-import { envConfig } from "~/services/config-service"
+import { ConfigService } from "~/services/config-service"
 import { DataService } from "~/services/data-service"
 
 export const AuthUseCases: IAuthUseCases = {
@@ -62,7 +62,7 @@ export const AuthUseCases: IAuthUseCases = {
         // Expires in 1 hour
         exp: Math.floor(Date.now() / 1000) + 60 * 60,
       },
-      envConfig.JWT_SECRET as SignatureKey,
+      ConfigService.JWT_SECRET as SignatureKey,
     )
 
     const response: ResponseDto<string> = {

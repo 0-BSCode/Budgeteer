@@ -14,6 +14,15 @@ export * from "./src/abstracts/services/data-service.abstract"
 export * from "./src/abstracts/use-cases/users-use-cases"
 export * from "./src/abstracts/use-cases/auth-use-cases"
 
+// Abstracts
+export * from "./src/abstracts/repositories/transaction-repository.abstract"
+export * from "./src/abstracts/services/data-service.abstract"
+export * from "./src/abstracts/use-cases/transaction-use-cases.abstract"
+
+// Abstracts
+export * from "./src/abstracts/repositories/transaction-repository.abstract"
+export * from "./src/abstracts/services/data-service.abstract"
+
 // Enums
 export * from "./src/enums/node-env.enum"
 export * from "./src/enums/transaction-type.enum"
@@ -22,3 +31,6 @@ export * from "./src/enums/http-status.enum"
 // Constants
 export * from "./src/constants/max-varchar-length"
 export * from "./src/constants/max-username-length"
+export * from "./src/constants/db.constants"
+
+// Constants

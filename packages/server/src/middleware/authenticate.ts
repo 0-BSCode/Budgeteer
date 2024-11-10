@@ -1,6 +1,6 @@
 import { verify } from "hono/jwt"
 import { createMiddleware } from "hono/factory"
-import { envConfig } from "~/services/config-service"
+import { ConfigService } from "~/services/config-service"
 import type { SignatureKey } from "hono/utils/jwt/jws"
 
 const authenticate = createMiddleware(async (c, next) => {
@@ -13,7 +13,7 @@ const authenticate = createMiddleware(async (c, next) => {
   const token = authHeader.split(" ")[1]
 
   try {
-    const decodedPayload = await verify(token, envConfig.JWT_SECRET as SignatureKey)
+    const decodedPayload = await verify(token, ConfigService.JWT_SECRET as SignatureKey)
 
     const { username, id } = decodedPayload
 
