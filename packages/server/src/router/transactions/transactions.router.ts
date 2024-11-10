@@ -20,11 +20,12 @@ transactionApi.get("/:id", zValidator("param", transactionIdSchema), async c => 
 })
 
 transactionApi.post("/", zValidator("json", createTransactionSchema), async c => {
-  const { description, type, amount } = c.req.valid("json")
+  const { description, type, amount, category } = c.req.valid("json")
   const data: TransactionCreateDto = {
     description,
     type,
     amount,
+    category,
   }
 
   const response = await TransactionUseCases.create(data)
@@ -37,12 +38,13 @@ transactionApi.put(
   zValidator("json", updateTransactionSchema),
   async c => {
     const { id } = c.req.valid("param")
-    const { description, type, amount } = c.req.valid("json")
+    const { description, type, amount, category } = c.req.valid("json")
 
     const data: TransactionUpdateDto = {
-      description,
-      type,
-      amount,
+      ...(description !== undefined && { description }),
+      ...(type !== undefined && { type }),
+      ...(amount !== undefined && { amount }),
+      ...(category !== undefined && { category }),
     }
 
     const response = await TransactionUseCases.update(parseInt(id), data)
