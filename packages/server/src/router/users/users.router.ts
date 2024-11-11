@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { authenticate } from "~/middleware/authenticate"
 import { zValidator } from "@hono/zod-validator"
-import { UsersUseCases } from "~/services/use-cases/users/users.use-cases"
+import { UsersUseCases } from "~/use-cases/users/users.use-cases"
 import { patchUserSchema } from "./users-dto.router"
 
 type Variables = {

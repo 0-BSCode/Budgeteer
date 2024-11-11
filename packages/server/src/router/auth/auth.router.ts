@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { zValidator } from "@hono/zod-validator"
 import { authRequestSchema } from "./auth-dto.router"
-import { AuthUseCases } from "~/services/use-cases/auth/auth.use-cases"
+import { AuthUseCases } from "~/use-cases/auth/auth.use-cases"
 
 const auth = new Hono().basePath("/auth")
 
