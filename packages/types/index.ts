@@ -11,8 +11,8 @@ export * from "./src/entities/users/user-update.dto"
 // Abstracts
 export * from "./src/abstracts/repositories/user-repository.abstract"
 export * from "./src/abstracts/services/data-service.abstract"
-export * from "./src/abstracts/use-cases/users-use-cases"
-export * from "./src/abstracts/use-cases/auth-use-cases"
+export * from "./src/abstracts/use-cases/users-use-cases.abstract"
+export * from "./src/abstracts/use-cases/auth-use-cases.abstract"
 
 // Abstracts
 export * from "./src/abstracts/repositories/transaction-repository.abstract"
