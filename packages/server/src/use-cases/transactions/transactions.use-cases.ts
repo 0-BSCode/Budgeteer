@@ -8,6 +8,7 @@ import {
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
+import { isCategoryValid } from "./utils/isCategoryValid"
 
 export const TransactionUseCases: ITransactionUseCases = {
   async findById(id: number): Promise<ResponseDto<TransactionDto>> {
@@ -24,9 +25,12 @@ export const TransactionUseCases: ITransactionUseCases = {
 
     return response
   },
-  // TODO: Error handling
   async create(dto: TransactionCreateDto): Promise<ResponseDto<TransactionDto | null>> {
     try {
+      if (!isCategoryValid(dto.type, dto.category)) {
+        throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `Invalid category for type ${dto.type}` })
+      }
+
       const transaction = await DataService.transactions.create(dto)
 
       const response: ResponseDto<TransactionDto> = {
@@ -44,6 +48,10 @@ export const TransactionUseCases: ITransactionUseCases = {
   },
   async update(id: number, dto: TransactionUpdateDto): Promise<ResponseDto<TransactionDto | null>> {
     await this.findById(id)
+
+    if (!isCategoryValid(dto.type, dto.category)) {
+      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `Invalid category for type ${dto.type}` })
+    }
 
     try {
       const transaction = await DataService.transactions.update(id, dto)
