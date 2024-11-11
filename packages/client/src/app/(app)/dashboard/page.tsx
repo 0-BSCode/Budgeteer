@@ -1,7 +1,9 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "~/components/ui/button"
+import { IncomeDistributionSection } from "~/features/dashboard/income-distribution-section"
 import { StatisticsCards } from "~/features/dashboard/statistic-cards"
+import { TransactionsSection } from "~/features/dashboard/transactions-section"
 
 export const metadata: Metadata = {
   title: "Dashboard | Budgeteer",
@@ -32,6 +34,8 @@ export default function Dashboard() {
           </Button>
         </div>
         <StatisticsCards />
+        <TransactionsSection />
+        <IncomeDistributionSection />
       </div>
     </main>
   )
