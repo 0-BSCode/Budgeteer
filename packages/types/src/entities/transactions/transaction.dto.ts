@@ -3,6 +3,7 @@ import { TransactionTypeEnum } from "~/enums/transaction-type.enum"
 
 export type TransactionDto = {
   id: number
+  userId: number
   description: string
   type: TransactionTypeEnum
   category: TransactionCategoryEnum

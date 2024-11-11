@@ -3,13 +3,21 @@ import { zValidator } from "@hono/zod-validator"
 import { createTransactionSchema, transactionIdSchema, updateTransactionSchema } from "./transactions-dto.router"
 import type { TransactionCreateDto, TransactionUpdateDto } from "@budgeteer/types"
 import { TransactionUseCases } from "~/use-cases/transactions/transactions.use-cases"
+import { authenticate } from "~/middleware/authenticate"
 
-// TODO: Protect routes and check per user
-const transactionApi = new Hono()
+type Variables = {
+  id: string
+}
 
-// TODO: Implement (fetch all transactions per user)
+const transactionApi = new Hono<{ Variables: Variables }>()
+
+transactionApi.use("*", authenticate)
+
 transactionApi.get("/", async c => {
-  return c.text("Hello World!")
+  const userId = c.get("id")
+
+  const response = await TransactionUseCases.findByUserId(parseInt(userId))
+  return c.json(response)
 })
 
 transactionApi.get("/:id", zValidator("param", transactionIdSchema), async c => {
@@ -26,6 +34,7 @@ transactionApi.post("/", zValidator("json", createTransactionSchema), async c =>
     type,
     amount,
     category,
+    userId: parseInt(c.get("id")),
   }
 
   const response = await TransactionUseCases.create(data)
