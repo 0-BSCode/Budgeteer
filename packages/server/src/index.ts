@@ -19,7 +19,7 @@ app.get("/", c => c.text("OK!"))
 
 // Routes
 app.route("/api/transactions", transactionApi)
-app.route("/", auth)
-app.route("/", user)
+app.route("/api/auth", auth)
+app.route("/api/users", user)
 
 export default app

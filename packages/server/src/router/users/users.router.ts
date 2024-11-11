@@ -8,7 +8,7 @@ type Variables = {
   id: string
 }
 
-const user = new Hono<{ Variables: Variables }>().basePath("/user")
+const user = new Hono<{ Variables: Variables }>()
 
 user.use("*", authenticate)
 
