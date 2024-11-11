@@ -5,12 +5,13 @@ import {
   type UserDto,
   type IAuthUseCases,
 } from "@budgeteer/types"
-import { compareSync, genSaltSync, hashSync } from "bcrypt"
 import { HTTPException } from "hono/http-exception"
 import { sign } from "hono/jwt"
 import type { SignatureKey } from "hono/utils/jwt/jws"
+import { comparePassword } from "~/infrastructure/bcrypt-hash-service"
 import { ConfigService } from "~/services/config-service"
 import { DataService } from "~/services/data-service"
+import { HashService } from "~/services/hash-service"
 
 export const AuthUseCases: IAuthUseCases = {
   async register(dto: UserCreateDto): Promise<ResponseDto<UserDto | null>> {
@@ -21,8 +22,7 @@ export const AuthUseCases: IAuthUseCases = {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `User with name ${username} already exists!` })
     }
 
-    const salt = genSaltSync()
-    const hashedPassword = hashSync(password, salt)
+    const hashedPassword = HashService.hashPassword(password)
 
     try {
       const user = await DataService.users.create({ username, password: hashedPassword })
@@ -49,7 +49,8 @@ export const AuthUseCases: IAuthUseCases = {
       throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: `User with name ${username} not found!` })
     }
 
-    if (!compareSync(password, user.password)) {
+    const isPasswordValid = comparePassword(password, user.password)
+    if (!isPasswordValid) {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Incorrect password. Please try again!" })
     }
 
