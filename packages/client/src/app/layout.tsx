@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { Manrope } from "next/font/google"
+import { ThemeProvider } from "~/components/providers/theme-provider"
 
 const font = Manrope({ subsets: ["latin"] })
 
@@ -16,7 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" translate="no">
-      <body className={font.className}>{children}</body>
+      <body className={font.className}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

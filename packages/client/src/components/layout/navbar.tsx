@@ -3,6 +3,8 @@ import Link from "next/link"
 import NavbarLinks from "./navbar-links"
 import { Menu, CircleUserRound } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "~/components/ui/sheet"
+import { Button } from "~/components/ui/button"
+import { ModeToggle } from "~/components/ui/mode-toggle"
 
 export default function Navbar() {
   return (
@@ -10,7 +12,7 @@ export default function Navbar() {
       {/* Navigation links that will only show in larger screens */}
       <nav className="hidden flex-col gap-6 font-medium md:flex md:flex-row md:items-center md:gap-1">
         <Link className="flex items-center gap-2" href="/">
-          <div className="w-12 h-12">
+          <div className="w-10 h-10">
             <Image src="/logo.webp" width={512} height={512} alt="Logo" />
           </div>
           <span className="sr-only">Budgeteer</span>
@@ -45,14 +47,12 @@ export default function Navbar() {
         </SheetContent>
       </Sheet>
 
-      <div className="flex items-center gap-4 ml-auto md:gap-2 lg:gap-4">
-        <button
-          className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-accent text-accent-foreground hover:bg-accent/80 h-10 w-10 rounded-full"
-          type="button"
-        >
-          <CircleUserRound className="h-5 w-5" />
+      <div className="flex items-center ml-auto gap-2">
+        <ModeToggle />
+        <Button size="icon" variant="outline" className="h-10 w-10 rounded-full">
+          <CircleUserRound className="h-8 w-8d" />
           <span className="sr-only">Open user menu</span>
-        </button>
+        </Button>
       </div>
     </header>
   )
