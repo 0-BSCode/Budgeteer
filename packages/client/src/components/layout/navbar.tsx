@@ -1,10 +1,18 @@
 import Image from "next/image"
 import Link from "next/link"
 import NavbarLinks from "./navbar-links"
-import { Menu, CircleUserRound } from "lucide-react"
+import { Menu, CircleUserRound, LogOut, User } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "~/components/ui/sheet"
 import { Button } from "~/components/ui/button"
 import { ModeToggle } from "~/components/ui/mode-toggle"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu"
 
 export default function Navbar() {
   return (
@@ -49,10 +57,26 @@ export default function Navbar() {
 
       <div className="flex items-center ml-auto gap-2">
         <ModeToggle />
-        <Button size="icon" variant="outline" className="h-10 w-10 rounded-full">
-          <CircleUserRound className="h-8 w-8d" />
-          <span className="sr-only">Open user menu</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="outline" className="h-10 w-10 rounded-full">
+              <CircleUserRound className="h-8 w-8d" />
+              <span className="sr-only">Open user menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="mr-4">
+            <DropdownMenuLabel>22101295@usc.edu.ph</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href="/profile">
+                <User className="h-4 w-4" /> My Profile
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              <LogOut className="h-4 w-4" /> Log Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   )
