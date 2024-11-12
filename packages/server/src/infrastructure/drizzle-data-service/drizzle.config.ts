@@ -3,8 +3,8 @@ import { fetchDbUrl } from "./utils/fetchDbUrl"
 
 const dbUrl = fetchDbUrl()
 export default defineConfig({
-  out: "./src/infrastructure/typeorm-data-service/migrations",
-  schema: "./src/infrastructure/typeorm-data-service/models",
+  out: "./src/infrastructure/drizzle-data-service/migrations",
+  schema: "./src/infrastructure/drizzle-data-service/models",
   dialect: "postgresql",
   dbCredentials: {
     url: dbUrl,
