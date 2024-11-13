@@ -2,15 +2,17 @@ import * as React from "react"
 
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "~/components/ui/carousel"
 import { StatCard } from "./stat-card"
+import { statisticsCategories } from "~/types/constants/statistics-categories"
+import { TimeRangeEnum } from "~/types/enums/time-range-enum"
 
 export function StatisticsCarousel() {
   return (
-    <Carousel className="w-full max-w-xs pb-2 lg:hidden">
+    <Carousel className="w-[80%] lg:w-full max-w-xs pb-2 lg:hidden">
       <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index}>
+        {statisticsCategories.map(category => (
+          <CarouselItem key={category}>
             <div className="p-1">
-              <StatCard />
+              <StatCard statisticsCategory={category} timeRange={TimeRangeEnum.DAILY} />
             </div>
           </CarouselItem>
         ))}
