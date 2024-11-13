@@ -3,8 +3,7 @@ import type { TransactionUpdateDto } from "~/entities/transactions/transaction-u
 import type { TransactionDto } from "~/entities/transactions/transaction.dto"
 
 export type ITransactionRepository = {
-  // TODO: Add remaining methods with users
-  // findByUser: (userId: number) => Promise<TransactionDto[]>
+  findByUser: (userId: number) => Promise<TransactionDto[]>
   findById: (id: number) => Promise<TransactionDto | null>
   create: (dto: TransactionCreateDto) => Promise<TransactionDto>
   update: (id: number, dto: TransactionUpdateDto) => Promise<TransactionDto>

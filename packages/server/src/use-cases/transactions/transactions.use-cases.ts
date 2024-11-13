@@ -25,6 +25,24 @@ export const TransactionUseCases: ITransactionUseCases = {
 
     return response
   },
+  async findByUserId(userId: number): Promise<ResponseDto<TransactionDto[]>> {
+    try {
+      const transactions = await DataService.transactions.findByUser(userId)
+
+      const response: ResponseDto<TransactionDto[]> = {
+        status: HttpStatusEnum.OK,
+        data: transactions,
+      }
+
+      return response
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
+      }
+
+      throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to fetch transactions" })
+    }
+  },
   async create(dto: TransactionCreateDto): Promise<ResponseDto<TransactionDto | null>> {
     try {
       if (!isCategoryValid(dto.type, dto.category)) {
