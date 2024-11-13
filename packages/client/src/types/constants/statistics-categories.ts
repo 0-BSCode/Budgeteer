@@ -1,3 +1,3 @@
-import { StatCategoryEnum } from "../enums/stat-category-enum"
+import { StatisticsCategoryEnum } from "../enums/statistics-category-enum"
 
-export const statisticsCategories = Object.values(StatCategoryEnum)
+export const statisticsCategories = Object.values(StatisticsCategoryEnum)

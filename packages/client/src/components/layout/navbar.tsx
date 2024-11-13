@@ -8,7 +8,7 @@ import { ModeToggle } from "~/components/ui/mode-toggle"
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background/80 px-4 md:px-6 backdrop-blur-sm z-[1000]">
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-accent/80 dark:bg-background/80 px-4 md:px-6 backdrop-blur-sm z-[1000]">
       {/* Navigation links that will only show in larger screens */}
       <nav className="hidden flex-col gap-6 font-medium md:flex md:flex-row md:items-center md:gap-1">
         <Link className="flex items-center gap-2" href="/">

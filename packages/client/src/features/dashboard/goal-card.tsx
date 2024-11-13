@@ -16,7 +16,7 @@ export function GoalCard({ title, deadline }: GoalCardProps) {
           <Edit className="w-4 h-4" />
         </div>
 
-        <CardDescription className="pb-2 lg:pb-4">
+        <CardDescription className="pb-2 lg:pb-2">
           <CardTitle className="text-xs font-normal text-muted-foreground">Ends on {deadline}</CardTitle>
         </CardDescription>
         <Progress value={50} />

@@ -16,20 +16,22 @@ export function TransactionsSection() {
             <h2 className="font-semibold text-2xl">Transactions</h2>
             <Button className="font-normal text-sm">+ New Transaction</Button>
           </div>
-          {[1, 2].map(() => (
-            <Transaction
-              type={TransactionTypeEnum.INCOME}
-              description="💸 Salary • 5:00PM, 11/03/2024"
-              key={Math.random()}
-            />
-          ))}
-          {[1, 2].map(() => (
-            <Transaction
-              type={TransactionTypeEnum.EXPENSE}
-              description="🍔 Food • 5:00PM, 11/03/2024"
-              key={Math.random()}
-            />
-          ))}
+          <div className="overflow-y-scroll h-60 pr-4">
+            {[1, 2, 3, 4, 5].map(() => (
+              <Transaction
+                type={TransactionTypeEnum.INCOME}
+                description="💸 Salary • 5:00PM, 11/03/2024"
+                key={Math.random()}
+              />
+            ))}
+            {[1, 2].map(() => (
+              <Transaction
+                type={TransactionTypeEnum.EXPENSE}
+                description="🍔 Food • 5:00PM, 11/03/2024"
+                key={Math.random()}
+              />
+            ))}
+          </div>
         </div>
       </main>
     </div>

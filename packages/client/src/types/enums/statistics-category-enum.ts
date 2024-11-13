@@ -1,4 +1,4 @@
-export enum StatCategoryEnum {
+export enum StatisticsCategoryEnum {
   NET_INCOME = "Net Income",
   INCOME = "Income",
   EXPENSES = "Expenses",
