@@ -1,3 +1,6 @@
-import type { UserDto } from "../users/user.dto"
+import { z } from "zod"
+import { UserDtoSchema } from "./user.dto"
 
-export type UserCreateDto = Pick<UserDto, "username" | "password">
+export const UserCreateDtoSchema = UserDtoSchema.pick({ username: true, password: true })
+
+export type UserCreateDto = z.infer<typeof UserCreateDtoSchema>

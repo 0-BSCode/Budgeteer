@@ -1,16 +1,13 @@
-import type { IUserRepository, UserCreateDto, UserUpdateDto, UserDto } from "@budgeteer/types"
+import {
+  type IUserRepository,
+  type UserCreateDto,
+  type UserUpdateDto,
+  type UserDto,
+  UserDtoSchema,
+} from "@budgeteer/types"
 import { db } from ".."
 import { eq } from "drizzle-orm"
 import { usersTable, type SelectUser } from "../models/user.model"
-import { z } from "zod"
-
-const validateUserSchema = z.object({
-  id: z.number(),
-  username: z.string(),
-  password: z.string(),
-  profile_picture: z.string(),
-  createdAt: z.union([z.string(), z.date()]),
-})
 
 export const userRepository: IUserRepository = {
   async findById(id: number): Promise<UserDto | null> {
@@ -52,7 +49,7 @@ export const userRepository: IUserRepository = {
     return this.convertToDto(record)
   },
   convertToDto(data: unknown): UserDto {
-    const transactionData = validateUserSchema.parse(data)
+    const transactionData = UserDtoSchema.parse(data)
 
     return {
       id: transactionData.id,
