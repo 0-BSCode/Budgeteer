@@ -14,6 +14,7 @@ import { z } from "zod"
 
 const validateTransactionSchema = z.object({
   id: z.number(),
+  userId: z.number(),
   description: z.string(),
   type: z.nativeEnum(TransactionTypeEnum),
   category: z.union([z.nativeEnum(IncomeCategoryEnum), z.nativeEnum(ExpenseCategoryEnum)]),
@@ -33,8 +34,17 @@ export const transactionRepository: ITransactionRepository = {
 
     return this.convertToDto(record)
   },
+  async findByUser(userId: number): Promise<TransactionDto[]> {
+    const records: SelectTransaction[] = await db
+      .select()
+      .from(transactionsTable)
+      .where(eq(transactionsTable.userId, userId))
+
+    return records.map(this.convertToDto)
+  },
   async create(dto: TransactionCreateDto): Promise<TransactionDto> {
     const data: InsertTransaction = {
+      userId: dto.userId,
       description: dto.description,
       type: dto.type,
       amount: dto.amount,
@@ -70,6 +80,7 @@ export const transactionRepository: ITransactionRepository = {
 
     return {
       id: transactionData.id,
+      userId: transactionData.userId,
       description: transactionData.description,
       type: transactionData.type,
       amount: transactionData.amount,

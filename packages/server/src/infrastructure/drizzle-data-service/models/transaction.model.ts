@@ -7,6 +7,7 @@ import {
   TransactionTypeEnum,
 } from "@budgeteer/types"
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
+import { usersTable } from "./user.model"
 
 export const transactionTypeEnum = pgEnum("transaction_type", enumToPgEnum(TransactionTypeEnum))
 export const transactionCategoryEnum = pgEnum(
@@ -16,6 +17,9 @@ export const transactionCategoryEnum = pgEnum(
 
 export const transactionsTable = pgTable("transactions", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer()
+    .references(() => usersTable.id)
+    .notNull(),
   description: varchar({ length: MAX_TRANSACTION_DESCRIPTION_LENGTH }).notNull(),
   type: transactionTypeEnum().notNull().default(TransactionTypeEnum.EXPENSE),
   category: transactionCategoryEnum().notNull(),
