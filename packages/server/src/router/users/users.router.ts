@@ -20,6 +20,13 @@ user.get("/", async c => {
   return c.json(response)
 })
 
+user.get("/balance", async c => {
+  const id = c.get("id")
+  const response = await UsersUseCases.getBalance(parseInt(id))
+
+  return c.json(response)
+})
+
 user.patch("/profile-picture", zValidator("json", patchUserSchema), async c => {
   const { profile_picture_url } = c.req.valid("json")
   const id = c.get("id")

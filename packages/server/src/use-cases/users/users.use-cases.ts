@@ -5,11 +5,27 @@ import {
   type UserUpdateDto,
   HttpStatusEnum,
   type UserDto,
+  TransactionTypeEnum,
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
 
 export const UsersUseCases: IUserUseCases = {
+  async getBalance(id: number): Promise<ResponseDto<number>> {
+    const transactions = await DataService.transactions.findByUser(id)
+    const expenses = transactions.filter(transaction => transaction.type === TransactionTypeEnum.EXPENSE)
+    const incomes = transactions.filter(transaction => transaction.type === TransactionTypeEnum.INCOME)
+    const balance =
+      incomes.reduce((total, income) => total + income.amount, 0) -
+      expenses.reduce((total, expense) => total + expense.amount, 0)
+
+    const response: ResponseDto<number> = {
+      status: HttpStatusEnum.OK,
+      data: balance,
+    }
+
+    return response
+  },
   async findById(id: number): Promise<ResponseDto<UserDto>> {
     const user = await DataService.users.findById(id)
 
