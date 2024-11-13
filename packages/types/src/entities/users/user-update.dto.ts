@@ -1,3 +1,6 @@
-import type { UserDto } from "./user.dto"
+import { z } from "zod"
+import { UserDtoSchema } from "./user.dto"
 
-export type UserUpdateDto = Partial<UserDto>
+export const UserUpdateDtoSchema = UserDtoSchema.partial()
+
+export type UserUpdateDto = z.infer<typeof UserUpdateDtoSchema>
