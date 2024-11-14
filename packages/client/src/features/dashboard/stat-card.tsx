@@ -8,7 +8,7 @@ interface StatCardProps {
 }
 
 export function StatCard({ timeRange, statisticsCategory }: StatCardProps) {
-  function getTimeRangeForCardDescription(TimeRange: TimeRangeEnum) {
+  const getTimeRangeForCardDescription = (TimeRange: TimeRangeEnum) => {
     return TimeRange === TimeRangeEnum.DAILY
       ? "yesterday"
       : TimeRange === TimeRangeEnum.WEEKLY
