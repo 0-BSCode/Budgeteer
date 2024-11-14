@@ -9,6 +9,7 @@ import {
 import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
 import { isCategoryValid } from "./utils/isCategoryValid"
+import { UsersUseCases } from "../users/users.use-cases"
 
 export const TransactionUseCases: ITransactionUseCases = {
   async findById(id: number): Promise<ResponseDto<TransactionDto>> {
@@ -26,6 +27,8 @@ export const TransactionUseCases: ITransactionUseCases = {
     return response
   },
   async findByUserId(userId: number): Promise<ResponseDto<TransactionDto[]>> {
+    await UsersUseCases.findById(userId)
+
     try {
       const transactions = await DataService.transactions.findByUser(userId)
 
