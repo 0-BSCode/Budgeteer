@@ -1,9 +1,11 @@
 export default function Footer() {
+  const fullYear = new Date().getFullYear()
+
   return (
     <footer className="border-t py-6 md:px-8 md:py-0 mt-auto bg-background h-24 w-full z-[1000]">
       <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
         <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
-          &copy; {new Date().getFullYear()} Budgeteer.
+          &copy; {fullYear} Budgeteer.
           <br />
           The source code is available on{" "}
           <a
