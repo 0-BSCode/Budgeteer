@@ -3,24 +3,11 @@ import {
   type TransactionDto,
   type TransactionCreateDto,
   type TransactionUpdateDto,
-  TransactionTypeEnum,
-  IncomeCategoryEnum,
-  ExpenseCategoryEnum,
+  TransactionDtoSchema,
 } from "@budgeteer/types"
 import { db } from ".."
 import { transactionsTable, type InsertTransaction, type SelectTransaction } from "../models/transaction.model"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
-
-const validateTransactionSchema = z.object({
-  id: z.number(),
-  description: z.string(),
-  type: z.nativeEnum(TransactionTypeEnum),
-  category: z.union([z.nativeEnum(IncomeCategoryEnum), z.nativeEnum(ExpenseCategoryEnum)]),
-  amount: z.number(),
-  createdAt: z.union([z.date(), z.string()]),
-  updatedAt: z.union([z.date(), z.string()]),
-})
 
 export const transactionRepository: ITransactionRepository = {
   async findById(id: number): Promise<TransactionDto | null> {
@@ -33,8 +20,17 @@ export const transactionRepository: ITransactionRepository = {
 
     return this.convertToDto(record)
   },
+  async findByUser(userId: number): Promise<TransactionDto[]> {
+    const records: SelectTransaction[] = await db
+      .select()
+      .from(transactionsTable)
+      .where(eq(transactionsTable.userId, userId))
+
+    return records.map(this.convertToDto)
+  },
   async create(dto: TransactionCreateDto): Promise<TransactionDto> {
     const data: InsertTransaction = {
+      userId: dto.userId,
       description: dto.description,
       type: dto.type,
       amount: dto.amount,
@@ -66,16 +62,17 @@ export const transactionRepository: ITransactionRepository = {
     await db.delete(transactionsTable).where(eq(transactionsTable.id, id))
   },
   convertToDto(data: unknown): TransactionDto {
-    const transactionData = validateTransactionSchema.parse(data)
+    const transactionData = TransactionDtoSchema.parse(data)
 
     return {
       id: transactionData.id,
+      userId: transactionData.userId,
       description: transactionData.description,
       type: transactionData.type,
       amount: transactionData.amount,
       category: transactionData.category,
-      createdAt: new Date(transactionData.createdAt),
-      updatedAt: new Date(transactionData.updatedAt),
+      createdAt: transactionData.createdAt,
+      updatedAt: transactionData.updatedAt,
     }
   },
 }
