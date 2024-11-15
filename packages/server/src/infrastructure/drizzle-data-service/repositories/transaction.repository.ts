@@ -20,7 +20,7 @@ export const transactionRepository: ITransactionRepository = {
 
     return this.convertToDto(record)
   },
-  async findByUser(userId: number): Promise<TransactionDto[]> {
+  async findByUserId(userId: number): Promise<TransactionDto[]> {
     const records: SelectTransaction[] = await db
       .select()
       .from(transactionsTable)

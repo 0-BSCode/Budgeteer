@@ -7,7 +7,7 @@ vi.mock("~/services/data-service", () => ({
   DataService: {
     transactions: {
       findById: vi.fn(),
-      findByUser: vi.fn(),
+      findByUserId: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
@@ -52,7 +52,7 @@ describe("TransactionUseCases", () => {
       },
     ]
     vi.mocked(DataService.users.findById).mockResolvedValue(1)
-    vi.mocked(DataService.transactions.findByUser).mockResolvedValue(transactions)
+    vi.mocked(DataService.transactions.findByUserId).mockResolvedValue(transactions)
     const response = await TransactionUseCases.findByUserId(1)
     expect(response.data).toEqual(transactions)
   })
@@ -64,7 +64,7 @@ describe("TransactionUseCases", () => {
 
   test("findByUserId throws a db error", async () => {
     vi.mocked(DataService.users.findById).mockResolvedValue(1)
-    vi.mocked(DataService.transactions.findByUser).mockRejectedValue(new Error("Database error!"))
+    vi.mocked(DataService.transactions.findByUserId).mockRejectedValue(new Error("Database error!"))
     await expect(TransactionUseCases.findByUserId(1)).rejects.toThrowError("Database error!")
   })
 

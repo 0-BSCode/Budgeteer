@@ -30,7 +30,7 @@ export const TransactionUseCases: ITransactionUseCases = {
     await UsersUseCases.findById(userId)
 
     try {
-      const transactions = await DataService.transactions.findByUser(userId)
+      const transactions = await DataService.transactions.findByUserId(userId)
 
       const response: ResponseDto<TransactionDto[]> = {
         status: HttpStatusEnum.OK,
