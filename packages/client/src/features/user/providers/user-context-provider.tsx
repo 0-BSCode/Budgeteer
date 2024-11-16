@@ -4,11 +4,11 @@ import { createContext, ReactNode } from "react"
 import userService from "../services/user-service"
 import useAuth from "~/features/auth/hooks/use-auth"
 import { useState, useEffect } from "react"
-import { UserDto } from "@budgeteer/types"
+import { UserPublicDto } from "@budgeteer/types"
 import { useRouter } from "next/navigation"
 
 type UserContext = {
-  user: UserDto | null
+  user: UserPublicDto | null
   authToken: string | null
 }
 
@@ -17,7 +17,7 @@ const Context = createContext<UserContext | undefined>(undefined)
 export default function UserContextProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const { authToken } = useAuth()
-  const [user, setUser] = useState<UserDto | null>(null)
+  const [user, setUser] = useState<UserPublicDto | null>(null)
 
   useEffect(() => {
     // Redirects the user to authenticate if they don't have a token

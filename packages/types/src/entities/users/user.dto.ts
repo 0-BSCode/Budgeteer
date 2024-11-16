@@ -19,4 +19,7 @@ export const UserDtoSchema = z.object({
   createdAt: z.coerce.date(),
 })
 
+export const UserPublicDtoSchema = UserDtoSchema.omit({ password: true })
+
 export type UserDto = z.infer<typeof UserDtoSchema>
+export type UserPublicDto = z.infer<typeof UserPublicDtoSchema>

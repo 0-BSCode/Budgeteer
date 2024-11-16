@@ -56,6 +56,7 @@ export const AuthUseCases: IAuthUseCases = {
     }
 
     const isPasswordValid = comparePassword(password, user.password)
+
     if (!isPasswordValid) {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Incorrect password. Please try again!" })
     }

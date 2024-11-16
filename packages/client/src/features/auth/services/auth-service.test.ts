@@ -1,5 +1,5 @@
 import { expect, it, describe } from "vitest"
-import { MIN_PASSWORD_LENGTH } from "@budgeteer/types"
+import { MIN_PASSWORD_LENGTH, UserDto } from "@budgeteer/types"
 import authService from "./auth-service"
 import userService from "~/features/user/services/user-service"
 
@@ -34,7 +34,7 @@ describe("register", () => {
     expect(user).toHaveProperty("id")
     expect(user).toHaveProperty("createdAt")
     expect(user).toHaveProperty("profile_picture")
-    expect(user.password).toBeUndefined()
+    expect((user as UserDto).password).toBeUndefined()
   })
 
   it(`should not allow passwords less than ${MIN_PASSWORD_LENGTH} characters in length`, async () => {

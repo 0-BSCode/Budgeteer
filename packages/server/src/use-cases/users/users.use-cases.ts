@@ -6,6 +6,8 @@ import {
   HttpStatusEnum,
   type UserDto,
   TransactionTypeEnum,
+  UserPublicDtoSchema,
+  type UserPublicDto,
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
@@ -26,16 +28,16 @@ export const UsersUseCases: IUserUseCases = {
 
     return response
   },
-  async findById(id: number): Promise<ResponseDto<UserDto>> {
+  async findById(id: number): Promise<ResponseDto<UserPublicDto>> {
     const user = await DataService.users.findById(id)
 
     if (!user) {
       throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "User not found" })
     }
 
-    const response: ResponseDto<UserDto> = {
+    const response: ResponseDto<UserPublicDto> = {
       status: HttpStatusEnum.OK,
-      data: user,
+      data: UserPublicDtoSchema.parse(user),
     }
 
     return response
