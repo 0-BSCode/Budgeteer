@@ -3,8 +3,11 @@ import auth from "./router/auth/auth.router"
 import user from "./router/users/users.router"
 import transactionApi from "./router/transactions/transactions.router"
 import { HttpStatusEnum, type ResponseDto } from "@budgeteer/types"
+import { logger } from "hono/logger"
 
 const app = new Hono()
+
+app.use(logger())
 
 app.onError((err, c) => {
   const response: ResponseDto<null> = {
