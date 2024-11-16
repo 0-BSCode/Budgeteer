@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { TransactionTypeEnum } from "~/enums/transaction-type.enum"
-import { IncomeCategoryEnum, ExpenseCategoryEnum } from "~/enums/transaction-category.enum"
-import { MIN_TRANSACTION_AMOUNT, MAX_TRANSACTION_DESCRIPTION_LENGTH } from "~/constants/db.constants"
+import { TransactionTypeEnum } from "@budgeteer/types"
+import { IncomeCategoryEnum, ExpenseCategoryEnum } from "@budgeteer/types"
+import { MIN_TRANSACTION_AMOUNT, MAX_TRANSACTION_DESCRIPTION_LENGTH } from "@budgeteer/types"
 
 export const TransactionDtoSchema = z.object({
   id: z.string().regex(/^[0-9]+$/, "Must be a number"),

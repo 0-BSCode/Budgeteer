@@ -5,7 +5,7 @@ import {
   MIN_USERNAME_LENGTH,
   MAX_USERNAME_LENGTH,
   MAX_PROFILE_PIC_LENGTH,
-} from "~/constants/db.constants"
+} from "@budgeteer/types"
 
 export const UserDtoSchema = z.object({
   id: z.number(),
