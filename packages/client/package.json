@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start -p 5173",
     "lint": "next lint",
-    "format": "prettier --write \"./src/**/*.+(jsx|tsx|js|ts|json|html|css)\""
+    "format": "prettier --write \"./src/**/*.+(jsx|tsx|js|ts|json|html|css)\"",
+    "test": "vitest"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
@@ -16,8 +17,8 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
-    "axios": "^1.7.7",
     "@radix-ui/react-tabs": "^1.1.1",
+    "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.3.1",
@@ -39,6 +40,7 @@
     "postcss": "^8",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^2.1.5"
   }
 }

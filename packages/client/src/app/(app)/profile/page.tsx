@@ -1,4 +1,4 @@
-import EditProfileForm from "~/features/profile/edit-profile-form"
+import EditProfileForm from "~/features/user/components/edit-profile-form"
 
 export default function Profile() {
   return (

@@ -1,12 +1,46 @@
-// import { createContext, ReactNode } from "react"
-// import type { UserContext } from "../types/user-context"
+"use client"
 
-// const UserContext = createContext<UserContext | undefined>(undefined)
+import { createContext, ReactNode } from "react"
+import userService from "../services/user-service"
+import useAuth from "~/features/auth/hooks/use-auth"
+import { useState, useEffect } from "react"
+import { UserDto } from "@budgeteer/types"
+import { useRouter } from "next/navigation"
 
-// export default function UserContextProvider({ children }: { children: ReactNode }) {
-//   const
+type UserContext = {
+  user: UserDto | null
+  authToken: string | null
+}
 
-//   const user =
+const Context = createContext<UserContext | undefined>(undefined)
 
-//     return <UserContext.Provider value={undefined}>{children}</UserContext.Provider>
-// }
+export default function UserContextProvider({ children }: { children: ReactNode }) {
+  const router = useRouter()
+  const { authToken } = useAuth()
+  const [user, setUser] = useState<UserDto | null>(null)
+
+  useEffect(() => {
+    // Redirects the user to authenticate if they don't have a token
+    if (!authToken) {
+      return router.replace("/auth/login")
+    }
+
+    const fetchUser = async () => {
+      const fetchedUser = await userService.fetchUserDetails(authToken)
+      setUser(fetchedUser)
+    }
+
+    fetchUser()
+  }, [router, authToken])
+
+  return (
+    <Context.Provider
+      value={{
+        user,
+        authToken,
+      }}
+    >
+      {children}
+    </Context.Provider>
+  )
+}
