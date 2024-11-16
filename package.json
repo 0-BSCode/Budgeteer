@@ -16,7 +16,9 @@
     "eslint-plugin-unused-imports": "3",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "vite-tsconfig-paths": "^5.1.2",
+    "vitest": "^2.1.4"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -24,6 +26,8 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
+    "test": "vitest",
+    "server:test": "bun run --cwd=\"packages/server\" test",
     "server:lint": "bun run --cwd=\"packages/server\" lint",
     "server:format": "bun run --cwd=\"packages/server\" format",
     "client:lint": "bun run --cwd=\"packages/client\" lint",

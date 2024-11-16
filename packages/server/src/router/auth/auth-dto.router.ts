@@ -1,9 +1,3 @@
-import { z } from "zod"
+import { UserDtoSchema } from "@budgeteer/types"
 
-export const authRequestSchema = z.object({
-  username: z
-    .string()
-    .max(30)
-    .regex(/^[a-zA-Z0-9]+$/),
-  password: z.string(),
-})
+export const authRequestSchema = UserDtoSchema.pick({ username: true, password: true })

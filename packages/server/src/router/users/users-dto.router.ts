@@ -1,5 +1,3 @@
-import { z } from "zod"
+import { UserDtoSchema } from "@budgeteer/types"
 
-export const patchUserSchema = z.object({
-  profile_picture_url: z.string().max(255),
-})
+export const patchUserSchema = UserDtoSchema.pick({ profile_picture: true })
