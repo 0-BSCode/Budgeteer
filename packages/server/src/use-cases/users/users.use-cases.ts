@@ -12,7 +12,7 @@ import { DataService } from "~/services/data-service"
 
 export const UsersUseCases: IUserUseCases = {
   async getBalance(id: number): Promise<ResponseDto<number>> {
-    const transactions = await DataService.transactions.findByUser(id)
+    const transactions = await DataService.transactions.findByUserId(id)
     const expenses = transactions.filter(transaction => transaction.type === TransactionTypeEnum.EXPENSE)
     const incomes = transactions.filter(transaction => transaction.type === TransactionTypeEnum.INCOME)
     const balance =
