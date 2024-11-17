@@ -1,13 +1,17 @@
 "use client"
 
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { LoaderCircle } from "lucide-react"
 import Link from "next/link"
 
 import { cn } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form"
+
+import { UserCreateDto, UserCreateDtoSchema } from "@budgeteer/types"
 
 interface LoginFormProps {
   className?: string
@@ -16,9 +20,15 @@ interface LoginFormProps {
 export function LoginForm({ className }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false)
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
+  const form = useForm<UserCreateDto>({
+    resolver: zodResolver(UserCreateDtoSchema),
+  })
+
+  async function onSubmit(values: UserCreateDto) {
     setIsLoading(true)
+
+    // TODO: Call services & update context
+    console.log(values)
 
     setTimeout(() => {
       setIsLoading(false)
@@ -27,37 +37,47 @@ export function LoginForm({ className }: LoginFormProps) {
 
   return (
     <div className={cn("grid gap-6", className)}>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-3">
-          <div className="grid gap-1">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              placeholder="Enter your username"
-              autoCapitalize="none"
-              autoComplete="username"
-              autoCorrect="off"
-              disabled={isLoading}
-              required
-            />
-          </div>
-          <div className="grid gap-1">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              autoCapitalize="none"
-              autoCorrect="off"
-              type="password"
-              disabled={isLoading}
-              required
-            />
-          </div>
-          <Button disabled={isLoading}>
+      <Form {...form}>
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your username"
+                    autoCapitalize="none"
+                    autoComplete="username"
+                    autoCorrect="off"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" autoCapitalize="none" autoCorrect="off" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button className="w-full" type="submit" disabled={isLoading}>
             {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
             Log In
           </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
+
       <div className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         <Link href="/auth/sign-up" className="underline underline-offset-4 hover:text-primary">
