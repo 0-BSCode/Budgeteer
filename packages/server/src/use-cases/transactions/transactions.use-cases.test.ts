@@ -3,6 +3,13 @@ import { DataService } from "~/services/data-service"
 import { TransactionUseCases } from "./transactions.use-cases"
 import { ExpenseCategoryEnum, IncomeCategoryEnum, TransactionTypeEnum, type TransactionDto } from "@budgeteer/types"
 
+const FAKE_USER = {
+  id: 1,
+  username: "johndoe",
+  profile_picture: "image_url",
+  createdAt: new Date(),
+}
+
 vi.mock("~/services/data-service", () => ({
   DataService: {
     transactions: {
@@ -51,7 +58,9 @@ describe("TransactionUseCases", () => {
         updatedAt: new Date(),
       },
     ]
-    vi.mocked(DataService.users.findById).mockResolvedValue(1)
+
+    vi.mocked(DataService.users.findById).mockResolvedValue(FAKE_USER)
+
     vi.mocked(DataService.transactions.findByUserId).mockResolvedValue(transactions)
     const response = await TransactionUseCases.findByUserId(1)
     expect(response.data).toEqual(transactions)
@@ -63,7 +72,7 @@ describe("TransactionUseCases", () => {
   })
 
   test("findByUserId throws a db error", async () => {
-    vi.mocked(DataService.users.findById).mockResolvedValue(1)
+    vi.mocked(DataService.users.findById).mockResolvedValue(FAKE_USER)
     vi.mocked(DataService.transactions.findByUserId).mockRejectedValue(new Error("Database error!"))
     await expect(TransactionUseCases.findByUserId(1)).rejects.toThrowError("Database error!")
   })

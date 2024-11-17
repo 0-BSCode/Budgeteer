@@ -1,10 +1,4 @@
-import {
-  type ResponseDto,
-  type UserCreateDto,
-  HttpStatusEnum,
-  type UserDto,
-  type IAuthUseCases,
-} from "@budgeteer/types"
+import { type ResponseDto, type UserCreateDto, HttpStatusEnum, type IAuthUseCases } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { sign } from "hono/jwt"
 import type { SignatureKey } from "hono/utils/jwt/jws"
@@ -14,7 +8,7 @@ import { DataService } from "~/services/data-service"
 import { HashService } from "~/services/hash-service"
 
 export const AuthUseCases: IAuthUseCases = {
-  async register(dto: UserCreateDto): Promise<ResponseDto<UserDto | null>> {
+  async register(dto: UserCreateDto): Promise<ResponseDto<string | null>> {
     const { username, password } = dto
 
     // Username must be unique
@@ -27,9 +21,21 @@ export const AuthUseCases: IAuthUseCases = {
     try {
       const user = await DataService.users.create({ username, password: hashedPassword })
 
-      const response: ResponseDto<UserDto> = {
+      const { id } = user
+
+      const token = await sign(
+        {
+          id,
+          username,
+          // Expires in 1 hour
+          exp: Math.floor(Date.now() / 1000) + 60 * 60,
+        },
+        ConfigService.JWT_SECRET as SignatureKey,
+      )
+
+      const response: ResponseDto<string> = {
         status: HttpStatusEnum.CREATED,
-        data: user,
+        data: token,
       }
       return response
     } catch (e) {
@@ -50,6 +56,7 @@ export const AuthUseCases: IAuthUseCases = {
     }
 
     const isPasswordValid = comparePassword(password, user.password)
+
     if (!isPasswordValid) {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Incorrect password. Please try again!" })
     }
@@ -67,7 +74,7 @@ export const AuthUseCases: IAuthUseCases = {
     )
 
     const response: ResponseDto<string> = {
-      status: HttpStatusEnum.CREATED,
+      status: HttpStatusEnum.OK,
       data: token,
     }
 
