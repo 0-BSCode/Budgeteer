@@ -2,11 +2,11 @@ import config from "~/lib/config"
 import axios from "axios"
 import { ResponseDto } from "@budgeteer/types"
 
-const BASE_URL = config.NEXT_PUBLIC_API_BASE_URL
+const BASE_URL = `${config.NEXT_PUBLIC_API_BASE_URL}/auth`
 
 const authService = {
   register: async (username: string, password: string): Promise<string> => {
-    const { data: response } = await axios.post<ResponseDto<string>>(`${BASE_URL}/auth/register`, {
+    const { data: response } = await axios.post<ResponseDto<string>>(`${BASE_URL}/register`, {
       username,
       password,
     })
@@ -18,7 +18,7 @@ const authService = {
     return response.data
   },
   login: async (username: string, password: string): Promise<string> => {
-    const { data: response } = await axios.post<ResponseDto<string>>(`${BASE_URL}/auth/login`, {
+    const { data: response } = await axios.post<ResponseDto<string>>(`${BASE_URL}/login`, {
       username,
       password,
     })

@@ -2,11 +2,11 @@ import config from "~/lib/config"
 import axios from "axios"
 import { UserPublicDtoSchema, UserPublicDto, ResponseDto } from "@budgeteer/types"
 
-const BASE_URL = config.NEXT_PUBLIC_API_BASE_URL
+const BASE_URL = `${config.NEXT_PUBLIC_API_BASE_URL}/users`
 
 const userService = {
   fetchUserDetails: async (token: string): Promise<UserPublicDto> => {
-    const { data: response } = await axios.get<ResponseDto<UserPublicDto>>(`${BASE_URL}/users`, {
+    const { data: response } = await axios.get<ResponseDto<UserPublicDto>>(`${BASE_URL}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
