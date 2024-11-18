@@ -14,4 +14,16 @@ export const TransactionDtoSchema = z.object({
   updatedAt: z.date(),
 })
 
+export const TransactionFilterDtoSchema = z
+  .object({
+    type: z.nativeEnum(TransactionTypeEnum),
+    category: z.union([z.nativeEnum(IncomeCategoryEnum), z.nativeEnum(ExpenseCategoryEnum)]),
+    minAmount: z.number().gte(0),
+    maxAmount: z.number().gte(0),
+    startDate: z.date(),
+    endDate: z.date(),
+  })
+  .partial()
+
 export type TransactionDto = z.infer<typeof TransactionDtoSchema>
+export type TransactionFilterDto = z.infer<typeof TransactionFilterDtoSchema>
