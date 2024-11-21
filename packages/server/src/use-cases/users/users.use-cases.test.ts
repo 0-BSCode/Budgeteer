@@ -67,8 +67,8 @@ describe("create", () => {
 
     vi.mocked(DataService.users.create).mockResolvedValue(user)
     const response = await UsersUseCases.create({
-      username: "Test",
-      password: "TestEncryptedPassword123123123",
+      username: user.username,
+      password: user.password,
     })
 
     expect(response.data).toEqual(user)
@@ -90,6 +90,18 @@ describe("create", () => {
         password: user.password,
       }),
     ).rejects.toThrowError()
+  })
+
+  it("should throw a db error when invalid credentials are detected", async () => {
+    vi.mocked(DataService.users.findByUsername).mockResolvedValue(null)
+    vi.mocked(DataService.users.create).mockRejectedValue(new Error("Database error!"))
+
+    await expect(
+      UsersUseCases.create({
+        username: "test",
+        password: "test",
+      }),
+    ).rejects.toThrowError("Database error!")
   })
 })
 
@@ -118,5 +130,24 @@ describe("updateProfilePicture", () => {
         profile_picture: "updated_image_url",
       }),
     ).rejects.toThrowError()
+  })
+
+  it("should throw a db error", async () => {
+    const user: UserPublicDto = {
+      id: 1,
+      username: "johndoe",
+      profile_picture: "image_url",
+      createdAt: new Date(),
+    }
+
+    vi.mocked(DataService.users.findById).mockResolvedValue(user)
+
+    vi.mocked(DataService.users.updateProfilePictureUrl).mockRejectedValue(new Error("Database error!"))
+
+    await expect(
+      UsersUseCases.updateProfilePictureUrl(1, {
+        profile_picture: "updated_image_url",
+      }),
+    ).rejects.toThrowError("Database error!")
   })
 })

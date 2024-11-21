@@ -58,6 +58,14 @@ describe("register", () => {
       AuthUseCases.register({ username: GOOD_INPUT.username, password: BAD_INPUT.password }),
     ).rejects.toThrowError()
   })
+
+  it("should throw a db error", async () => {
+    vi.mocked(AuthUseCases.register).mockRejectedValue(new Error("Database error!"))
+
+    await expect(
+      AuthUseCases.register({ username: BAD_INPUT.username, password: BAD_INPUT.password }),
+    ).rejects.toThrowError("Database error!")
+  })
 })
 
 describe("login", () => {
