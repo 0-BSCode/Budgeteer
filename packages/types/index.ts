@@ -22,6 +22,8 @@ export * from "./src/enums/http-status.enum"
 export * from './src/enums/node-env.enum';
 export * from './src/enums/transaction-type.enum';
 export * from './src/enums/transaction-category.enum';
+export * from './src/enums/sort-order.enum';
+export * from './src/enums/transaction-sort-column.enum'
 
 // Constants
 export * from "./src/constants/db.constants"
