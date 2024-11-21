@@ -13,7 +13,7 @@ export const ExpenseCategoryEnum = {
   TRANSPORTATION: "TRANSPORTATION",
   UTILITIES: "UTILITIES",
   OTHER: "OTHER",
-}
+} as const
 
 export const IncomeCategoryEnumSchema = z.enum([
   IncomeCategoryEnum.ALLOWANCE,
