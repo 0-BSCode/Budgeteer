@@ -1,5 +1,5 @@
 import { integer, pgTable, varchar, date, pgEnum, real } from "drizzle-orm/pg-core"
-import { enumsToPgEnum, enumToPgEnum } from "../utils/enumToPgEnum"
+import { enumsToPgEnum } from "../utils/enumsToPgEnum"
 import {
   ExpenseCategoryEnum,
   IncomeCategoryEnum,
@@ -9,7 +9,7 @@ import {
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import { usersTable } from "./user.model"
 
-export const transactionTypeEnum = pgEnum("transaction_type", enumToPgEnum(TransactionTypeEnum))
+export const transactionTypeEnum = pgEnum("transaction_type", enumsToPgEnum([TransactionTypeEnum]))
 export const transactionCategoryEnum = pgEnum(
   "transaction_category",
   enumsToPgEnum([IncomeCategoryEnum, ExpenseCategoryEnum]),
