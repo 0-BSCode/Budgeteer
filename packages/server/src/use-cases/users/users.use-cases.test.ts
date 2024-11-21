@@ -1,244 +1,104 @@
-import { expect, test, vi, describe } from "vitest"
+import { expect, vi, it, describe } from "vitest"
 import { DataService } from "~/services/data-service"
-import { TransactionUseCases } from "../transactions/transactions.use-cases"
-import { ExpenseCategoryEnum, IncomeCategoryEnum, TransactionTypeEnum, type TransactionDto } from "@budgeteer/types"
-
-const FAKE_USER = {
-  id: 1,
-  username: "johndoe",
-  profile_picture: "image_url",
-  createdAt: new Date(),
-}
+import { type UserDto, type UserPublicDto } from "@budgeteer/types"
+import { UsersUseCases } from "../users/users.use-cases"
 
 vi.mock("~/services/data-service", () => ({
   DataService: {
-    transactions: {
-      findById: vi.fn(),
-      findByUserId: vi.fn(),
-      create: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
-    },
     users: {
       findById: vi.fn(),
       findByUsername: vi.fn(),
       create: vi.fn(),
       updateProfilePictureUrl: vi.fn(),
-      convertToDto: vi.fn(),
     },
   },
 }))
 
-// findById: (id: number) => Promise<UserDto | null>
-// findByUsername: (username: string) => Promise<UserDto | null>
-// create: (dto: UserCreateDto) => Promise<UserDto>
-// updateProfilePictureUrl: (id: number, dto: UserUpdateDto) => Promise<UserDto>
-// convertToDto: (data: unknown) => UserDto
-
-describe("TransactionUseCases", () => {
-  test("findById finds a transaction", async () => {
-    const transaction: TransactionDto = {
+describe("findById", () => {
+  it("should find a user and return their credentials without a password field", async () => {
+    const user: UserPublicDto = {
       id: 1,
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
+      username: "johndoe",
+      profile_picture: "image_url",
       createdAt: new Date(),
-      updatedAt: new Date(),
     }
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
-    const response = await TransactionUseCases.findById(1)
-    expect(response.data).toEqual(transaction)
+
+    vi.mocked(DataService.users.findById).mockResolvedValue(user)
+    const response = await UsersUseCases.findById(1)
+    expect(response.data).toEqual(user)
   })
 
-  test("findById throws an error if the transaction is not found", async () => {
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(null)
-    await expect(TransactionUseCases.findById(1)).rejects.toThrowError("Transaction not found")
-  })
-
-  test("findByUserId finds all transactions for a user", async () => {
-    const transactions: TransactionDto[] = [
-      {
-        id: 1,
-        description: "Test",
-        type: TransactionTypeEnum.EXPENSE,
-        amount: 50,
-        category: ExpenseCategoryEnum.ENTERTAINMENT,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ]
-
-    vi.mocked(DataService.users.findById).mockResolvedValue(FAKE_USER)
-
-    vi.mocked(DataService.transactions.findByUserId).mockResolvedValue(transactions)
-    const response = await TransactionUseCases.findByUserId(1)
-    expect(response.data).toEqual(transactions)
-  })
-
-  test("findByUserId throws an error if the user is not found", async () => {
+  it("should throw an error if the user is not found", async () => {
     vi.mocked(DataService.users.findById).mockResolvedValue(null)
-    await expect(TransactionUseCases.findByUserId(1)).rejects.toThrowError("User not found")
+    await expect(UsersUseCases.findById(1)).rejects.toThrowError("User not found")
   })
+})
 
-  test("findByUserId throws a db error", async () => {
-    vi.mocked(DataService.users.findById).mockResolvedValue(FAKE_USER)
-    vi.mocked(DataService.transactions.findByUserId).mockRejectedValue(new Error("Database error!"))
-    await expect(TransactionUseCases.findByUserId(1)).rejects.toThrowError("Database error!")
-  })
-
-  test("create creates a transaction", async () => {
-    const transaction: TransactionDto = {
+describe("findByUsername", () => {
+  it("should find a user with an encrypted password field", async () => {
+    const user: UserDto = {
       id: 1,
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
+      username: "johndoe",
+      profile_picture: "image_url",
+      password: "TestEncryptedPassword123123123",
       createdAt: new Date(),
-      updatedAt: new Date(),
     }
-    vi.mocked(DataService.transactions.create).mockResolvedValue(transaction)
-    const response = await TransactionUseCases.create({
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
+
+    vi.mocked(DataService.users.findByUsername).mockResolvedValue(user)
+    const response = await UsersUseCases.findByUsername("johndoe")
+    expect(response.data).toEqual(user)
+  })
+
+  it("should throw an error if the user is not found", async () => {
+    vi.mocked(DataService.users.findByUsername).mockResolvedValue(null)
+    await expect(UsersUseCases.findByUsername("johndoe")).rejects.toThrowError()
+  })
+})
+
+describe("create", () => {
+  it("should create a user", async () => {
+    const user: UserDto = {
+      id: 1,
+      username: "johndoe",
+      profile_picture: "image_url",
+      password: "TestEncryptedPassword123123123",
+      createdAt: new Date(),
+    }
+
+    vi.mocked(DataService.users.create).mockResolvedValue(user)
+    const response = await UsersUseCases.create({
+      username: "Test",
+      password: "TestEncryptedPassword123123123",
     })
-    expect(response.data).toEqual(transaction)
-  })
 
-  test("create throws an error if the category is invalid", async () => {
-    await expect(
-      TransactionUseCases.create({
-        description: "Test",
-        type: TransactionTypeEnum.EXPENSE,
-        amount: 50,
-        category: IncomeCategoryEnum.SALARY,
-      }),
-    ).rejects.toThrowError(`Invalid category for type ${TransactionTypeEnum.EXPENSE}`)
+    expect(response.data).toEqual(user)
   })
+})
 
-  test("create throws a db error", async () => {
-    vi.mocked(DataService.transactions.create).mockRejectedValue(new Error("Database error!"))
-    await expect(
-      TransactionUseCases.create({
-        description: "Test",
-        type: TransactionTypeEnum.EXPENSE,
-        amount: 50,
-        category: ExpenseCategoryEnum.ENTERTAINMENT,
-      }),
-    ).rejects.toThrowError("Database error!")
-  })
-
-  test("update updates a transaction", async () => {
-    const transaction: TransactionDto = {
+describe("updateProfilePicture", () => {
+  it("should update a user's profile picture URL", async () => {
+    const user: UserPublicDto = {
       id: 1,
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
+      username: "johndoe",
+      profile_picture: "image_url",
       createdAt: new Date(),
-      updatedAt: new Date(),
     }
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
-    vi.mocked(DataService.transactions.update).mockResolvedValue(transaction)
-    const response = await TransactionUseCases.update(1, {
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
+
+    vi.mocked(DataService.users.findById).mockResolvedValue(user)
+    vi.mocked(DataService.users.updateProfilePictureUrl).mockResolvedValue(user)
+    const response = await UsersUseCases.updateProfilePictureUrl(1, {
+      profile_picture: "updated_image_url",
     })
-    expect(response.data).toEqual(transaction)
+    expect(response.data).toEqual(user)
   })
 
-  test("update throws an error if the transaction is not found", async () => {
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(null)
+  it("should throw an error if the user is not found", async () => {
+    vi.mocked(DataService.users.findById).mockResolvedValue(null)
+
     await expect(
-      TransactionUseCases.update(1, {
-        description: "Test",
-        type: TransactionTypeEnum.EXPENSE,
-        amount: 50,
-        category: ExpenseCategoryEnum.ENTERTAINMENT,
+      UsersUseCases.updateProfilePictureUrl(1, {
+        profile_picture: "updated_image_url",
       }),
-    ).rejects.toThrowError("Transaction not found")
-  })
-
-  test("update throws an error if the category is invalid", async () => {
-    const transaction: TransactionDto = {
-      id: 1,
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
-    await expect(
-      TransactionUseCases.update(1, {
-        description: "Test",
-        type: TransactionTypeEnum.EXPENSE,
-        amount: 50,
-        category: IncomeCategoryEnum.SALARY,
-      }),
-    ).rejects.toThrowError(`Invalid category for type ${TransactionTypeEnum.EXPENSE}`)
-  })
-
-  test("update throws a db error", async () => {
-    const transaction: TransactionDto = {
-      id: 1,
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
-    vi.mocked(DataService.transactions.update).mockRejectedValue(new Error("Database error!"))
-    await expect(
-      TransactionUseCases.update(1, {
-        description: "Test",
-        type: TransactionTypeEnum.EXPENSE,
-        amount: 50,
-        category: ExpenseCategoryEnum.ENTERTAINMENT,
-      }),
-    ).rejects.toThrowError("Database error!")
-  })
-
-  test("delete deletes a transaction", async () => {
-    const transaction: TransactionDto = {
-      id: 1,
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
-    vi.mocked(DataService.transactions.delete)
-    const response = await TransactionUseCases.delete(1)
-    expect(response.data).toEqual(null)
-  })
-
-  test("delete throws an error if the transaction is not found", async () => {
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(null)
-    await expect(TransactionUseCases.delete(1)).rejects.toThrowError("Transaction not found")
-  })
-
-  test("delete throws a db error", async () => {
-    const transaction: TransactionDto = {
-      id: 1,
-      description: "Test",
-      type: TransactionTypeEnum.EXPENSE,
-      amount: 50,
-      category: ExpenseCategoryEnum.ENTERTAINMENT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-    vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
-    vi.mocked(DataService.transactions.delete).mockRejectedValue(new Error("Database error!"))
-    await expect(TransactionUseCases.delete(1)).rejects.toThrowError("Database error!")
+    ).rejects.toThrowError()
   })
 })
