@@ -57,6 +57,10 @@ export const UsersUseCases: IUserUseCases = {
     return response
   },
   async create(dto: UserCreateDto): Promise<ResponseDto<UserDto | null>> {
+    if (await DataService.users.findByUsername(dto.username)) {
+      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `User with name ${dto.username} already exists!` })
+    }
+
     try {
       const user = await DataService.users.create(dto)
 

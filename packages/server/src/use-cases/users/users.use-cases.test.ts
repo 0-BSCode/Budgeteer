@@ -73,6 +73,24 @@ describe("create", () => {
 
     expect(response.data).toEqual(user)
   })
+  it("should throw an error if the username is already taken by another user", async () => {
+    const user: UserDto = {
+      id: 1,
+      username: "johndoe",
+      profile_picture: "image_url",
+      password: "TestEncryptedPassword123123123",
+      createdAt: new Date(),
+    }
+
+    vi.mocked(DataService.users.findByUsername).mockResolvedValue(user)
+
+    await expect(
+      UsersUseCases.create({
+        username: user.username,
+        password: user.password,
+      }),
+    ).rejects.toThrowError()
+  })
 })
 
 describe("updateProfilePicture", () => {
