@@ -1,29 +1,45 @@
 import { z } from "zod"
-import { TransactionTypeEnum } from "~/enums/transaction-type.enum"
-import { IncomeCategoryEnum, ExpenseCategoryEnum } from "~/enums/transaction-category.enum"
+import { TransactionTypeEnumSchema } from "~/enums/transaction-type.enum"
+import { TransactionCategoryEnumSchema } from "~/enums/transaction-category.enum"
 import { MIN_TRANSACTION_AMOUNT, MAX_TRANSACTION_DESCRIPTION_LENGTH } from "~/constants/db.constants"
+import { SortOrderEnum, SortOrderEnumSchema } from "~/enums/sort-order.enum"
+import { TransactionSortColumnEnum, TransactionSortColumnEnumSchema } from "~/enums/transaction-sort-column.enum"
 
 export const TransactionDtoSchema = z.object({
   id: z.string().regex(/^[0-9]+$/, "Must be a number"),
   userId: z.number(),
   description: z.string().max(MAX_TRANSACTION_DESCRIPTION_LENGTH),
-  type: z.nativeEnum(TransactionTypeEnum),
-  category: z.union([z.nativeEnum(IncomeCategoryEnum), z.nativeEnum(ExpenseCategoryEnum)]),
+  type: TransactionTypeEnumSchema,
+  category: TransactionCategoryEnumSchema,
   amount: z.number().min(MIN_TRANSACTION_AMOUNT),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
 
-export const TransactionFilterDtoSchema = z
-  .object({
-    type: z.nativeEnum(TransactionTypeEnum),
-    category: z.union([z.nativeEnum(IncomeCategoryEnum), z.nativeEnum(ExpenseCategoryEnum)]),
-    minAmount: z.number().gte(0),
-    maxAmount: z.number().gte(0),
-    startDate: z.date(),
-    endDate: z.date(),
-  })
-  .partial()
+export const TransactionQueryDtoSchema = z.object({
+  // User ID
+  userId: z.number(),
+
+  // Type and category filter
+  type: TransactionTypeEnumSchema.optional(),
+  categories: z.array(TransactionCategoryEnumSchema).default([]),
+
+  // Amount filter
+  minAmount: z.number().min(0).optional(),
+  maxAmount: z.number().min(0).optional(),
+
+  // Date filter
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+
+  // Pagination
+  page: z.number().min(1).default(1),
+  limit: z.number().min(1).max(100).default(10),
+
+  // Sorting
+  sortBy: TransactionSortColumnEnumSchema.default(TransactionSortColumnEnum.DATE),
+  sortOrder: SortOrderEnumSchema.default(SortOrderEnum.ASC),
+})
 
 export type TransactionDto = z.infer<typeof TransactionDtoSchema>
-export type TransactionFilterDto = z.infer<typeof TransactionFilterDtoSchema>
+export type TransactionQueryDto = z.infer<typeof TransactionQueryDtoSchema>

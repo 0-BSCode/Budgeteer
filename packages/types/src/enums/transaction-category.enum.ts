@@ -28,4 +28,4 @@ export const ExpenseCategoryEnumSchema = z.enum([
   ExpenseCategoryEnum.UTILITIES,
   ExpenseCategoryEnum.OTHER,
 ])
-export const TransactionCategoryEnum = z.union([IncomeCategoryEnumSchema, ExpenseCategoryEnumSchema])
+export const TransactionCategoryEnumSchema = z.union([IncomeCategoryEnumSchema, ExpenseCategoryEnumSchema])
