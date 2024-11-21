@@ -63,27 +63,10 @@ describe("register", () => {
 describe("login", () => {
   it("should authenticate successfully and respond with an auth token", async () => {
     const mockLoginResponse = { status: HttpStatusEnum.OK, token: "mocked.jwt.token" }
-    // const transaction: TransactionDto = {
-    //   id: 1,
-    //   description: "Test",
-    //   type: TransactionTypeEnum.EXPENSE,
-    //   amount: 50,
-    //   category: ExpenseCategoryEnum.ENTERTAINMENT,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // }
-    // vi.mocked(DataService.transactions.create).mockResolvedValue(transaction)
-    // const response = await TransactionUseCases.create({
-    //   description: "Test",
-    //   type: TransactionTypeEnum.EXPENSE,
-    //   amount: 50,
-    //   category: ExpenseCategoryEnum.ENTERTAINMENT,
-    // })
-    // expect(response.data).toEqual(transaction)
-    // Check if token has the structure of a JWT
+
     vi.mocked(AuthUseCases.login).mockResolvedValue(mockLoginResponse)
 
-    // Attempt to log in with the same credentials used to register earlier
+    // Attempt to log in
     const response = await AuthUseCases.login({ username: GOOD_INPUT.username, password: GOOD_INPUT.password })
 
     const { token } = response
