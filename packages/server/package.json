@@ -2,7 +2,7 @@
   "name": "@budgeteer/server",
   "module": "src/index.ts",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "dev": "bun run --watch src/index.ts",
     "start": "bun src/index.ts",
     "lint": "eslint --fix --no-error-on-unmatched-pattern ./src/**/*.ts",
     "format": "prettier --write \"**/*.+(ts|json)\"",
@@ -30,7 +30,7 @@
     "drizzle-orm": "^0.36.0",
     "hono": "^4.6.9",
     "pg": "^8.13.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.7"
   },
   "type": "module"
 }
