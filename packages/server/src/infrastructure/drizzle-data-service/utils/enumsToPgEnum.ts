@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const enumsToPgEnum = <T extends Record<string, any>>(myEnums: T[]): [T[keyof T], ...T[keyof T][]] => {
-  const res = [] as unknown as [T[keyof T], ...T[keyof T][]]
+export const enumsToPgEnum = <T extends string>(...values: Record<string, T>[]): [T, ...T[]] => {
+  const allValues = values.flatMap(obj => Object.values(obj))
+  const uniqueValues = [...new Set(allValues)]
 
-  for (const myEnum of myEnums) {
-    const values = Object.values(myEnum).map((value: any) => `${value}`) as any
-    res.push(...values)
+  // Ensure at least one value exists
+  if (uniqueValues.length === 0) {
+    throw new Error("At least one enum value is required")
   }
 
-  const uniqueValues = new Set(res)
-  return Array.from(uniqueValues) as [T[keyof T], ...T[keyof T][]]
+  return [uniqueValues[0], ...uniqueValues.slice(1)] as [T, ...T[]]
 }
