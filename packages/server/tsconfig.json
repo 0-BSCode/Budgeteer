@@ -28,5 +28,8 @@
     "paths": {
       "~/*": ["./src/*"]
     }
-  }
+  },
+  "references": [{
+    "path": "../types"
+  }]
 }

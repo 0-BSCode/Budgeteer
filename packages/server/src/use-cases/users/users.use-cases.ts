@@ -6,7 +6,6 @@ import {
   HttpStatusEnum,
   type UserDto,
   TransactionTypeEnum,
-  UserPublicDtoSchema,
   type UserPublicDto,
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
@@ -35,9 +34,10 @@ export const UsersUseCases: IUserUseCases = {
       throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "User not found" })
     }
 
+    const { password, ...userWithoutPassword } = user
     const response: ResponseDto<UserPublicDto> = {
       status: HttpStatusEnum.OK,
-      data: UserPublicDtoSchema.parse(user),
+      data: userWithoutPassword,
     }
 
     return response
@@ -56,7 +56,7 @@ export const UsersUseCases: IUserUseCases = {
 
     return response
   },
-  async create(dto: UserCreateDto): Promise<ResponseDto<UserDto | null>> {
+  async create(dto: UserCreateDto): Promise<ResponseDto<UserDto>> {
     if (await DataService.users.findByUsername(dto.username)) {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `User with name ${dto.username} already exists!` })
     }
@@ -77,7 +77,7 @@ export const UsersUseCases: IUserUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to create user" })
     }
   },
-  async updateProfilePictureUrl(id: number, dto: UserUpdateDto): Promise<ResponseDto<UserDto | null>> {
+  async updateProfilePictureUrl(id: number, dto: UserUpdateDto): Promise<ResponseDto<UserDto>> {
     await this.findById(id)
 
     try {

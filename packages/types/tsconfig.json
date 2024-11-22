@@ -12,7 +12,8 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
 
     // Best practices
     "strict": true,
@@ -27,6 +28,8 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
-    }
+    },
+
+    "composite": true
   }
 }

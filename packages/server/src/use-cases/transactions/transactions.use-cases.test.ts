@@ -1,11 +1,18 @@
 import { expect, test, vi, describe } from "vitest"
 import { DataService } from "~/services/data-service"
 import { TransactionUseCases } from "./transactions.use-cases"
-import { ExpenseCategoryEnum, IncomeCategoryEnum, TransactionTypeEnum, type TransactionDto } from "@budgeteer/types"
+import {
+  ExpenseCategoryEnum,
+  IncomeCategoryEnum,
+  TransactionTypeEnum,
+  type TransactionDto,
+  type UserDto,
+} from "@budgeteer/types"
 
-const FAKE_USER = {
+const FAKE_USER: UserDto = {
   id: 1,
   username: "johndoe",
+  password: "password",
   profile_picture: "image_url",
   createdAt: new Date(),
 }
@@ -28,7 +35,8 @@ vi.mock("~/services/data-service", () => ({
 describe("TransactionUseCases", () => {
   test("findById finds a transaction", async () => {
     const transaction: TransactionDto = {
-      id: 1,
+      id: "1",
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
@@ -49,7 +57,8 @@ describe("TransactionUseCases", () => {
   test("findByUserId finds all transactions for a user", async () => {
     const transactions: TransactionDto[] = [
       {
-        id: 1,
+        id: "1",
+        userId: 1,
         description: "Test",
         type: TransactionTypeEnum.EXPENSE,
         amount: 50,
@@ -79,7 +88,8 @@ describe("TransactionUseCases", () => {
 
   test("create creates a transaction", async () => {
     const transaction: TransactionDto = {
-      id: 1,
+      id: "1",
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
@@ -89,6 +99,7 @@ describe("TransactionUseCases", () => {
     }
     vi.mocked(DataService.transactions.create).mockResolvedValue(transaction)
     const response = await TransactionUseCases.create({
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
@@ -100,6 +111,7 @@ describe("TransactionUseCases", () => {
   test("create throws an error if the category is invalid", async () => {
     await expect(
       TransactionUseCases.create({
+        userId: 1,
         description: "Test",
         type: TransactionTypeEnum.EXPENSE,
         amount: 50,
@@ -112,6 +124,7 @@ describe("TransactionUseCases", () => {
     vi.mocked(DataService.transactions.create).mockRejectedValue(new Error("Database error!"))
     await expect(
       TransactionUseCases.create({
+        userId: 1,
         description: "Test",
         type: TransactionTypeEnum.EXPENSE,
         amount: 50,
@@ -122,7 +135,8 @@ describe("TransactionUseCases", () => {
 
   test("update updates a transaction", async () => {
     const transaction: TransactionDto = {
-      id: 1,
+      id: "1",
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
@@ -155,7 +169,8 @@ describe("TransactionUseCases", () => {
 
   test("update throws an error if the category is invalid", async () => {
     const transaction: TransactionDto = {
-      id: 1,
+      id: "1",
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
@@ -176,7 +191,8 @@ describe("TransactionUseCases", () => {
 
   test("update throws a db error", async () => {
     const transaction: TransactionDto = {
-      id: 1,
+      id: "1",
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
@@ -198,7 +214,8 @@ describe("TransactionUseCases", () => {
 
   test("delete deletes a transaction", async () => {
     const transaction: TransactionDto = {
-      id: 1,
+      id: "1",
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
@@ -219,7 +236,8 @@ describe("TransactionUseCases", () => {
 
   test("delete throws a db error", async () => {
     const transaction: TransactionDto = {
-      id: 1,
+      id: "1",
+      userId: 1,
       description: "Test",
       type: TransactionTypeEnum.EXPENSE,
       amount: 50,
