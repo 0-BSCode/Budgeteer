@@ -6,6 +6,7 @@ import { SortOrderEnum, SortOrderEnumSchema } from "~/enums/sort-order.enum"
 import { TransactionSortColumnEnum, TransactionSortColumnEnumSchema } from "~/enums/transaction-sort-column.enum"
 
 export const TransactionDtoSchema = z.object({
+  // TODO: Make consistent with other entity ID's
   id: z.string().regex(/^[0-9]+$/, "Must be a number"),
   userId: z.number(),
   description: z.string().max(MAX_TRANSACTION_DESCRIPTION_LENGTH),
