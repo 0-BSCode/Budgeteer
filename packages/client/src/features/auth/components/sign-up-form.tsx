@@ -72,7 +72,7 @@ export function SignUpForm({ className }: SignUpFormProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input autoCapitalize="none" autoCorrect="off" {...field} />
+                  <Input type="password" autoCapitalize="none" autoCorrect="off" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
