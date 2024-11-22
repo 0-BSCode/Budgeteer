@@ -13,12 +13,19 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 
 import { UserCreateDtoSchema, UserCreateDto } from "@budgeteer/types"
 
+import useAuth from "../hooks/use-auth"
+import { useToast } from "~/hooks/use-toast"
+import { useRouter } from "next/navigation"
+
 interface SignUpFormProps {
   className?: string
 }
 
 export function SignUpForm({ className }: SignUpFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const { register } = useAuth()
+  const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm<UserCreateDto>({
     resolver: zodResolver(UserCreateDtoSchema),
@@ -27,12 +34,18 @@ export function SignUpForm({ className }: SignUpFormProps) {
   async function onSubmit(values: UserCreateDto) {
     setIsLoading(true)
 
-    // TODO: Call services & update context
-    console.log(values)
-
-    setTimeout(() => {
+    try {
+      await register(values.username, values.password)
       setIsLoading(false)
-    }, 3000)
+      router.replace("/")
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "An error occured during registration!",
+        description: (e as Error).message,
+      })
+      setIsLoading(false)
+    }
   }
 
   return (
