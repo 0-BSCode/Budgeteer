@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { TransactionTypeEnumSchema } from "~/enums/transaction-type.enum"
-import { TransactionCategoryEnumSchema } from "~/enums/transaction-category.enum"
-import { MIN_TRANSACTION_AMOUNT, MAX_TRANSACTION_DESCRIPTION_LENGTH } from "~/constants/db.constants"
-import { SortOrderEnum, SortOrderEnumSchema } from "~/enums/sort-order.enum"
-import { TransactionSortColumnEnum, TransactionSortColumnEnumSchema } from "~/enums/transaction-sort-column.enum"
+import { TransactionTypeEnumSchema } from "../../enums/transaction-type.enum"
+import { TransactionCategoryEnumSchema } from "../../enums/transaction-category.enum"
+import { MIN_TRANSACTION_AMOUNT, MAX_TRANSACTION_DESCRIPTION_LENGTH } from "../../constants/db.constants"
+import { SortOrderEnum, SortOrderEnumSchema } from "../../enums/sort-order.enum"
+import { TransactionSortColumnEnum, TransactionSortColumnEnumSchema } from "../../enums/transaction-sort-column.enum"
 
 export const TransactionDtoSchema = z.object({
   // TODO: Make consistent with other entity ID's

@@ -1,4 +1,10 @@
-import { type ResponseDto, type UserCreateDto, HttpStatusEnum, type IAuthUseCases } from "@budgeteer/types"
+import {
+  type ResponseDto,
+  type UserCreateDto,
+  HttpStatusEnum,
+  type IAuthUseCases,
+  MIN_PASSWORD_LENGTH,
+} from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { sign } from "hono/jwt"
 import type { SignatureKey } from "hono/utils/jwt/jws"
@@ -10,6 +16,13 @@ import { HashService } from "~/services/hash-service"
 export const AuthUseCases: IAuthUseCases = {
   async register(dto: UserCreateDto): Promise<ResponseDto<string | null>> {
     const { username, password } = dto
+
+    // Password cannot be less than 8 characters long
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, {
+        message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long!`,
+      })
+    }
 
     // Username must be unique
     if (await DataService.users.findByUsername(username)) {
