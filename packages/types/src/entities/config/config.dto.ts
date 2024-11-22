@@ -1,4 +1,4 @@
-import type { NodeEnv } from "~/enums/node-env.enum"
+import type { NodeEnv } from "../../enums/node-env.enum"
 
 export type ConfigDto = {
   NODE_ENV: NodeEnv

@@ -5,7 +5,7 @@ import {
   MIN_USERNAME_LENGTH,
   MAX_USERNAME_LENGTH,
   MAX_PROFILE_PIC_LENGTH,
-} from "~/constants/db.constants"
+} from "../../constants/db.constants"
 
 export const UserDtoSchema = z.object({
   id: z.number(),
