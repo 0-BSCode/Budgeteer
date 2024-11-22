@@ -4,10 +4,13 @@ import {
   type TransactionCreateDto,
   type TransactionUpdateDto,
   TransactionDtoSchema,
+  type TransactionQueryDto,
+  TransactionSortColumnEnum,
+  SortOrderEnum,
 } from "@budgeteer/types"
 import { db } from ".."
 import { transactionsTable, type InsertTransaction, type SelectTransaction } from "../models/transaction.model"
-import { eq } from "drizzle-orm"
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm"
 
 export const transactionRepository: ITransactionRepository = {
   async findById(id: number): Promise<TransactionDto | null> {
@@ -25,6 +28,59 @@ export const transactionRepository: ITransactionRepository = {
       .select()
       .from(transactionsTable)
       .where(eq(transactionsTable.userId, userId))
+
+    return records.map(this.convertToDto)
+  },
+  async query(dto: TransactionQueryDto): Promise<TransactionDto[]> {
+    const whereConditions = []
+
+    // Query by date
+    if (dto.startDate) {
+      whereConditions.push(gte(transactionsTable.createdAt, dto.startDate.toString()))
+    }
+
+    if (dto.endDate) {
+      whereConditions.push(lte(transactionsTable.createdAt, dto.endDate.toISOString()))
+    }
+
+    // Query by amount
+    if (dto.minAmount) {
+      whereConditions.push(gte(transactionsTable.amount, dto.minAmount))
+    }
+
+    if (dto.maxAmount) {
+      whereConditions.push(lte(transactionsTable.amount, dto.maxAmount))
+    }
+
+    // Query by type
+    if (dto.type) {
+      whereConditions.push(eq(transactionsTable.type, dto.type))
+    }
+
+    // Query by categories
+    if (dto.categories.length > 0) {
+      const categories = dto.categories.map(category => eq(transactionsTable.category, category))
+      whereConditions.push(and(...categories))
+    }
+
+    whereConditions.push(eq(transactionsTable.userId, dto.userId))
+
+    // Sorting
+    const sortColumn =
+      dto.sortBy === TransactionSortColumnEnum.DATE ? transactionsTable.createdAt : transactionsTable.amount
+    const sortCriteria = dto.sortOrder === SortOrderEnum.ASC ? asc(sortColumn) : desc(sortColumn)
+
+    // Pagination
+    const offset = (dto.page - 1) * dto.limit
+    const limit = dto.limit
+
+    const records: SelectTransaction[] = await db
+      .select()
+      .from(transactionsTable)
+      .where(and(...whereConditions))
+      .orderBy(sortCriteria)
+      .offset(offset)
+      .limit(limit)
 
     return records.map(this.convertToDto)
   },

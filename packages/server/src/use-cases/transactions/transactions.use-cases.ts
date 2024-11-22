@@ -3,6 +3,7 @@ import {
   type ResponseDto,
   type TransactionDto,
   type TransactionCreateDto,
+  type TransactionQueryDto,
   HttpStatusEnum,
   type TransactionUpdateDto,
 } from "@budgeteer/types"
@@ -14,7 +15,6 @@ import { UsersUseCases } from "../users/users.use-cases"
 export const TransactionUseCases: ITransactionUseCases = {
   async findById(id: number): Promise<ResponseDto<TransactionDto>> {
     const transaction = await DataService.transactions.findById(id)
-
     if (!transaction) {
       throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "Transaction not found" })
     }
@@ -46,9 +46,30 @@ export const TransactionUseCases: ITransactionUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to fetch transactions" })
     }
   },
-  async create(dto: TransactionCreateDto): Promise<ResponseDto<TransactionDto | null>> {
+  async query(dto: TransactionQueryDto): Promise<ResponseDto<TransactionDto[]>> {
+    await UsersUseCases.findById(dto.userId)
+
     try {
-      if (!isCategoryValid(dto.type, dto.category)) {
+      const transactions = await DataService.transactions.query(dto)
+
+      const response: ResponseDto<TransactionDto[]> = {
+        status: HttpStatusEnum.OK,
+        data: transactions,
+      }
+
+      return response
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
+      }
+
+      throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to fetch transactions" })
+    }
+  },
+  async create(dto: TransactionCreateDto): Promise<ResponseDto<TransactionDto>> {
+    try {
+      // Check if category is valid for transaction type
+      if (dto.type && !isCategoryValid(dto.type, dto.category)) {
         throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `Invalid category for type ${dto.type}` })
       }
 
@@ -67,10 +88,18 @@ export const TransactionUseCases: ITransactionUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to create transaction" })
     }
   },
-  async update(id: number, dto: TransactionUpdateDto): Promise<ResponseDto<TransactionDto | null>> {
-    await this.findById(id)
+  async update(id: number, dto: TransactionUpdateDto): Promise<ResponseDto<TransactionDto>> {
+    const { data } = await this.findById(id)
 
-    if (!isCategoryValid(dto.type, dto.category)) {
+    // Check if category is valid for transaction type
+    if (dto.type) {
+      data.type = dto.type
+    }
+
+    if (dto.category) {
+      data.category = dto.category
+    }
+    if (!isCategoryValid(data.type, data.category)) {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: `Invalid category for type ${dto.type}` })
     }
 

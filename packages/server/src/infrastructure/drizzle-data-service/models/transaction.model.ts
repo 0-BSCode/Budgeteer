@@ -1,5 +1,5 @@
 import { integer, pgTable, varchar, date, pgEnum, real } from "drizzle-orm/pg-core"
-import { enumsToPgEnum, enumToPgEnum } from "../utils/enumToPgEnum"
+import { enumsToPgEnum } from "../utils/enumsToPgEnum"
 import {
   ExpenseCategoryEnum,
   IncomeCategoryEnum,
@@ -9,10 +9,11 @@ import {
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import { usersTable } from "./user.model"
 
-export const transactionTypeEnum = pgEnum("transaction_type", enumToPgEnum(TransactionTypeEnum))
+export const transactionTypeEnum = pgEnum("transaction_type", enumsToPgEnum(TransactionTypeEnum))
+// TODO: Fix type error (converts fine, but it gets recognized as an array of 'OTHER')
 export const transactionCategoryEnum = pgEnum(
   "transaction_category",
-  enumsToPgEnum([IncomeCategoryEnum, ExpenseCategoryEnum]),
+  enumsToPgEnum(ExpenseCategoryEnum, IncomeCategoryEnum),
 )
 
 export const transactionsTable = pgTable("transactions", {
