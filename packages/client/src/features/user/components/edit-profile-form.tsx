@@ -8,15 +8,19 @@ import EditAvatar from "./edit-avatar"
 
 import { useState, type Dispatch, type SetStateAction } from "react"
 import { useUserContext } from "../providers/user-context-provider"
+import useAuth from "~/features/auth/hooks/use-auth"
+import { useToast } from "~/hooks/use-toast"
 
 const BLANK_INPUT = ""
 
 export default function EditProfileForm() {
   const [isEditing, setIsEditing] = useState(false)
-  const { user } = useUserContext()
-  const username = user?.username ?? "Guest"
   const [newUsername, setNewUsername] = useState(BLANK_INPUT)
   const [newPassword, setNewPassword] = useState(BLANK_INPUT)
+  const { user } = useUserContext()
+  const { updateUserCredentials } = useAuth()
+  const { toast } = useToast()
+  const username = user?.username ?? "Guest"
 
   const isInvalidNewCredentials = newUsername === BLANK_INPUT || newPassword === BLANK_INPUT
 
@@ -30,9 +34,23 @@ export default function EditProfileForm() {
     setIsEditing(false)
   }
 
-  const handleSaveChanges = () => {
-    console.log("TODO: implement profile change saving")
-    handleCancelEditing()
+  const handleSaveChanges = async () => {
+    try {
+      await updateUserCredentials({ username: newUsername, password: newPassword })
+
+      toast({
+        variant: "success",
+        title: "Successfully edited profile!",
+      })
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "An error occured!",
+        description: (e as Error).message,
+      })
+    } finally {
+      handleCancelEditing()
+    }
   }
 
   const handleInputChange = (setFn: Dispatch<SetStateAction<string>>, value: string) => {
