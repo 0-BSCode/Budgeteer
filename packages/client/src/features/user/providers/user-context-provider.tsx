@@ -4,9 +4,10 @@ import { createContext, ReactNode, useContext } from "react"
 import userService from "../services/user-service"
 import useAuth from "~/features/auth/hooks/use-auth"
 import { useState, useEffect } from "react"
-import { UserPublicDto } from "@budgeteer/types"
+import { UserPublicDto, UserPublicDtoSchema } from "@budgeteer/types"
 import { useRouter } from "next/navigation"
 import LoadingPage from "~/components/layout/loading-page"
+import { useToast } from "~/hooks/use-toast"
 
 type UserContext = {
   user: UserPublicDto | null
@@ -17,6 +18,7 @@ const Context = createContext<UserContext | undefined>(undefined)
 
 export function UserContextProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
+  const { toast } = useToast()
   const { authToken } = useAuth()
   const [user, setUser] = useState<UserPublicDto | null>(null)
 
@@ -27,12 +29,22 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
     }
 
     const fetchUser = async () => {
-      const fetchedUser = await userService.fetchUserDetails(authToken)
-      setUser(fetchedUser)
+      try {
+        const fetchedUser = UserPublicDtoSchema.parse(await userService.fetchUserDetails(authToken))
+
+        setUser(fetchedUser)
+      } catch (e) {
+        toast({
+          variant: "destructive",
+          title: "An error occured while fetching user details.",
+          description: (e as Error).message,
+        })
+        router.replace("/auth/login")
+      }
     }
 
     fetchUser()
-  }, [router, authToken])
+  }, [router, authToken, toast])
 
   if (!user) {
     return <LoadingPage />
