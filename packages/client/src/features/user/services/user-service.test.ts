@@ -4,6 +4,7 @@ import userService from "~/features/user/services/user-service"
 import authService from "~/features/auth/services/auth-service"
 
 const NEW_CREDENTIALS = {
+  profile_picture: "5",
   username: `new${createRandomString()}`,
   password: "87654321",
 }
@@ -41,6 +42,17 @@ describe.only("user-service", () => {
       sharedTestState.token = token
       sharedTestState.username = NEW_CREDENTIALS.username
       sharedTestState.password = NEW_CREDENTIALS.password
+    })
+  })
+
+  describe("updateUserProfilePicture", () => {
+    it("should update the profile picture successfully", async () => {
+      const updatedProfile = await userService.updateUserProfilePicture(
+        sharedTestState.token,
+        NEW_CREDENTIALS.profile_picture,
+      )
+
+      expect(updatedProfile).toHaveProperty("profile_picture", NEW_CREDENTIALS.profile_picture)
     })
   })
 })

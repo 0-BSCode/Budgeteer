@@ -36,6 +36,26 @@ const userService = {
 
     return user
   },
+  updateUserProfilePicture: async (token: string, newProfilePicture: string): Promise<UserPublicDto> => {
+    const { data: response } = await axios.patch<ResponseDto<UserPublicDto>>(
+      `${BASE_URL}/profile-picture`,
+      { profile_picture: newProfilePicture },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    )
+
+    const { data: user, success } = UserPublicDtoSchema.safeParse(response.data)
+
+    if (!success) {
+      throw new Error("The server sent malformatted data. Please contact the website admin.")
+    }
+
+    return user
+  },
 }
 
 export default userService
