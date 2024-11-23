@@ -1,10 +1,10 @@
 "use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { UserPen, Save } from "lucide-react"
+import EditAvatar from "./edit-avatar"
 
 import { useState, type Dispatch, type SetStateAction } from "react"
 import { useUserContext } from "../providers/user-context-provider"
@@ -42,10 +42,7 @@ export default function EditProfileForm() {
   return (
     <div className="space-y-8">
       <div className="flex justify-center">
-        <Avatar className="w-48 h-48">
-          <AvatarImage alt="Your profile picture" />
-          <AvatarFallback>Ü</AvatarFallback>
-        </Avatar>
+        <EditAvatar />
       </div>
 
       <div className="flex flex-col items-center gap-4">
@@ -99,7 +96,7 @@ export default function EditProfileForm() {
         ) : (
           <Button onClick={handleEditProfile} variant="outline" size="lg" className="w-full max-w-md">
             <UserPen className="w-4 h-4" />
-            Edit Profile
+            Edit Credentials
           </Button>
         )}
       </div>
