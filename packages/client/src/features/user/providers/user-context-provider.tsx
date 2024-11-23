@@ -6,6 +6,7 @@ import useAuth from "~/features/auth/hooks/use-auth"
 import { useState, useEffect } from "react"
 import { UserPublicDto } from "@budgeteer/types"
 import { useRouter } from "next/navigation"
+import LoadingPage from "~/components/layout/loading-page"
 
 type UserContext = {
   user: UserPublicDto | null
@@ -32,6 +33,10 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
 
     fetchUser()
   }, [router, authToken])
+
+  if (!user) {
+    return <LoadingPage />
+  }
 
   return (
     <Context.Provider
