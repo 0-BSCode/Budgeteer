@@ -12,6 +12,7 @@ import { useToast } from "~/hooks/use-toast"
 type UserContext = {
   user: UserPublicDto | null
   authToken: string | null
+  updateUserProfilePicture: ((p: string) => Promise<void>) | null
 }
 
 const Context = createContext<UserContext | undefined>(undefined)
@@ -46,8 +47,13 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
     fetchUser()
   }, [router, authToken, toast])
 
-  if (!user) {
+  if (!user || !authToken) {
     return <LoadingPage />
+  }
+
+  const updateUserProfilePicture = async (newProfilePicture: string) => {
+    const newProfile = await userService.updateUserProfilePicture(authToken, newProfilePicture)
+    setUser(newProfile)
   }
 
   return (
@@ -55,6 +61,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         authToken,
+        updateUserProfilePicture,
       }}
     >
       {children}
