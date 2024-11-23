@@ -2,10 +2,7 @@ import { expect, it, describe } from "vitest"
 import { MIN_PASSWORD_LENGTH, UserDto } from "@budgeteer/types"
 import authService from "./auth-service"
 import userService from "~/features/user/services/user-service"
-
-function createRandomString(): string {
-  return Math.random().toString().slice(2, 10)
-}
+import { createRandomString } from "~/lib/test/sertupTestUser"
 
 const GOOD_INPUT = {
   username: `test${createRandomString()}`,

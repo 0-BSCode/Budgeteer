@@ -11,6 +11,7 @@ import {
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
+import { HashService } from "~/services/hash-service"
 
 export const UsersUseCases: IUserUseCases = {
   async getBalance(id: number): Promise<ResponseDto<number>> {
@@ -101,7 +102,7 @@ export const UsersUseCases: IUserUseCases = {
     await this.findById(id)
 
     try {
-      const user = await DataService.users.update(id, dto)
+      const user = await DataService.users.update(id, { ...dto, password: HashService.hashPassword(dto.password) })
 
       const response: ResponseDto<UserPublicDto> = {
         status: HttpStatusEnum.OK,
