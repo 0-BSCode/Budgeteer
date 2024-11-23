@@ -82,7 +82,7 @@ export default function EditAvatar() {
                   <Avatar
                     onClick={() => handleSelectAvatar(pic)}
                     key={`profile-picture-id-${pic}`}
-                    className={cn("w-24 h-24", {
+                    className={cn("w-16 h-16 sm:w-24 sm:h-24", {
                       "outline-4 outline outline-primary": pic === newProfilePicture,
                       "opacity-70 hover:opacity-100 transition-all cursor-pointer": pic !== newProfilePicture,
                     })}
