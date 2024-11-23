@@ -4,10 +4,12 @@ import user from "./router/users/users.router"
 import transactionApi from "./router/transactions/transactions.router"
 import { HttpStatusEnum, type ResponseDto } from "@budgeteer/types"
 import { logger } from "hono/logger"
+import { cors } from "hono/cors"
 
 const app = new Hono()
 
 app.use(logger())
+app.use(cors())
 
 app.onError((err, c) => {
   const response: ResponseDto<null> = {

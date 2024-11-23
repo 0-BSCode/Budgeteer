@@ -16,7 +16,8 @@ export default function useAuth() {
   }
 
   const register = async (username: string, password: string) => {
-    await authService.register(username, password)
+    const token = await authService.register(username, password)
+    setAuthToken(token)
   }
 
   return { authToken, login, logout, register }

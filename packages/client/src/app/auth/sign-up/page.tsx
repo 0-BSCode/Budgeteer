@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 
 import { Button } from "~/components/ui/button"
-import { SignUpForm } from "~/features/auth/sign-up-form"
+import { SignUpForm } from "~/features/auth/components/sign-up-form"
 
 export const metadata: Metadata = {
   title: "Sign Up | Budgeteer",

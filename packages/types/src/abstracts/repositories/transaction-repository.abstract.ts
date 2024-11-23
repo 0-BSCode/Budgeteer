@@ -1,6 +1,6 @@
-import type { TransactionCreateDto } from "~/entities/transactions/transaction-create.dto"
-import type { TransactionUpdateDto } from "~/entities/transactions/transaction-update.dto"
-import type { TransactionDto, TransactionQueryDto } from "~/entities/transactions/transaction.dto"
+import type { TransactionCreateDto } from "../../entities/transactions/transaction-create.dto"
+import type { TransactionUpdateDto } from "../../entities/transactions/transaction-update.dto"
+import type { TransactionDto, TransactionQueryDto } from "../../entities/transactions/transaction.dto"
 
 export type ITransactionRepository = {
   query: (query: TransactionQueryDto) => Promise<TransactionDto[]>

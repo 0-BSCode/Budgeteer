@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, ReactNode } from "react"
+import { createContext, ReactNode, useContext } from "react"
 import userService from "../services/user-service"
 import useAuth from "~/features/auth/hooks/use-auth"
 import { useState, useEffect } from "react"
@@ -14,7 +14,7 @@ type UserContext = {
 
 const Context = createContext<UserContext | undefined>(undefined)
 
-export default function UserContextProvider({ children }: { children: ReactNode }) {
+export function UserContextProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const { authToken } = useAuth()
   const [user, setUser] = useState<UserPublicDto | null>(null)
@@ -43,4 +43,10 @@ export default function UserContextProvider({ children }: { children: ReactNode 
       {children}
     </Context.Provider>
   )
+}
+
+export function useUserContext() {
+  const context = useContext(Context)
+  if (context === undefined) throw new Error("useUserContext was used outside of the provider!")
+  return context
 }
