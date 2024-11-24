@@ -50,11 +50,7 @@ export const userRepository: IUserRepository = {
     return this.convertToDto(record)
   },
   async update(id: number, dto: UserUpdateDto): Promise<UserDto> {
-    const records = await db
-      .update(usersTable)
-      .set({ ...dto })
-      .where(eq(usersTable.id, id))
-      .returning()
+    const records = await db.update(usersTable).set(dto).where(eq(usersTable.id, id)).returning()
 
     const record: SelectUser = records[0]
 
