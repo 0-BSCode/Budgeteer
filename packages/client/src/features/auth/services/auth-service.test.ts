@@ -2,7 +2,7 @@ import { expect, it, describe } from "vitest"
 import { MIN_PASSWORD_LENGTH, UserDto } from "@budgeteer/types"
 import authService from "./auth-service"
 import userService from "~/features/user/services/user-service"
-import { createRandomString } from "~/lib/test/sertupTestUser"
+import { createRandomString } from "~/lib/test/setupTestUser"
 
 const GOOD_INPUT = {
   username: `test${createRandomString()}`,
