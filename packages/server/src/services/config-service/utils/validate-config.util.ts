@@ -14,6 +14,8 @@ export const isConfigValid = (config: Partial<ConfigDto>): boolean => {
   for (const field of requiredFields) {
     if (!(field in config)) {
       throw new Error(`Missing required environment variable: ${field}`)
+    } else if (!config[field]) {
+      throw new Error(`Environment variable ${field} cannot be empty`)
     }
   }
 

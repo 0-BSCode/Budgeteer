@@ -9,13 +9,13 @@ config({
 
 function loadEnvConfig() {
   const config: Partial<ConfigDto> = {
-    NODE_ENV: process.env["NODE_ENV"] as NodeEnv,
-    DB_PASSWORD: process.env["POSTGRES_PASSWORD"],
-    DB_USER: process.env["POSTGRES_USER"],
-    DB_DB: process.env["POSTGRES_DB"],
-    DB_HOST: process.env["POSTGRES_HOST"],
-    DB_PORT: Number(process.env["DB_PORT"]),
-    JWT_SECRET: process.env["JWT_SECRET"],
+    NODE_ENV: (process.env["NODE_ENV"] as NodeEnv) ?? NodeEnv.DEVELOPMENT,
+    DB_PASSWORD: process.env["POSTGRES_PASSWORD"] ?? "example",
+    DB_USER: process.env["POSTGRES_USER"] ?? "postgres",
+    DB_DB: process.env["POSTGRES_DB"] ?? "postgres",
+    DB_HOST: process.env["POSTGRES_HOST"] ?? "localhost",
+    DB_PORT: Number(process.env["DB_PORT"]) ?? 5432,
+    JWT_SECRET: process.env["JWT_SECRET"] ?? "secret",
   }
 
   if (!isConfigValid(config)) {
