@@ -1,6 +1,5 @@
 import { type ConfigDto, NodeEnv } from "@budgeteer/types"
 import { config } from "dotenv"
-import { isConfigValid } from "./utils/validate-config.util"
 import path from "path"
 
 config({
@@ -16,10 +15,6 @@ function loadEnvConfig() {
     DB_HOST: process.env["POSTGRES_HOST"] ?? "localhost",
     DB_PORT: Number(process.env["DB_PORT"]) ?? 5432,
     JWT_SECRET: process.env["JWT_SECRET"] ?? "secret",
-  }
-
-  if (!isConfigValid(config)) {
-    throw new Error("Invalid environment variables")
   }
 
   return config
