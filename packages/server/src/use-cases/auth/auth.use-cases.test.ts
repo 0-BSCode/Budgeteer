@@ -32,13 +32,13 @@ const BAD_INPUT = {
 
 describe("register", () => {
   it("should create new accounts successfully & respond with an auth token", async () => {
-    const mockRegisterResponse = { status: HttpStatusEnum.CREATED, token: "mocked.jwt.token" }
+    const mockRegisterResponse = { status: HttpStatusEnum.CREATED, data: "mocked.jwt.token" }
 
     // Check if token has the structure of a JWT
     vi.mocked(AuthUseCases.register).mockResolvedValue(mockRegisterResponse)
     const response = await AuthUseCases.register({ username: GOOD_INPUT.username, password: GOOD_INPUT.password })
 
-    const { token } = response
+    const { data: token } = response
 
     expect(token).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/)
   })
@@ -70,14 +70,14 @@ describe("register", () => {
 
 describe("login", () => {
   it("should authenticate successfully and respond with an auth token", async () => {
-    const mockLoginResponse = { status: HttpStatusEnum.OK, token: "mocked.jwt.token" }
+    const mockLoginResponse = { status: HttpStatusEnum.OK, data: "mocked.jwt.token" }
 
     vi.mocked(AuthUseCases.login).mockResolvedValue(mockLoginResponse)
 
     // Attempt to log in
     const response = await AuthUseCases.login({ username: GOOD_INPUT.username, password: GOOD_INPUT.password })
 
-    const { token } = response
+    const { data: token } = response
     // Check if token has the structure of a JWT
     expect(token).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/)
   })

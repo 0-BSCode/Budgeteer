@@ -7,6 +7,7 @@ export * from "./src/entities/response/response.dto"
 export * from "./src/entities/users/user-create.dto"
 export * from "./src/entities/users/user.dto"
 export * from "./src/entities/users/user-update.dto"
+export * from "./src/entities/users/user-update-profile-picture.dto"
 
 // Abstracts
 export * from "./src/abstracts/repositories/transaction-repository.abstract"
@@ -19,11 +20,11 @@ export * from "./src/abstracts/use-cases/transaction-use-cases.abstract"
 
 // Enums
 export * from "./src/enums/http-status.enum"
-export * from './src/enums/node-env.enum';
-export * from './src/enums/transaction-type.enum';
-export * from './src/enums/transaction-category.enum';
-export * from './src/enums/sort-order.enum';
-export * from './src/enums/transaction-sort-column.enum'
+export * from "./src/enums/node-env.enum"
+export * from "./src/enums/transaction-type.enum"
+export * from "./src/enums/transaction-category.enum"
+export * from "./src/enums/sort-order.enum"
+export * from "./src/enums/transaction-sort-column.enum"
 
 // Constants
 export * from "./src/constants/db.constants"
