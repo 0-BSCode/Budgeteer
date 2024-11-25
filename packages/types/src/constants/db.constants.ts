@@ -8,3 +8,4 @@ export const MAX_USERNAME_LENGTH = 30
 export const MIN_PASSWORD_LENGTH = 8
 export const MAX_PASSWORD_LENGTH = 255
 export const MAX_PROFILE_PIC_LENGTH = 255
+export const AVAILABLE_PROFILE_PICTURES = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]

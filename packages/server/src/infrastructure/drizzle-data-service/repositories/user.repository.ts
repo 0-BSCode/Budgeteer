@@ -1,6 +1,7 @@
 import {
   type IUserRepository,
   type UserCreateDto,
+  type UserUpdateProfilePictureDto,
   type UserUpdateDto,
   type UserDto,
   UserDtoSchema,
@@ -37,12 +38,19 @@ export const userRepository: IUserRepository = {
 
     return this.convertToDto(record)
   },
-  async updateProfilePictureUrl(id: number, dto: UserUpdateDto): Promise<UserDto> {
+  async updateProfilePictureUrl(id: number, dto: UserUpdateProfilePictureDto): Promise<UserDto> {
     const records = await db
       .update(usersTable)
       .set({ profile_picture: dto.profile_picture })
       .where(eq(usersTable.id, id))
       .returning()
+
+    const record: SelectUser = records[0]
+
+    return this.convertToDto(record)
+  },
+  async update(id: number, dto: UserUpdateDto): Promise<UserDto> {
+    const records = await db.update(usersTable).set(dto).where(eq(usersTable.id, id)).returning()
 
     const record: SelectUser = records[0]
 
