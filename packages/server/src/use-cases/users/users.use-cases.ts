@@ -2,6 +2,7 @@ import {
   type IUserUseCases,
   type ResponseDto,
   type UserCreateDto,
+  type UserUpdateProfilePictureDto,
   type UserUpdateDto,
   HttpStatusEnum,
   type UserDto,
@@ -10,6 +11,7 @@ import {
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
 import { DataService } from "~/services/data-service"
+import { HashService } from "~/services/hash-service"
 
 export const UsersUseCases: IUserUseCases = {
   async getBalance(id: number): Promise<ResponseDto<number>> {
@@ -34,10 +36,9 @@ export const UsersUseCases: IUserUseCases = {
       throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "User not found" })
     }
 
-    const { password, ...userWithoutPassword } = user
     const response: ResponseDto<UserPublicDto> = {
       status: HttpStatusEnum.OK,
-      data: userWithoutPassword,
+      data: user,
     }
 
     return response
@@ -77,13 +78,33 @@ export const UsersUseCases: IUserUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to create user" })
     }
   },
-  async updateProfilePictureUrl(id: number, dto: UserUpdateDto): Promise<ResponseDto<UserDto>> {
+  async updateProfilePictureUrl(id: number, dto: UserUpdateProfilePictureDto): Promise<ResponseDto<UserPublicDto>> {
     await this.findById(id)
 
     try {
       const user = await DataService.users.updateProfilePictureUrl(id, dto)
 
-      const response: ResponseDto<UserDto> = {
+      const response: ResponseDto<UserPublicDto> = {
+        status: HttpStatusEnum.OK,
+        data: user,
+      }
+
+      return response
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
+      }
+
+      throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to update user" })
+    }
+  },
+  async update(id: number, dto: UserUpdateDto): Promise<ResponseDto<UserPublicDto>> {
+    await this.findById(id)
+
+    try {
+      const user = await DataService.users.update(id, { ...dto, password: HashService.hashPassword(dto.password) })
+
+      const response: ResponseDto<UserPublicDto> = {
         status: HttpStatusEnum.OK,
         data: user,
       }
