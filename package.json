@@ -41,6 +41,7 @@
     "db:migration-generate": "bun run --cwd=\"packages/server\" drizzle:generate",
     "db:migration-migrate": "bun run --cwd=\"packages/server\" drizzle:migrate",
     "db:migration-push": "bun run --cwd=\"packages/server\" drizzle:push",
+    "db:seed": "bun run --cwd=\"packages/server\" drizzle:seed",
     "client:dev": "bun run --cwd=\"packages/client\" dev",
     "client:start": "bun run --cwd=\"packages/client\" start",
     "server:dev": "bun run --cwd=\"packages/server\" dev",

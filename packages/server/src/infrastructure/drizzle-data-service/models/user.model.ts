@@ -1,5 +1,5 @@
 import { MAX_USERNAME_LENGTH, MAX_PROFILE_PIC_LENGTH, MAX_PASSWORD_LENGTH } from "@budgeteer/types"
-import type { InferSelectModel } from "drizzle-orm"
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import { integer, pgTable, varchar, date } from "drizzle-orm/pg-core"
 
 export const usersTable = pgTable("users", {
@@ -11,3 +11,4 @@ export const usersTable = pgTable("users", {
 })
 
 export type SelectUser = InferSelectModel<typeof usersTable>
+export type InsertUser = InferInsertModel<typeof usersTable>
