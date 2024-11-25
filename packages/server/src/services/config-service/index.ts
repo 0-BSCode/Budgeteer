@@ -13,7 +13,7 @@ function loadEnvConfig() {
     DB_USER: process.env["POSTGRES_USER"] ?? "postgres",
     DB_DB: process.env["POSTGRES_DB"] ?? "postgres",
     DB_HOST: process.env["POSTGRES_HOST"] ?? "localhost",
-    DB_PORT: Number(process.env["DB_PORT"]) ?? 5432,
+    DB_PORT: process.env["DB_PORT"] ?? 5432,
     JWT_SECRET: process.env["JWT_SECRET"] ?? "secret",
   }
 
