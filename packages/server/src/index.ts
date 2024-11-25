@@ -12,6 +12,8 @@ app.use(logger())
 app.use(cors())
 
 app.onError((err, c) => {
+  console.error(err)
+
   const response: ResponseDto<null> = {
     status: HttpStatusEnum.INTERNAL_SERVER_ERROR,
     data: null,

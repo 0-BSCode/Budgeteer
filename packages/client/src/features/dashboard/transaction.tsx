@@ -3,7 +3,7 @@ import { TransactionTypeEnum } from "@budgeteer/types"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 
 interface TransactionProps {
-  type: TransactionTypeEnum
+  type: string
   description: string
 }
 

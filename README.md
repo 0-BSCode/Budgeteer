@@ -27,8 +27,8 @@ If you want to setup your own environment variables in the Docker Compose files,
 
 ```bash
 # creates a .env to read from when executing the Docker Compose file
-cp docker/.env.example docker/.env
+cp .env.example .env
 
 # start editing it
-nano docker/.env
+nano .env
 ```

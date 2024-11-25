@@ -1,0 +1,52 @@
+services:
+  client:
+    depends_on:
+      - server
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    restart: always
+    ports:
+      - ${CLIENT_PORT:-5173}:${CLIENT_PORT:-5173}
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://server:${SERVER_PORT:-3000}/api}
+
+  server:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    restart: always
+    ports:
+      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-example}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - POSTGRES_HOST=${POSTGRES_HOST:-db}
+      - JWT_SECRET=${JWT_SECRET:-secret}
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-example}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+    volumes:
+      - budgeteer-db:/var/lib/postgresql/data
+      # run this script on first DB initialization
+      - ./packages/server/src/infrastructure/drizzle-data-service/migrations/0000_furry_sheva_callister.sql:/docker-entrypoint-initdb.d/init.sql
+
+  adminer:
+    depends_on:
+      - db
+    image: adminer
+    restart: always
+    ports:
+      - ${ADMINER_PORT:-8080}:${ADMINER_PORT:-8080}
+
+volumes:
+  budgeteer-db:

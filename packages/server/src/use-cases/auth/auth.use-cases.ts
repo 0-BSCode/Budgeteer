@@ -53,6 +53,8 @@ export const AuthUseCases: IAuthUseCases = {
       return response
     } catch (e) {
       if (e instanceof Error) {
+        console.log(e)
+
         throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
       }
 
