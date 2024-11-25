@@ -21,6 +21,7 @@ export * from "./src/abstracts/services/hash-service.abstract"
 export * from "./src/abstracts/use-cases/users-use-cases.abstract"
 export * from "./src/abstracts/use-cases/auth-use-cases.abstract"
 export * from "./src/abstracts/use-cases/transaction-use-cases.abstract"
+export * from "./src/abstracts/use-cases/goals-use-cases.abstract"
 
 // Enums
 export * from "./src/enums/http-status.enum"
