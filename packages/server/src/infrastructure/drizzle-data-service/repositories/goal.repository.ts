@@ -6,7 +6,6 @@ import {
   GoalDtoSchema,
 } from "@budgeteer/types"
 import { db } from ".."
-import { transactionsTable } from "../models/transaction.model"
 import { eq } from "drizzle-orm"
 import { goalsTable, type InsertGoal, type SelectGoal } from "../models/goals.model"
 
@@ -45,9 +44,9 @@ export const goalRepository: IGoalRepository = {
       .set({
         description: dto.description,
         amount: dto.amount,
-        deadline: new Date().toString(),
+        deadline: new Date(),
       })
-      .where(eq(transactionsTable.id, id))
+      .where(eq(goalsTable.id, id))
       .returning()
     const record: SelectGoal = records[0]
 

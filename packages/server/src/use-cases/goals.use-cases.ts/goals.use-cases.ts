@@ -47,7 +47,7 @@ export const GoalUseCases: IGoalUseCases = {
   async create(dto: GoalCreateDto): Promise<ResponseDto<GoalDto>> {
     try {
       // Check if deadline is in the future (past the creation date)
-      if (dto.deadline <= new Date()) {
+      if (dto.deadline < new Date()) {
         throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Deadline must be in the future" })
       }
 

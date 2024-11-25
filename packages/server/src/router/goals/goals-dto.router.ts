@@ -1,12 +1,10 @@
 import { GoalDtoSchema } from "@budgeteer/types"
+import { z } from "zod"
 
-export const goalIdSchema = GoalDtoSchema.pick({ id: true })
-
-export const createGoalSchema = GoalDtoSchema.pick({
-  description: true,
-  userId: true,
-  deadline: true,
-  amount: true,
+export const goalIdSchema = z.object({
+  id: z.coerce.number(),
 })
 
-export const updateGoalSchema = createGoalSchema.partial()
+export const createGoalSchema = GoalDtoSchema.partial()
+
+export const updateGoalSchema = GoalDtoSchema.partial()
