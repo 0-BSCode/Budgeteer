@@ -36,8 +36,8 @@
     "types:format": "bun run --cwd=\"packages/types\" format",
     "workspace:lint": "bun run server:lint && bun run client:lint && bun run types:lint",
     "workspace:format": "bun run server:format && bun run client:format && bun run types:format",
-    "db:up": "docker-compose -f docker-compose.dev.yml up -d",
-    "db:down": "docker-compose -f docker-compose.dev.yml down",
+    "db:up": "docker-compose -f docker-compose.yml up -d db",
+    "db:down": "docker-compose -f docker-compose.yml down db",
     "db:migration-generate": "bun run --cwd=\"packages/server\" drizzle:generate",
     "db:migration-migrate": "bun run --cwd=\"packages/server\" drizzle:migrate",
     "db:migration-push": "bun run --cwd=\"packages/server\" drizzle:push",
@@ -47,8 +47,8 @@
     "client:start": "bun run --cwd=\"packages/client\" start",
     "server:dev": "bun run --cwd=\"packages/server\" dev",
     "server:start": "bun run --cwd=\"packages/server\" start",
-    "all:up": "docker-compose -f docker-compose.dev.yml up",
-    "all:down": "docker-compose -f docker-compose.dev.yml down"
+    "all:up": "docker-compose -f docker-compose.yml up",
+    "all:down": "docker-compose -f docker-compose.yml down"
   },
   "workspaces": [
     "packages/*"
