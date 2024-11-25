@@ -26,7 +26,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
-    "test": "vitest",
+    "test": "docker-compose -f docker-compose.yml up -d db server && vitest --run && docker-compose -f docker-compose.yml down db server",
     "server:test": "bun run --cwd=\"packages/server\" test",
     "server:lint": "bun run --cwd=\"packages/server\" lint",
     "server:format": "bun run --cwd=\"packages/server\" format",
