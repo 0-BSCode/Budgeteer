@@ -14,5 +14,5 @@ export const goalsTable = pgTable("goals", {
   deadline: date().defaultNow().notNull(),
 })
 
-export type SelectTransaction = InferSelectModel<typeof goalsTable>
-export type InsertTransaction = InferInsertModel<typeof goalsTable>
+export type SelectGoal = InferSelectModel<typeof goalsTable>
+export type InsertGoal = InferInsertModel<typeof goalsTable>
