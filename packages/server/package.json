@@ -8,7 +8,8 @@
     "format": "prettier --write \"**/*.+(ts|json)\"",
     "drizzle:generate": "drizzle-kit generate --config=\"./src/infrastructure/drizzle-data-service/drizzle.config.ts\"",
     "drizzle:migrate": "drizzle-kit migrate --config=\"./src/infrastructure/drizzle-data-service/drizzle.config.ts\"",
-    "drizzle:push": "drizzle-kit push --config=\"./src/infrastructure/drizzle-data-service/drizzle.config.ts\""
+    "drizzle:push": "drizzle-kit push --config=\"./src/infrastructure/drizzle-data-service/drizzle.config.ts\"",
+    "drizzle:seed": "bun run \"./src/infrastructure/drizzle-data-service/seeder.ts\""
   },
   "devDependencies": {
     "@types/bun": "latest",
