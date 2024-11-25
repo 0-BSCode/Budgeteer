@@ -3,19 +3,14 @@ import { MAX_GOAL_DESCRIPTION_LENGTH, MIN_GOAL_AMOUNT } from "../../constants/db
 import { SortOrderEnum, SortOrderEnumSchema } from "../../enums/sort-order.enum"
 import { TransactionSortColumnEnum, TransactionSortColumnEnumSchema } from "../../enums/transaction-sort-column.enum"
 
-export const GoalDtoSchema = z
-  .object({
-    id: z.number(),
-    userId: z.number(),
-    amount: z.number().min(MIN_GOAL_AMOUNT),
-    description: z.string().max(MAX_GOAL_DESCRIPTION_LENGTH),
-    createdAt: z.date(),
-    deadline: z.date(),
-  })
-  .refine(data => data.deadline > data.createdAt, {
-    message: "Deadline must come after creation date",
-    path: ["deadline"],
-  })
+export const GoalDtoSchema = z.object({
+  id: z.number(),
+  userId: z.number(),
+  amount: z.number().min(MIN_GOAL_AMOUNT),
+  description: z.string().max(MAX_GOAL_DESCRIPTION_LENGTH),
+  createdAt: z.date(),
+  deadline: z.date(),
+})
 
 export const GoalQueryDtoSchema = z.object({
   // User ID
