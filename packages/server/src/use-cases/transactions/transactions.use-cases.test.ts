@@ -4,14 +4,17 @@ import { TransactionUseCases } from "./transactions.use-cases"
 import {
   ExpenseCategoryEnum,
   IncomeCategoryEnum,
+  SortOrderEnum,
+  TransactionSortColumnEnum,
   TransactionTypeEnum,
   type TransactionCreateDto,
   type TransactionDto,
+  type TransactionQueryDto,
   type TransactionUpdateDto,
   type UserDto,
 } from "@budgeteer/types"
 
-const FAKE_USER: UserDto = {
+const VALID_USER: UserDto = {
   id: 1,
   username: "johndoe",
   password: "password",
@@ -19,9 +22,18 @@ const FAKE_USER: UserDto = {
   createdAt: new Date(),
 }
 
+const VALID_QUERY: TransactionQueryDto = {
+  userId: VALID_USER.id,
+  limit: 10,
+  page: 1,
+  categories: [],
+  sortBy: TransactionSortColumnEnum.DATE,
+  sortOrder: SortOrderEnum.ASC,
+}
+
 const VALID_TRANSACTION: TransactionDto = {
   id: "1",
-  userId: 1,
+  userId: VALID_USER.id,
   description: "Test",
   type: TransactionTypeEnum.EXPENSE,
   amount: 50,
@@ -33,13 +45,53 @@ const VALID_TRANSACTION: TransactionDto = {
 const VALID_TRANSACTIONS: TransactionDto[] = [
   {
     id: "1",
-    userId: 1,
-    description: "Test",
+    userId: VALID_USER.id,
+    description: "Buy lunch",
     type: TransactionTypeEnum.EXPENSE,
     amount: 50,
     category: ExpenseCategoryEnum.ENTERTAINMENT,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date("2022-01-01"),
+    updatedAt: new Date("2022-01-01"),
+  },
+  {
+    id: "2",
+    userId: VALID_USER.id,
+    description: "Work salary",
+    type: TransactionTypeEnum.INCOME,
+    amount: 100,
+    category: IncomeCategoryEnum.SALARY,
+    createdAt: new Date("2023-01-02"),
+    updatedAt: new Date("2023-01-02"),
+  },
+  {
+    id: "3",
+    userId: VALID_USER.id,
+    description: "Gift",
+    type: TransactionTypeEnum.INCOME,
+    amount: 75,
+    category: IncomeCategoryEnum.ALLOWANCE,
+    createdAt: new Date("2021-12-02"),
+    updatedAt: new Date("2023-12-02"),
+  },
+  {
+    id: "4",
+    userId: VALID_USER.id,
+    description: "Movie",
+    type: TransactionTypeEnum.EXPENSE,
+    amount: 25,
+    category: ExpenseCategoryEnum.ENTERTAINMENT,
+    createdAt: new Date("2024-12-02"),
+    updatedAt: new Date("2024-12-02"),
+  },
+  {
+    id: "5",
+    userId: VALID_USER.id,
+    description: "Movie",
+    type: TransactionTypeEnum.EXPENSE,
+    amount: 225,
+    category: ExpenseCategoryEnum.ENTERTAINMENT,
+    createdAt: new Date("2024-11-05"),
+    updatedAt: new Date("2024-11-05"),
   },
 ]
 
@@ -74,7 +126,7 @@ describe("findById", () => {
 
 describe("findByUserId", () => {
   it("should find all transactions for a user", async () => {
-    vi.mocked(DataService.users.findById).mockResolvedValue(FAKE_USER)
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
     vi.mocked(DataService.transactions.findByUserId).mockResolvedValue(VALID_TRANSACTIONS)
     const response = await TransactionUseCases.findByUserId(1)
     expect(response.data).toEqual(VALID_TRANSACTIONS)
@@ -86,42 +138,46 @@ describe("findByUserId", () => {
   })
 
   it("should throw a db error", async () => {
-    vi.mocked(DataService.users.findById).mockResolvedValue(FAKE_USER)
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
     vi.mocked(DataService.transactions.findByUserId).mockRejectedValue(new Error("Database error!"))
     await expect(TransactionUseCases.findByUserId(1)).rejects.toThrowError("Database error!")
   })
 })
 
+// This just tests the business logic specified in the use-cases
 describe("query", () => {
-  it.skip("should return all transactions", async () => {
-    const transactions: TransactionDto[] = [
-      {
-        id: "1",
-        userId: 1,
-        description: "Test",
-        type: TransactionTypeEnum.EXPENSE,
-        amount: 50,
-        category: ExpenseCategoryEnum.ENTERTAINMENT,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ]
-    vi.mocked(DataService.transactions.findByUserId).mockResolvedValue(transactions)
-    const response = await TransactionUseCases.query({ userId: 1 })
-    expect(response.data).toEqual(transactions)
+  it("should return all transactions", async () => {
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
+    vi.mocked(DataService.transactions.query).mockResolvedValue(VALID_TRANSACTIONS)
+    const response = await TransactionUseCases.query(VALID_QUERY)
+    expect(response.data).toEqual(VALID_TRANSACTIONS)
   })
 
-  it("should return transactions filtered by date", async () => {
-    // Initialize a start and end date then pass start, end, or both
+  it("should throw an error if user is not found", async () => {
+    const queryDto: TransactionQueryDto = { ...VALID_QUERY }
+    vi.mocked(DataService.users.findById).mockResolvedValue(null)
+    await expect(TransactionUseCases.query(queryDto)).rejects.toThrowError("User not found")
   })
 
-  it("should return transactions filtered by amount", async () => {
-    // Initialize a min and max amount then pass min, max, or both
+  it("should throw an error if startDate is greater than endDate", async () => {
+    const queryDto: TransactionQueryDto = {
+      ...VALID_QUERY,
+      startDate: new Date("2023-01-01"),
+      endDate: new Date("2022-01-01"),
+    }
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
+    await expect(TransactionUseCases.query(queryDto)).rejects.toThrowError("Start date cannot be greater than end date")
   })
 
-  it("should return transactions filtered by type", async () => {})
+  it("should throw an error if minAmount is greater than maxAmount", async () => {
+    const queryDto: TransactionQueryDto = { ...VALID_QUERY, minAmount: 100, maxAmount: 50 }
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
+    await expect(TransactionUseCases.query(queryDto)).rejects.toThrowError(
+      "Min amount cannot be greater than max amount",
+    )
+  })
 
-  it("should return transactions filtered by category", async () => {
+  it("should throw a db error", async () => {
     // Initialize a categories then pass one or multiple
   })
 })
