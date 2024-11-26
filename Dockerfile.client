@@ -1,0 +1,17 @@
+FROM oven/bun:alpine AS base
+
+FROM base AS builder
+WORKDIR /app
+RUN apk add --no-cache git
+COPY . .
+
+RUN bun install
+RUN bun run client:build
+
+FROM builder AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+USER bun
+EXPOSE 5173
+CMD ["bun", "run", "client:start"]
