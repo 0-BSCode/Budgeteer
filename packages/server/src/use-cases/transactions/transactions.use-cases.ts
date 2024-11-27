@@ -49,6 +49,14 @@ export const TransactionUseCases: ITransactionUseCases = {
   async query(dto: TransactionQueryDto): Promise<ResponseDto<TransactionDto[]>> {
     await UsersUseCases.findById(dto.userId)
 
+    if (dto.minAmount && dto.maxAmount && dto.minAmount > dto.maxAmount) {
+      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Min amount cannot be greater than max amount" })
+    }
+
+    if (dto.startDate && dto.endDate && dto.startDate > dto.endDate) {
+      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Start date cannot be greater than end date" })
+    }
+
     try {
       const transactions = await DataService.transactions.query(dto)
 
