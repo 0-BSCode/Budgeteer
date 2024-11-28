@@ -6,19 +6,19 @@ import { db } from "."
 const userData: InsertUser[] = [
   {
     username: "johndoe",
-    password: "TestEncryptedPassword123123123",
+    password: "$2b$10$80usWN8h9b5dN2f6ZFFIkuT81l/w4TtK1JChhU3XQsPH2D2PF61dG",
     profile_picture: "image_url",
     createdAt: new Date().toISOString(),
   },
   {
     username: "janedoe",
-    password: "TestEncryptedPassword123123123",
+    password: "$2b$10$80usWN8h9b5dN2f6ZFFIkuT81l/w4TtK1JChhU3XQsPH2D2PF61dG",
     profile_picture: "image_url",
     createdAt: new Date().toISOString(),
   },
   {
     username: "bobsmith",
-    password: "TestEncryptedPassword123123123",
+    password: "$2b$10$80usWN8h9b5dN2f6ZFFIkuT81l/w4TtK1JChhU3XQsPH2D2PF61dG",
     profile_picture: "image_url",
     createdAt: new Date().toISOString(),
   },
