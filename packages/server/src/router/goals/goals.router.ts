@@ -16,7 +16,7 @@ goals.use("*", authenticate)
 goals.get("/", async c => {
   const userId = c.get("id")
 
-  const response = await GoalUseCases.findAllUserGoals(parseInt(userId))
+  const response = await GoalUseCases.findByUserId(parseInt(userId))
   return c.json(response)
 })
 
@@ -50,14 +50,14 @@ goals.put("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGo
     ...(amount !== undefined && { amount }),
   }
 
-  const response = await GoalUseCases.update(parseInt(id), data)
+  const response = await GoalUseCases.update(id, data)
   return c.json(response)
 })
 
 goals.delete("/:id", zValidator("param", goalIdSchema), async c => {
   const { id } = c.req.valid("param")
 
-  const response = await GoalUseCases.delete(parseInt(id))
+  const response = await GoalUseCases.delete(id)
   return c.json(response)
 })
 

@@ -11,11 +11,11 @@ import { DataService } from "~/services/data-service"
 import { UsersUseCases } from "../users/users.use-cases"
 
 export const GoalUseCases: IGoalUseCases = {
-  async findAllUserGoals(userId: number): Promise<ResponseDto<GoalDto[]>> {
+  async findByUserId(userId: number): Promise<ResponseDto<GoalDto[]>> {
     await UsersUseCases.findById(userId)
 
     try {
-      const goals = await DataService.goals.findAllUserGoals(userId)
+      const goals = await DataService.goals.findByUserId(userId)
 
       const response: ResponseDto<GoalDto[]> = {
         status: HttpStatusEnum.OK,
@@ -69,10 +69,8 @@ export const GoalUseCases: IGoalUseCases = {
   async update(id: number, dto: GoalUpdateDto): Promise<ResponseDto<GoalDto>> {
     const goal = await this.findById(id)
 
-    if (dto.deadline) {
-      if (dto.deadline < goal.createdAt) {
-        throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Deadline must be in the future" })
-      }
+    if (dto.deadline && dto.deadline < goal.createdAt && dto.deadline < new Date()) {
+      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Deadline must be in the future" })
     }
 
     try {

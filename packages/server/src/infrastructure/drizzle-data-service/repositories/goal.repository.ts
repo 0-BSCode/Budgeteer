@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm"
 import { goalsTable, type InsertGoal, type SelectGoal } from "../models/goals.model"
 
 export const goalRepository: IGoalRepository = {
-  async findAllUserGoals(userId: number): Promise<GoalDto[]> {
+  async findByUserId(userId: number): Promise<GoalDto[]> {
     const records: SelectGoal[] = await db.select().from(goalsTable).where(eq(goalsTable.userId, userId))
 
     return records.map(this.convertToDto)
@@ -44,7 +44,7 @@ export const goalRepository: IGoalRepository = {
       .set({
         description: dto.description,
         amount: dto.amount,
-        deadline: new Date(),
+        deadline: dto.deadline?.toString(),
       })
       .where(eq(goalsTable.id, id))
       .returning()
