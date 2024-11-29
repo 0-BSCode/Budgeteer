@@ -1,6 +1,12 @@
 "use client"
 
-import { TransactionTypeEnum } from "@budgeteer/types"
+import {
+  ExpenseCategoryEnumValues,
+  IncomeCategoryEnumValues,
+  TransactionCategoryEnum,
+  TransactionTypeEnum,
+  TransactionTypeEnumValues,
+} from "@budgeteer/types"
 import { SelectTrigger, SelectValue } from "@radix-ui/react-select"
 import { useRouter } from "next/navigation"
 import { Dispatch, SetStateAction, useState } from "react"
@@ -8,17 +14,19 @@ import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { Select, SelectContent, SelectItem } from "~/components/ui/select"
-import { expenseCategories, incomeCategories } from "~/types/constants/transaction-categories"
-import { transactionTypes } from "~/types/constants/transaction-types"
+import useTransaction from "../hooks/use-transaction"
+import { useToast } from "~/hooks/use-toast"
 
 const BLANK_INPUT = ""
 
 export default function CreateTransactionForm() {
   const router = useRouter()
+  const { create } = useTransaction()
+  const { toast } = useToast()
   const [description, setDescription] = useState(BLANK_INPUT)
   const [date, setDate] = useState(new Date())
-  const [type, setType] = useState<string>(TransactionTypeEnum.EXPENSE)
-  const [category, setCategory] = useState<string | null>(null)
+  const [type, setType] = useState<TransactionTypeEnum>(TransactionTypeEnumValues.EXPENSE)
+  const [category, setCategory] = useState<TransactionCategoryEnum>(IncomeCategoryEnumValues.SALARY)
   const [amount, setAmount] = useState(BLANK_INPUT)
 
   const formatDate = (date: Date) => {
@@ -36,7 +44,29 @@ export default function CreateTransactionForm() {
     router.push("/dashboard")
   }
 
-  const handleCreateTransaction = async () => {}
+  const handleCreateTransaction = async () => {
+    try {
+      await create({
+        description,
+        date,
+        type,
+        category,
+        amount: Number(amount),
+      })
+      toast({
+        variant: "success",
+        title: "Creation successful!",
+        description: "Successfully created new transaction",
+      })
+      router.push("/dashboard")
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "An error occured!",
+        description: (e as Error).message,
+      })
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -74,12 +104,17 @@ export default function CreateTransactionForm() {
           <Label htmlFor="transaction-type" className="block">
             Type
           </Label>
-          <Select value={type} onValueChange={e => handleInputChange(setType, e)}>
+          <Select
+            value={type}
+            onValueChange={e =>
+              handleInputChange<TransactionTypeEnum>(setType, e as keyof typeof TransactionTypeEnumValues)
+            }
+          >
             <SelectTrigger className="w-full max-w-md rounded border border-input px-3 py-1">
               <SelectValue placeholder="Select a type" />
             </SelectTrigger>
             <SelectContent>
-              {transactionTypes.map(type => (
+              {Object.values(TransactionTypeEnumValues).map(type => (
                 <SelectItem key={type} value={type}>
                   {type}
                 </SelectItem>
@@ -91,19 +126,22 @@ export default function CreateTransactionForm() {
           <Label htmlFor="transaction-category" className="block">
             Category
           </Label>
-          <Select value={category ?? ""} onValueChange={e => handleInputChange<string | null>(setCategory, e)}>
+          <Select
+            value={category}
+            onValueChange={e => handleInputChange<TransactionCategoryEnum>(setCategory, e as TransactionCategoryEnum)}
+          >
             <SelectTrigger className="w-full max-w-md rounded border border-input px-3 py-1">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
-              {type === TransactionTypeEnum.EXPENSE &&
-                expenseCategories.map(category => (
+              {type === TransactionTypeEnumValues.EXPENSE &&
+                Object.values(ExpenseCategoryEnumValues).map(category => (
                   <SelectItem key={category} value={category}>
                     {category}
                   </SelectItem>
                 ))}
-              {type === TransactionTypeEnum.INCOME &&
-                incomeCategories.map(category => (
+              {type === TransactionTypeEnumValues.INCOME &&
+                Object.values(IncomeCategoryEnumValues).map(category => (
                   <SelectItem key={category} value={category}>
                     {category}
                   </SelectItem>
@@ -115,7 +153,7 @@ export default function CreateTransactionForm() {
 
       <div className="flex justify-center">
         <div className="grid gap-3 w-full max-w-md">
-          <Button>Add Transaction</Button>
+          <Button onClick={handleCreateTransaction}>Add Transaction</Button>
           <Button variant="ghost" onClick={handleCancelCreating}>
             Cancel
           </Button>
