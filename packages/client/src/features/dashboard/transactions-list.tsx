@@ -1,6 +1,6 @@
 import { Button } from "~/components/ui/button"
 import { Transaction } from "./transaction"
-import { TransactionTypeEnum } from "@budgeteer/types"
+import { TransactionTypeEnumValues } from "@budgeteer/types"
 
 export function TransactionsList() {
   return (
@@ -11,7 +11,7 @@ export function TransactionsList() {
       </div>
       {[1, 2].map(() => (
         <Transaction
-          type={TransactionTypeEnum.INCOME}
+          type={TransactionTypeEnumValues.INCOME}
           description="💸 Salary • 5:00PM, 11/03/2024"
           key={Math.random()}
         />

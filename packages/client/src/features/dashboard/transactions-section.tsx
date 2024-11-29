@@ -2,7 +2,7 @@
 
 import { Button } from "~/components/ui/button"
 import { Transaction } from "./transaction"
-import { TransactionTypeEnum } from "@budgeteer/types"
+import { TransactionTypeEnumValues } from "@budgeteer/types"
 import { ChevronRight } from "lucide-react"
 import { useRouter } from "next/navigation"
 
@@ -28,14 +28,14 @@ export function TransactionsSection() {
           <div className="overflow-y-scroll h-60 pr-4">
             {[1, 2, 3, 4, 5].map(() => (
               <Transaction
-                type={TransactionTypeEnum.INCOME}
+                type={TransactionTypeEnumValues.INCOME}
                 description="💸 Salary • 5:00PM, 11/03/2024"
                 key={Math.random()}
               />
             ))}
             {[1, 2].map(() => (
               <Transaction
-                type={TransactionTypeEnum.EXPENSE}
+                type={TransactionTypeEnumValues.EXPENSE}
                 description="🍔 Food • 5:00PM, 11/03/2024"
                 key={Math.random()}
               />
