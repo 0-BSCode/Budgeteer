@@ -1,19 +1,18 @@
 import { integer, pgTable, varchar, date, pgEnum, real } from "drizzle-orm/pg-core"
 import { enumsToPgEnum } from "../utils/enumsToPgEnum"
 import {
-  ExpenseCategoryEnum,
-  IncomeCategoryEnum,
+  ExpenseCategoryEnumValues,
+  IncomeCategoryEnumValues,
   MAX_TRANSACTION_DESCRIPTION_LENGTH,
-  TransactionTypeEnum,
+  TransactionTypeEnumValues,
 } from "@budgeteer/types"
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import { usersTable } from "./user.model"
 
-export const transactionTypeEnum = pgEnum("transaction_type", enumsToPgEnum(TransactionTypeEnum))
-// TODO: Fix type error (converts fine, but it gets recognized as an array of 'OTHER')
+export const transactionTypeEnum = pgEnum("transaction_type", enumsToPgEnum(TransactionTypeEnumValues))
 export const transactionCategoryEnum = pgEnum(
   "transaction_category",
-  enumsToPgEnum(ExpenseCategoryEnum, IncomeCategoryEnum),
+  enumsToPgEnum(ExpenseCategoryEnumValues, IncomeCategoryEnumValues),
 )
 
 export const transactionsTable = pgTable("transactions", {
@@ -22,9 +21,10 @@ export const transactionsTable = pgTable("transactions", {
     .references(() => usersTable.id)
     .notNull(),
   description: varchar({ length: MAX_TRANSACTION_DESCRIPTION_LENGTH }).notNull(),
-  type: transactionTypeEnum().notNull().default(TransactionTypeEnum.EXPENSE),
+  type: transactionTypeEnum().notNull().default(TransactionTypeEnumValues.EXPENSE),
   category: transactionCategoryEnum().notNull(),
   amount: real().notNull().default(0),
+  date: date().notNull(),
   createdAt: date().defaultNow().notNull(),
   updatedAt: date().defaultNow().notNull(),
 })

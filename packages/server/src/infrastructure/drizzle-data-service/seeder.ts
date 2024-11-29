@@ -1,4 +1,4 @@
-import { ExpenseCategoryEnum, IncomeCategoryEnum, TransactionTypeEnum } from "@budgeteer/types"
+import { ExpenseCategoryEnumValues, IncomeCategoryEnumValues, TransactionTypeEnumValues } from "@budgeteer/types"
 import { transactionsTable, type InsertTransaction } from "./models/transaction.model"
 import { usersTable, type InsertUser } from "./models/user.model"
 import { db } from "."
@@ -27,41 +27,46 @@ const userData: InsertUser[] = [
 const transactionData: InsertTransaction[] = [
   {
     userId: 1,
+    date: new Date("2022-02-01").toISOString(),
     description: "Salary",
-    type: TransactionTypeEnum.INCOME,
-    category: IncomeCategoryEnum.SALARY,
+    type: TransactionTypeEnumValues.INCOME,
+    category: IncomeCategoryEnumValues.SALARY,
     amount: 1000,
     createdAt: new Date("2022-02-01").toISOString(),
   },
   {
     userId: 1,
+    date: new Date("2022-02-05").toISOString(),
     description: "Rent",
-    type: TransactionTypeEnum.EXPENSE,
-    category: ExpenseCategoryEnum.UTILITIES,
+    type: TransactionTypeEnumValues.EXPENSE,
+    category: ExpenseCategoryEnumValues.UTILITIES,
     amount: 500,
     createdAt: new Date("2022-02-05").toISOString(),
   },
   {
     userId: 1,
+    date: new Date("2022-02-10").toISOString(),
     description: "Grocery",
-    type: TransactionTypeEnum.EXPENSE,
-    category: ExpenseCategoryEnum.FOOD,
+    type: TransactionTypeEnumValues.EXPENSE,
+    category: ExpenseCategoryEnumValues.FOOD,
     amount: 100,
     createdAt: new Date("2022-02-10").toISOString(),
   },
   {
     userId: 1,
+    date: new Date("2022-02-12").toISOString(),
     description: "Dining",
-    type: TransactionTypeEnum.EXPENSE,
-    category: ExpenseCategoryEnum.FOOD,
+    type: TransactionTypeEnumValues.EXPENSE,
+    category: ExpenseCategoryEnumValues.FOOD,
     amount: 200,
     createdAt: new Date("2022-02-12").toISOString(),
   },
   {
     userId: 1,
+    date: new Date("2022-02-15").toISOString(),
     description: "Utility",
-    type: TransactionTypeEnum.EXPENSE,
-    category: ExpenseCategoryEnum.UTILITIES,
+    type: TransactionTypeEnumValues.EXPENSE,
+    category: ExpenseCategoryEnumValues.UTILITIES,
     amount: 150,
     createdAt: new Date("2022-02-15").toISOString(),
   },
