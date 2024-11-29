@@ -16,6 +16,7 @@ import { Label } from "~/components/ui/label"
 import { Select, SelectContent, SelectItem } from "~/components/ui/select"
 import useTransaction from "../hooks/use-transaction"
 import { useToast } from "~/hooks/use-toast"
+import { convertToTitleCase } from "~/lib/convertToTitleCase"
 
 const BLANK_INPUT = ""
 
@@ -26,7 +27,7 @@ export default function CreateTransactionForm() {
   const [description, setDescription] = useState(BLANK_INPUT)
   const [date, setDate] = useState(new Date())
   const [type, setType] = useState<TransactionTypeEnum>(TransactionTypeEnumValues.EXPENSE)
-  const [category, setCategory] = useState<TransactionCategoryEnum>(IncomeCategoryEnumValues.SALARY)
+  const [category, setCategory] = useState<TransactionCategoryEnum>("OTHER")
   const [amount, setAmount] = useState(BLANK_INPUT)
 
   const formatDate = (date: Date) => {
@@ -96,7 +97,7 @@ export default function CreateTransactionForm() {
             id="transaction-amount"
             type="number"
             className="max-w-md"
-            value={Number(amount) ?? BLANK_INPUT}
+            value={amount}
             onChange={e => handleInputChange<string>(setAmount, e.target.value)}
           />
         </div>
@@ -116,7 +117,7 @@ export default function CreateTransactionForm() {
             <SelectContent>
               {Object.values(TransactionTypeEnumValues).map(type => (
                 <SelectItem key={type} value={type}>
-                  {type}
+                  {convertToTitleCase(type)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -137,13 +138,13 @@ export default function CreateTransactionForm() {
               {type === TransactionTypeEnumValues.EXPENSE &&
                 Object.values(ExpenseCategoryEnumValues).map(category => (
                   <SelectItem key={category} value={category}>
-                    {category}
+                    {convertToTitleCase(category)}
                   </SelectItem>
                 ))}
               {type === TransactionTypeEnumValues.INCOME &&
                 Object.values(IncomeCategoryEnumValues).map(category => (
                   <SelectItem key={category} value={category}>
-                    {category}
+                    {convertToTitleCase(category)}
                   </SelectItem>
                 ))}
             </SelectContent>
