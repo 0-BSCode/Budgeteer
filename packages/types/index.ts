@@ -8,15 +8,20 @@ export * from "./src/entities/users/user-create.dto"
 export * from "./src/entities/users/user.dto"
 export * from "./src/entities/users/user-update.dto"
 export * from "./src/entities/users/user-update-profile-picture.dto"
+export * from "./src/entities/goals/goal.dto"
+export * from "./src/entities/goals/goal-create.dto"
+export * from "./src/entities/goals/goal-update.dto"
 
 // Abstracts
 export * from "./src/abstracts/repositories/transaction-repository.abstract"
 export * from "./src/abstracts/repositories/user-repository.abstract"
+export * from "./src/abstracts/repositories/goal-repository.abstract"
 export * from "./src/abstracts/services/data-service.abstract"
 export * from "./src/abstracts/services/hash-service.abstract"
 export * from "./src/abstracts/use-cases/users-use-cases.abstract"
 export * from "./src/abstracts/use-cases/auth-use-cases.abstract"
 export * from "./src/abstracts/use-cases/transaction-use-cases.abstract"
+export * from "./src/abstracts/use-cases/goals-use-cases.abstract"
 
 // Enums
 export * from "./src/enums/http-status.enum"

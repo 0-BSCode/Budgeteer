@@ -2,6 +2,10 @@
 export const MIN_TRANSACTION_AMOUNT = 0
 export const MAX_TRANSACTION_DESCRIPTION_LENGTH = 255
 
+// Goal constants
+export const MAX_GOAL_DESCRIPTION_LENGTH = 255
+export const MIN_GOAL_AMOUNT = 0
+
 // User constants
 export const MIN_USERNAME_LENGTH = 3
 export const MAX_USERNAME_LENGTH = 30
