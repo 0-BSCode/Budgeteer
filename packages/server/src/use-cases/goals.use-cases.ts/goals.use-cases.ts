@@ -31,11 +31,15 @@ export const GoalUseCases: IGoalUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to fetch user goals" })
     }
   },
-  async findById(id: number): Promise<ResponseDto<GoalDto>> {
-    const goal = await DataService.goals.findById(id)
-    if (!goal) {
+  async findById(id: number, userId: number): Promise<ResponseDto<GoalDto>> {
+    const goals = await this.findByUserId(userId)
+
+    // Check if the user has the goal with the given id
+    if (goals.data.filter((goal: GoalDto) => goal.id === id).length === 0) {
       throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "Goal not found" })
     }
+
+    const goal = await DataService.goals.findById(id)
 
     const response: ResponseDto<GoalDto> = {
       status: HttpStatusEnum.OK,
@@ -66,8 +70,8 @@ export const GoalUseCases: IGoalUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to create goal" })
     }
   },
-  async update(id: number, dto: GoalUpdateDto): Promise<ResponseDto<GoalDto>> {
-    const goal = await this.findById(id)
+  async update(id: number, userId: number, dto: GoalUpdateDto): Promise<ResponseDto<GoalDto>> {
+    const goal = await this.findById(id, userId)
 
     if (dto.deadline && dto.deadline < goal.createdAt && dto.deadline < new Date()) {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Deadline must be in the future" })
@@ -90,8 +94,8 @@ export const GoalUseCases: IGoalUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to update goal" })
     }
   },
-  async delete(id: number): Promise<ResponseDto<null>> {
-    await this.findById(id)
+  async delete(id: number, userId: number): Promise<ResponseDto<null>> {
+    await this.findById(id, userId)
 
     try {
       await DataService.goals.delete(id)

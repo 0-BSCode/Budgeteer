@@ -5,8 +5,8 @@ import type { ResponseDto } from "src/entities/response/response.dto"
 
 export type IGoalUseCases = {
   findByUserId: (userId: number) => Promise<ResponseDto<GoalDto[]>>
-  findById: (id: number) => Promise<ResponseDto<GoalDto | null>>
+  findById: (id: number, userId: number) => Promise<ResponseDto<GoalDto>>
   create: (dto: GoalCreateDto) => Promise<ResponseDto<GoalDto>>
-  update: (id: number, dto: GoalUpdateDto) => Promise<ResponseDto<GoalDto>>
-  delete: (id: number) => Promise<ResponseDto<void>>
+  update: (id: number, userId: number, dto: GoalUpdateDto) => Promise<ResponseDto<GoalDto>>
+  delete: (id: number, userId: number) => Promise<ResponseDto<void>>
 }

@@ -21,9 +21,10 @@ goals.get("/", async c => {
 })
 
 goals.get("/:id", zValidator("param", goalIdSchema), async c => {
-  const id = c.req.param("id")
+  const { id } = c.req.valid("param")
+  const userId = parseInt(c.get("id"))
 
-  const response = await GoalUseCases.findById(parseInt(id))
+  const response = await GoalUseCases.findById(id, userId)
   return c.json(response)
 })
 
@@ -42,6 +43,7 @@ goals.post("/", zValidator("json", createGoalSchema), async c => {
 
 goals.put("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGoalSchema), async c => {
   const { id } = c.req.valid("param")
+  const userId = parseInt(c.get("id"))
   const { description, deadline, amount } = c.req.valid("json")
 
   const data: GoalUpdateDto = {
@@ -50,14 +52,15 @@ goals.put("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGo
     ...(amount !== undefined && { amount }),
   }
 
-  const response = await GoalUseCases.update(id, data)
+  const response = await GoalUseCases.update(id, userId, data)
   return c.json(response)
 })
 
 goals.delete("/:id", zValidator("param", goalIdSchema), async c => {
   const { id } = c.req.valid("param")
+  const userId = parseInt(c.get("id"))
 
-  const response = await GoalUseCases.delete(id)
+  const response = await GoalUseCases.delete(id, userId)
   return c.json(response)
 })
 
