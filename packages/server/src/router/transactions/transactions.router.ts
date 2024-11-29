@@ -14,25 +14,25 @@ type Variables = {
   id: string
 }
 
-const transactionApi = new Hono<{ Variables: Variables }>()
+const transactions = new Hono<{ Variables: Variables }>()
 
-transactionApi.use("*", authenticate)
+transactions.use("*", authenticate)
 
-transactionApi.get("/", async c => {
+transactions.get("/", async c => {
   const userId = c.get("id")
 
   const response = await TransactionUseCases.findByUserId(parseInt(userId))
   return c.json(response)
 })
 
-transactionApi.get("/:id", zValidator("param", transactionIdSchema), async c => {
+transactions.get("/:id", zValidator("param", transactionIdSchema), async c => {
   const id = c.req.param("id")
 
   const response = await TransactionUseCases.findById(parseInt(id))
   return c.json(response)
 })
 
-transactionApi.get("/query", zValidator("query", transactionQuerySchema), async c => {
+transactions.get("/query", zValidator("query", transactionQuerySchema), async c => {
   const userId = c.get("id")
   const query: Omit<TransactionQueryDto, "userId"> = c.req.valid("query")
   const data: TransactionQueryDto = {
@@ -53,7 +53,7 @@ transactionApi.get("/query", zValidator("query", transactionQuerySchema), async 
   return c.json(response)
 })
 
-transactionApi.post("/", zValidator("json", createTransactionSchema), async c => {
+transactions.post("/", zValidator("json", createTransactionSchema), async c => {
   const { description, type, amount, category, date } = c.req.valid("json")
   const data: TransactionCreateDto = {
     description,
@@ -68,7 +68,7 @@ transactionApi.post("/", zValidator("json", createTransactionSchema), async c =>
   return c.json(response)
 })
 
-transactionApi.put(
+transactions.put(
   "/:id",
   zValidator("param", transactionIdSchema),
   zValidator("json", updateTransactionSchema),
@@ -89,11 +89,11 @@ transactionApi.put(
   },
 )
 
-transactionApi.delete("/:id", zValidator("param", transactionIdSchema), async c => {
+transactions.delete("/:id", zValidator("param", transactionIdSchema), async c => {
   const { id } = c.req.valid("param")
 
   const response = await TransactionUseCases.delete(id)
   return c.json(response)
 })
 
-export default transactionApi
+export default transactions

@@ -14,7 +14,7 @@ import { DataService } from "~/services/data-service"
 import { HashService } from "~/services/hash-service"
 
 export const AuthUseCases: IAuthUseCases = {
-  async register(dto: UserCreateDto): Promise<ResponseDto<string | null>> {
+  async register(dto: UserCreateDto): Promise<ResponseDto<string>> {
     const { username, password } = dto
 
     // Password cannot be less than 8 characters long
@@ -53,14 +53,13 @@ export const AuthUseCases: IAuthUseCases = {
       return response
     } catch (e) {
       if (e instanceof Error) {
-
         throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
       }
 
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to create user" })
     }
   },
-  async login(dto: UserCreateDto): Promise<ResponseDto<string | null>> {
+  async login(dto: UserCreateDto): Promise<ResponseDto<string>> {
     const { username, password } = dto
 
     const user = await DataService.users.findByUsername(username)
