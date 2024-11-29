@@ -1,9 +1,16 @@
+"use client"
+
 import { Button } from "~/components/ui/button"
 import { Transaction } from "./transaction"
 import { TransactionTypeEnum } from "@budgeteer/types"
 import { ChevronRight } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export function TransactionsSection() {
+  const router = useRouter()
+  const handleNewTransactionRedirect = () => {
+    router.push("/transaction/new")
+  }
   return (
     <div className="lg:px-8 lg:pb-8">
       <main className=" flex-col grid justify-center lg:max-w-none grid-cols-12 px-4 lg:px-0 gap-8">
@@ -14,7 +21,9 @@ export function TransactionsSection() {
         <div className="hidden col-span-5 h-full lg:flex flex-col">
           <div className="flex justify-between w-full items-center pb-4">
             <h2 className="font-semibold text-2xl">Transactions</h2>
-            <Button className="font-normal text-sm">+ New Transaction</Button>
+            <Button className="font-normal text-sm" onClick={handleNewTransactionRedirect}>
+              + New Transaction
+            </Button>
           </div>
           <div className="overflow-y-scroll h-60 pr-4">
             {[1, 2, 3, 4, 5].map(() => (
