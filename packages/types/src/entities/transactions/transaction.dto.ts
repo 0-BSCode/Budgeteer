@@ -6,15 +6,15 @@ import { SortOrderEnum, SortOrderEnumSchema } from "../../enums/sort-order.enum"
 import { TransactionSortColumnEnum, TransactionSortColumnEnumSchema } from "../../enums/transaction-sort-column.enum"
 
 export const TransactionDtoSchema = z.object({
-  // TODO: Make consistent with other entity ID's
-  id: z.string().regex(/^[0-9]+$/, "Must be a number"),
+  id: z.number(),
   userId: z.number(),
   description: z.string().max(MAX_TRANSACTION_DESCRIPTION_LENGTH),
   type: TransactionTypeEnumSchema,
   category: TransactionCategoryEnumSchema,
   amount: z.number().min(MIN_TRANSACTION_AMOUNT),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  date: z.coerce.date(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 })
 
 export const TransactionQueryDtoSchema = z.object({
