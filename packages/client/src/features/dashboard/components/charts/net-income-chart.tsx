@@ -33,7 +33,7 @@ export function NetIncomeChart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer style={{ height: 216, width: "100%" }} config={chartConfig}>
+        <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
             data={chartData}

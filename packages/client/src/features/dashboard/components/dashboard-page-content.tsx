@@ -42,12 +42,12 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
           </TabsList>
         </Tabs>
       </div>
-      <div className="flex gap-8">
-        <section className="w-1/2 grid gap-8">
+      <div className="flex gap-8 flex-col md:flex-row">
+        <section className="md:w-1/2 grid gap-8">
           <NetIncomeChart />
           <DistributionPieChart />
         </section>
-        <section className="w-1/2">lorem1000</section>
+        <section className="md:w-1/2">lorem1000</section>
       </div>
     </>
   )
