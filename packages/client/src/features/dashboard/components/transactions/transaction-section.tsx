@@ -11,7 +11,7 @@ export function TransactionSection() {
       <div className="flex justify-between w-full items-center mb-8 gap-4">
         <DashboardSectionHeading
           className="mb-0"
-          title="Transactions"
+          title="Transactions 🧾"
           description="A summary of your recent activity"
         />
         <Button asChild>

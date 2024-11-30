@@ -10,6 +10,7 @@ import { DistributionPieChart } from "./charts/distribution-pie-chart"
 import { MobileStatCarousel } from "./stats/mobile-stat-carousel"
 import { TransactionSection } from "./transactions/transaction-section"
 import { DashboardSectionHeading } from "./dashboard-section-heading"
+import { GoalSection } from "./goals/goal-section"
 
 interface Props {
   initialTimeRange: TimeRangeEnum
@@ -52,7 +53,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
       </section>
       <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
         <section className="md:w-3/5">
-          <DashboardSectionHeading title="Analytics" description="Overview of your financial performance" />
+          <DashboardSectionHeading title="Analytics 📊" description="Overview of your financial performance" />
           <div className="grid gap-8">
             <NetIncomeChart />
             <DistributionPieChart />
@@ -60,10 +61,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
         </section>
         <div className="md:w-2/5 flex flex-col gap-8">
           <TransactionSection />
-          <section>
-            <DashboardSectionHeading title="Goals" description="Track your progress toward key milestones" />
-            <div></div>
-          </section>
+          <GoalSection />
         </div>
       </div>
     </>
