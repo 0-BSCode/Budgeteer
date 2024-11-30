@@ -4,10 +4,10 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import { useRouter } from "next/navigation"
-import { MobileStatWidget } from "./mobile-stat-widget"
 import { StatCard } from "./stat-card"
 import { NetIncomeChart } from "./charts/net-income-chart"
 import { DistributionPieChart } from "./charts/distribution-pie-chart"
+import { MobileStatCarousel } from "./mobile-stat-carousel"
 
 interface Props {
   initialTimeRange: TimeRangeEnum
@@ -26,14 +26,9 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
 
   return (
     <>
-      <div className="flex justify-between w-full items-center mb-8 flex-col sm:flex-row gap-8 col-span-full">
+      <div className="flex justify-between w-full items-center mb-8 flex-col sm:flex-row gap-8 col-span-full overflow-hidden">
         <h1 className="hidden sm:block text-3xl font-bold text-start">Dashboard</h1>
-        <MobileStatWidget
-          className="sm:hidden"
-          title="Net income"
-          value="$56,381"
-          description="31.74% up since last week"
-        />
+        <MobileStatCarousel className="sm:hidden" timeRange={initialTimeRange} />
         <Tabs className="sm:w-1/2 w-full" onValueChange={handleTimeRangeChange} defaultValue={initialTimeRange}>
           <TabsList className="grid grid-cols-3">
             <TabsTrigger value={TimeRangeEnumSchema.Values.daily}>
