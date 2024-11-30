@@ -1,13 +1,6 @@
 "use client"
 
-import {
-  ExpenseCategoryEnumValues,
-  IncomeCategoryEnumValues,
-  TransactionCreateDto,
-  TransactionCreateDtoSchema,
-  TransactionTypeEnum,
-  TransactionTypeEnumValues,
-} from "@budgeteer/types"
+import { ExpenseCategoryEnumValues, IncomeCategoryEnumValues, TransactionTypeEnumValues } from "@budgeteer/types"
 import { SelectTrigger, SelectValue } from "@radix-ui/react-select"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -22,28 +15,31 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form"
 import { Calendar } from "~/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, LoaderCircle } from "lucide-react"
 import { cn } from "~/lib/utils"
 import { format } from "date-fns"
+import { RawTransactionCreateDto, RawTransactionCreateDtoSchema } from "~/types/entities/raw-transaction-create.dto"
 
 export default function CreateTransactionForm() {
   const router = useRouter()
   const { create } = useTransaction()
   const { toast } = useToast()
-  const [type, setType] = useState<TransactionTypeEnum>(TransactionTypeEnumValues.EXPENSE)
   const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<TransactionCreateDto>({
-    resolver: zodResolver(TransactionCreateDtoSchema),
+  const form = useForm<RawTransactionCreateDto>({
+    resolver: zodResolver(RawTransactionCreateDtoSchema),
+    defaultValues: {
+      type: TransactionTypeEnumValues.EXPENSE,
+      category: ExpenseCategoryEnumValues.OTHER,
+    },
   })
 
   const handleCancelCreating = () => {
     router.push("/dashboard")
   }
 
-  const onSubmit = async (values: TransactionCreateDto) => {
+  const onSubmit = async (values: RawTransactionCreateDto) => {
     setIsLoading(true)
-
     try {
       await create({
         description: values.description,
@@ -64,6 +60,7 @@ export default function CreateTransactionForm() {
         title: "An error occured!",
         description: (e as Error).message,
       })
+    } finally {
       setIsLoading(false)
     }
   }
@@ -137,9 +134,15 @@ export default function CreateTransactionForm() {
               <FormItem>
                 <FormLabel>Type</FormLabel>
                 <Select
+                  value={field.value}
                   onValueChange={value => {
+                    form.setValue(
+                      "category",
+                      value === TransactionTypeEnumValues.EXPENSE
+                        ? ExpenseCategoryEnumValues.OTHER
+                        : IncomeCategoryEnumValues.OTHER,
+                    )
                     field.onChange(value)
-                    setType(value as TransactionTypeEnum)
                   }}
                 >
                   <FormControl>
@@ -149,8 +152,11 @@ export default function CreateTransactionForm() {
                   </FormControl>
 
                   <SelectContent>
-                    <SelectItem value={TransactionTypeEnumValues.EXPENSE}>Expense</SelectItem>
-                    <SelectItem value={TransactionTypeEnumValues.INCOME}>Income</SelectItem>
+                    {Object.values(TransactionTypeEnumValues).map(type => (
+                      <SelectItem key={type} value={type}>
+                        {convertToTitleCase(type)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -163,20 +169,25 @@ export default function CreateTransactionForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select
+                  value={field.value}
+                  onValueChange={value => {
+                    field.onChange(value)
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger className="block w-full max-w-md rounded border border-input px-3 py-1">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {type === TransactionTypeEnumValues.EXPENSE &&
+                    {form.getValues("type") === TransactionTypeEnumValues.EXPENSE &&
                       Object.values(ExpenseCategoryEnumValues).map(category => (
                         <SelectItem key={category} value={category}>
                           {convertToTitleCase(category)}
                         </SelectItem>
                       ))}
-                    {type === TransactionTypeEnumValues.INCOME &&
+                    {form.getValues("type") === TransactionTypeEnumValues.INCOME &&
                       Object.values(IncomeCategoryEnumValues).map(category => (
                         <SelectItem key={category} value={category}>
                           {convertToTitleCase(category)}
@@ -191,6 +202,7 @@ export default function CreateTransactionForm() {
           <div className="space-y-4 w-full max-w-md py-8">
             <div className="grid gap-3 w-full max-w-md">
               <Button type="submit" disabled={isLoading}>
+                {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                 Add Transaction
               </Button>
               <Button variant="ghost" onClick={handleCancelCreating} className="w-full">
