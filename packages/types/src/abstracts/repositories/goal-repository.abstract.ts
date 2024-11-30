@@ -1,6 +1,6 @@
-import type { GoalDto } from "src/entities/goals/goal.dto"
-import type { GoalCreateDto } from "src/entities/goals/goal-create.dto"
-import type { GoalUpdateDto } from "src/entities/goals/goal-update.dto"
+import type { GoalDto } from "../../entities/goals/goal.dto"
+import type { GoalCreateDto } from "../../entities/goals/goal-create.dto"
+import type { GoalUpdateDto } from "../../entities/goals/goal-update.dto"
 
 export type IGoalRepository = {
   findByUserId: (userId: number) => Promise<GoalDto[]>
