@@ -15,7 +15,6 @@ const transactionService = {
     })
     const { data: transaction, success } = TransactionDtoSchema.safeParse(response.data)
 
-    console.log(transaction)
     if (!success) {
       throw new Error("The server sent malformatted data. Please contact the website admin.")
     }
