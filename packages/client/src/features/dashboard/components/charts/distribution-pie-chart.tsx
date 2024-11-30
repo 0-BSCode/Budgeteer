@@ -40,7 +40,7 @@ const chartConfig = {
 
 export function DistributionPieChart() {
   return (
-    <Card className="bg-background rounded-md">
+    <Card className="rounded-md">
       <CardHeader>
         <CardTitle>Income Distribution</CardTitle>
         <CardDescription>Visualizing your income sources</CardDescription>

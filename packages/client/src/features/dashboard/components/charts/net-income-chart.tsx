@@ -23,7 +23,7 @@ const chartConfig = {
 
 export function NetIncomeChart() {
   return (
-    <Card className="bg-background rounded-md">
+    <Card className="rounded-md">
       <CardHeader>
         <CardTitle>Net Income</CardTitle>
         <CardDescription>

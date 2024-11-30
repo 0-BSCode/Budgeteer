@@ -4,7 +4,8 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import { useRouter } from "next/navigation"
-import StatWidget from "./stat-widget"
+import { MobileStatWidget } from "./mobile-stat-widget"
+import { StatCard } from "./stat-card"
 import { NetIncomeChart } from "./charts/net-income-chart"
 import { DistributionPieChart } from "./charts/distribution-pie-chart"
 
@@ -27,7 +28,12 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
     <>
       <div className="flex justify-between w-full items-center mb-8 flex-col sm:flex-row gap-8 col-span-full">
         <h1 className="hidden sm:block text-3xl font-bold text-start">Dashboard</h1>
-        <StatWidget className="sm:hidden" title="Net income" value="$56,381" description="31.74% up since last week" />
+        <MobileStatWidget
+          className="sm:hidden"
+          title="Net income"
+          value="$56,381"
+          description="31.74% up since last week"
+        />
         <Tabs className="sm:w-1/2 w-full" onValueChange={handleTimeRangeChange} defaultValue={initialTimeRange}>
           <TabsList className="grid grid-cols-3">
             <TabsTrigger value={TimeRangeEnumSchema.Values.daily}>
@@ -42,12 +48,38 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
           </TabsList>
         </Tabs>
       </div>
-      <div className="flex gap-8 flex-col md:flex-row">
-        <section className="md:w-1/2 grid gap-8">
-          <NetIncomeChart />
-          <DistributionPieChart />
+      <section className="hidden sm:grid sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {[1, 2, 3, 4].map(i => (
+          <StatCard key={i} timeRange={initialTimeRange} />
+        ))}
+      </section>
+      <div className="flex flex-col md:flex-row gap-8 md:gap-16">
+        <section className="md:w-3/5">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold">Analytics</h2>
+            <p className="text-muted-foreground text-sm">Overview of your financial performance</p>
+          </div>
+          <div className="grid gap-8">
+            <NetIncomeChart />
+            <DistributionPieChart />
+          </div>
         </section>
-        <section className="md:w-1/2">lorem1000</section>
+        <div className="md:w-2/5 flex flex-col gap-8">
+          <section>
+            <div className="mb-4">
+              <h2 className="text-xl font-bold">Transactions</h2>
+              <p className="text-muted-foreground text-sm">A summary of your recent activity</p>
+            </div>
+            <div></div>
+          </section>
+          <section>
+            <div className="mb-4">
+              <h2 className="text-xl font-bold">Goals</h2>
+              <p className="text-muted-foreground text-sm">Track your progress toward key milestones</p>
+            </div>
+            <div></div>
+          </section>
+        </div>
       </div>
     </>
   )

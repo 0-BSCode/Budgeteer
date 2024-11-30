@@ -7,7 +7,7 @@ interface Props {
   className?: string
 }
 
-export default function StatWidget({ title, value, description, className }: Props) {
+export function MobileStatWidget({ title, value, description, className }: Props) {
   return (
     <section className={cn("flex flex-col gap-2 items-center", className)}>
       <p className="text-muted-foreground">{title}</p>

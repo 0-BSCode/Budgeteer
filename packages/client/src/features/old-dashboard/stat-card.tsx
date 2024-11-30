@@ -1,6 +1,6 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { StatisticsCategoryEnum } from "~/types/enums/statistics-category-enum"
-import { TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
+import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 
 interface StatCardProps {
   timeRange: TimeRangeEnum
@@ -9,9 +9,9 @@ interface StatCardProps {
 
 export function StatCard({ timeRange, statisticsCategory }: StatCardProps) {
   const getTimeRangeForCardDescription = (TimeRange: TimeRangeEnum) => {
-    return TimeRange === TimeRangeEnum.DAILY
+    return TimeRange === TimeRangeEnumSchema.Values.daily
       ? "yesterday"
-      : TimeRange === TimeRangeEnum.WEEKLY
+      : TimeRange === TimeRangeEnumSchema.Values.weekly
         ? "last week"
         : "last month"
   }
