@@ -50,7 +50,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
       </section>
       <div className="flex flex-col md:flex-row gap-8 md:gap-16">
         <section className="md:w-3/5">
-          <div className="mb-4">
+          <div className="mb-8">
             <h2 className="text-xl font-bold">Analytics</h2>
             <p className="text-muted-foreground text-sm">Overview of your financial performance</p>
           </div>
@@ -61,14 +61,14 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
         </section>
         <div className="md:w-2/5 flex flex-col gap-8">
           <section>
-            <div className="mb-4">
+            <div className="mb-8">
               <h2 className="text-xl font-bold">Transactions</h2>
               <p className="text-muted-foreground text-sm">A summary of your recent activity</p>
             </div>
             <div></div>
           </section>
           <section>
-            <div className="mb-4">
+            <div className="mb-8">
               <h2 className="text-xl font-bold">Goals</h2>
               <p className="text-muted-foreground text-sm">Track your progress toward key milestones</p>
             </div>

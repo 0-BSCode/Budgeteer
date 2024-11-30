@@ -40,13 +40,13 @@ const chartConfig = {
 
 export function DistributionPieChart() {
   return (
-    <Card className="rounded-md">
+    <Card className=" rounded-md">
       <CardHeader>
         <CardTitle>Income Distribution</CardTitle>
         <CardDescription>Visualizing your income sources</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer className="max-h-[216px] w-full" config={chartConfig}>
           <BarChart
             accessibilityLayer
             data={chartData}
