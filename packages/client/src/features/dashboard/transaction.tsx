@@ -1,5 +1,5 @@
 import { MinusIcon, PlusIcon } from "lucide-react"
-import { TransactionTypeEnum } from "@budgeteer/types"
+import { TransactionTypeEnumValues } from "@budgeteer/types"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 
 interface TransactionProps {
@@ -12,7 +12,7 @@ export function Transaction({ type, description }: TransactionProps) {
     <div className="w-full flex gap-4 justify-between items-center pb-6">
       <div className="flex gap-4 items-center">
         <div className="p-2 rounded-full bg-background border-2 border-outline">
-          {type === TransactionTypeEnum.INCOME ? (
+          {type === TransactionTypeEnumValues.INCOME ? (
             <PlusIcon className="w-4 h-4 lg:w-6 lg:h-6" />
           ) : (
             <MinusIcon className="w-4 h-4 lg:w-6 lg:h-6" />

@@ -1,4 +1,9 @@
-import type { TransactionDto } from "./transaction.dto"
+import type { z } from "zod"
+import { TransactionDtoSchema } from "./transaction.dto"
 
-type OmittedFields = Pick<TransactionDto, "id" | "createdAt" | "updatedAt">
-export type TransactionCreateDto = Omit<TransactionDto, keyof OmittedFields>
+export const TransactionCreateDtoSchema = TransactionDtoSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+})
+export type TransactionCreateDto = z.infer<typeof TransactionCreateDtoSchema>

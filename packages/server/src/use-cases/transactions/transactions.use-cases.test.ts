@@ -2,11 +2,11 @@ import { expect, vi, describe, it, beforeEach } from "vitest"
 import { DataService } from "~/services/data-service"
 import { TransactionUseCases } from "./transactions.use-cases"
 import {
-  ExpenseCategoryEnum,
-  IncomeCategoryEnum,
+  ExpenseCategoryEnumValues,
+  IncomeCategoryEnumValues,
   SortOrderEnum,
   TransactionSortColumnEnum,
-  TransactionTypeEnum,
+  TransactionTypeEnumValues,
   type TransactionCreateDto,
   type TransactionDto,
   type TransactionQueryDto,
@@ -32,64 +32,70 @@ const VALID_QUERY: TransactionQueryDto = {
 }
 
 const VALID_TRANSACTION: TransactionDto = {
-  id: "1",
+  id: 1,
+  date: new Date(),
   userId: VALID_USER.id,
   description: "Test",
-  type: TransactionTypeEnum.EXPENSE,
+  type: TransactionTypeEnumValues.EXPENSE,
   amount: 50,
-  category: ExpenseCategoryEnum.ENTERTAINMENT,
+  category: ExpenseCategoryEnumValues.ENTERTAINMENT,
   createdAt: new Date(),
   updatedAt: new Date(),
 }
 
 const VALID_TRANSACTIONS: TransactionDto[] = [
   {
-    id: "1",
+    id: 1,
+    date: new Date("2022-01-01"),
     userId: VALID_USER.id,
     description: "Buy lunch",
-    type: TransactionTypeEnum.EXPENSE,
+    type: TransactionTypeEnumValues.EXPENSE,
     amount: 50,
-    category: ExpenseCategoryEnum.ENTERTAINMENT,
+    category: ExpenseCategoryEnumValues.ENTERTAINMENT,
     createdAt: new Date("2022-01-01"),
     updatedAt: new Date("2022-01-01"),
   },
   {
-    id: "2",
+    id: 2,
+    date: new Date("2023-01-02"),
     userId: VALID_USER.id,
     description: "Work salary",
-    type: TransactionTypeEnum.INCOME,
+    type: TransactionTypeEnumValues.INCOME,
     amount: 100,
-    category: IncomeCategoryEnum.SALARY,
+    category: IncomeCategoryEnumValues.SALARY,
     createdAt: new Date("2023-01-02"),
     updatedAt: new Date("2023-01-02"),
   },
   {
-    id: "3",
+    id: 3,
+    date: new Date("2021-12-02"),
     userId: VALID_USER.id,
     description: "Gift",
-    type: TransactionTypeEnum.INCOME,
+    type: TransactionTypeEnumValues.INCOME,
     amount: 75,
-    category: IncomeCategoryEnum.ALLOWANCE,
+    category: IncomeCategoryEnumValues.ALLOWANCE,
     createdAt: new Date("2021-12-02"),
     updatedAt: new Date("2023-12-02"),
   },
   {
-    id: "4",
+    id: 4,
+    date: new Date("2024-12-02"),
     userId: VALID_USER.id,
     description: "Movie",
-    type: TransactionTypeEnum.EXPENSE,
+    type: TransactionTypeEnumValues.EXPENSE,
     amount: 25,
-    category: ExpenseCategoryEnum.ENTERTAINMENT,
+    category: ExpenseCategoryEnumValues.ENTERTAINMENT,
     createdAt: new Date("2024-12-02"),
     updatedAt: new Date("2024-12-02"),
   },
   {
-    id: "5",
+    id: 5,
+    date: new Date("2024-11-05"),
     userId: VALID_USER.id,
     description: "Movie",
-    type: TransactionTypeEnum.EXPENSE,
+    type: TransactionTypeEnumValues.EXPENSE,
     amount: 225,
-    category: ExpenseCategoryEnum.ENTERTAINMENT,
+    category: ExpenseCategoryEnumValues.ENTERTAINMENT,
     createdAt: new Date("2024-11-05"),
     updatedAt: new Date("2024-11-05"),
   },
@@ -193,9 +199,9 @@ describe("create", () => {
 
   it("should throw an error if the category is invalid", async () => {
     const { id, ...data } = VALID_TRANSACTION
-    const transactionCreateDto: TransactionCreateDto = { ...data, category: IncomeCategoryEnum.SALARY }
+    const transactionCreateDto: TransactionCreateDto = { ...data, category: IncomeCategoryEnumValues.SALARY }
     await expect(TransactionUseCases.create(transactionCreateDto)).rejects.toThrowError(
-      `Invalid category for type ${TransactionTypeEnum.EXPENSE}`,
+      `Invalid category for type ${TransactionTypeEnumValues.EXPENSE}`,
     )
   })
 
@@ -220,7 +226,7 @@ describe("update", () => {
       ...data,
       description: "Updated",
       amount: 100,
-      category: ExpenseCategoryEnum.FOOD,
+      category: ExpenseCategoryEnumValues.FOOD,
     }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
     vi.mocked(DataService.transactions.update).mockResolvedValue({ ...transaction, ...transactionUpdateDto })
@@ -237,10 +243,10 @@ describe("update", () => {
 
   it("should throw an error if the category is invalid", async () => {
     const { id, ...data } = transaction
-    const transactionUpdateDto: TransactionUpdateDto = { ...data, category: IncomeCategoryEnum.SALARY }
+    const transactionUpdateDto: TransactionUpdateDto = { ...data, category: IncomeCategoryEnumValues.SALARY }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
     await expect(TransactionUseCases.update(1, transactionUpdateDto)).rejects.toThrowError(
-      `Invalid category for type ${TransactionTypeEnum.EXPENSE}`,
+      `Invalid category for type ${TransactionTypeEnumValues.EXPENSE}`,
     )
   })
 
