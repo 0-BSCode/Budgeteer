@@ -7,7 +7,7 @@ import { TimeRangeEnum } from "~/types/enums/time-range-enum"
 
 export function StatisticsCarousel() {
   return (
-    <Carousel className="w-[80%] lg:w-full max-w-xs pb-2 lg:hidden">
+    <Carousel className="w-[80%] max-w-xs pb-2 lg:hidden lg:w-full">
       <CarouselContent>
         {statisticsCategories.map(category => (
           <CarouselItem key={category}>

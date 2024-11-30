@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
   return (
-    <main className="container relative flex-col col-span-full lg:max-w-none px-4 lg:px-0">
-      <div className="flex-col w-full justify-center items-center">
+    <main className="container relative col-span-full flex-col px-4 lg:max-w-none lg:px-0">
+      <div className="w-full flex-col items-center justify-center">
         <StatisticsCards />
         <TransactionsSection />
         <IncomeDistributionSection />

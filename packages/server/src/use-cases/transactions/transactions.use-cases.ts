@@ -13,9 +13,10 @@ import { isCategoryValid } from "./utils/isCategoryValid"
 import { UsersUseCases } from "../users/users.use-cases"
 
 export const TransactionUseCases: ITransactionUseCases = {
-  async findById(id: number): Promise<ResponseDto<TransactionDto>> {
+  async findById(id: number, userId: number): Promise<ResponseDto<TransactionDto>> {
     const transaction = await DataService.transactions.findById(id)
-    if (!transaction) {
+
+    if (!transaction || transaction.userId !== userId) {
       throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "Transaction not found" })
     }
 
@@ -96,8 +97,8 @@ export const TransactionUseCases: ITransactionUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to create transaction" })
     }
   },
-  async update(id: number, dto: TransactionUpdateDto): Promise<ResponseDto<TransactionDto>> {
-    const { data } = await this.findById(id)
+  async update(id: number, userId: number, dto: TransactionUpdateDto): Promise<ResponseDto<TransactionDto>> {
+    const { data } = await this.findById(id, userId)
 
     // Check if category is valid for transaction type
     if (dto.type) {
@@ -128,8 +129,8 @@ export const TransactionUseCases: ITransactionUseCases = {
       throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to update transaction" })
     }
   },
-  async delete(id: number): Promise<ResponseDto<null>> {
-    await this.findById(id)
+  async delete(id: number, userId: number): Promise<ResponseDto<null>> {
+    await this.findById(id, userId)
 
     try {
       await DataService.transactions.delete(id)

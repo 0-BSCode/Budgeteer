@@ -9,21 +9,21 @@ interface TransactionProps {
 
 export function Transaction({ type, description }: TransactionProps) {
   return (
-    <div className="w-full flex gap-4 justify-between items-center pb-6">
-      <div className="flex gap-4 items-center">
-        <div className="p-2 rounded-full bg-background border-2 border-outline">
+    <div className="flex w-full items-center justify-between gap-4 pb-6">
+      <div className="flex items-center gap-4">
+        <div className="border-outline rounded-full border-2 bg-background p-2">
           {type === TransactionTypeEnumValues.INCOME ? (
-            <PlusIcon className="w-4 h-4 lg:w-6 lg:h-6" />
+            <PlusIcon className="h-4 w-4 lg:h-6 lg:w-6" />
           ) : (
-            <MinusIcon className="w-4 h-4 lg:w-6 lg:h-6" />
+            <MinusIcon className="h-4 w-4 lg:h-6 lg:w-6" />
           )}
         </div>
-        <div className="flex flex-col ">
-          <p className="text-sm lg:text-base text-foreground font-semibold">{convertToTitleCase(type)}</p>
-          <p className="text-[10px] lg:text-xs font-normal text-muted-foreground font truncate">{description}</p>
+        <div className="flex flex-col">
+          <p className="text-sm font-semibold text-foreground lg:text-base">{convertToTitleCase(type)}</p>
+          <p className="font truncate text-[10px] font-normal text-muted-foreground lg:text-xs">{description}</p>
         </div>
       </div>
-      <p className="text-xl lg:text-2xl text-foreground font-bold pb-2">₱123.45</p>
+      <p className="pb-2 text-xl font-bold text-foreground lg:text-2xl">₱123.45</p>
     </div>
   )
 }

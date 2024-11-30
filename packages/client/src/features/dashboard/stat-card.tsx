@@ -19,12 +19,12 @@ export function StatCard({ timeRange, statisticsCategory }: StatCardProps) {
   return (
     <Card className="col-span-1">
       <CardHeader>
-        <CardTitle className="text-xs lg:text-sm font-normal text-muted-foreground">{statisticsCategory}</CardTitle>
+        <CardTitle className="text-xs font-normal text-muted-foreground lg:text-sm">{statisticsCategory}</CardTitle>
         <CardDescription>
-          <p className="text-2xl lg:text-3xl text-foreground font-bold pb-2">
+          <p className="pb-2 text-2xl font-bold text-foreground lg:text-3xl">
             {statisticsCategory === StatisticsCategoryEnum.PENDING_GOALS ? "4" : "₱123.45"}
           </p>
-          <p className="text-xs lg:text-sm font-normal text-muted-foreground">
+          <p className="text-xs font-normal text-muted-foreground lg:text-sm">
             {statisticsCategory === StatisticsCategoryEnum.PENDING_GOALS
               ? "More goals need funding"
               : `31.74% up since ${getTimeRangeForCardDescription(timeRange)}`}

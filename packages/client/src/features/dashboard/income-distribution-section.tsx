@@ -3,22 +3,22 @@ import { GoalCard } from "./goal-card"
 
 export function IncomeDistributionSection() {
   return (
-    <div className="col-span-full lg:px-8 pb-8 h-full  lg:mb-8">
-      <main className="h-full flex-col grid lg:max-w-none grid-cols-12  lg:px-0 gap-8">
+    <div className="col-span-full h-full pb-8 lg:mb-8 lg:px-8">
+      <main className="grid h-full grid-cols-12 flex-col gap-8 lg:max-w-none lg:px-0">
         <div className="col-span-7 h-full">
-          <div className="flex-col pb-4 lg:flex hidden">
-            <h2 className="font-semibold text-2xl">Income Distribution</h2>
+          <div className="hidden flex-col pb-4 lg:flex">
+            <h2 className="text-2xl font-semibold">Income Distribution</h2>
             <p className="text-sm font-normal text-muted-foreground">November 1, 2024 - November 8, 2024</p>
           </div>
-          <div className="w-full h-80  bg-gray-200 dark:bg-card rounded-lg lg:block hidden"></div>
+          <div className="hidden h-80 w-full rounded-lg bg-gray-200 dark:bg-card lg:block"></div>
         </div>
-        <div className="col-span-12 lg:col-span-5 h-full flex flex-col">
-          <div className="flex justify-between w-full items-center pb-4 lg:pb-8">
-            <h2 className="font-semibold text-2xl">Goals</h2>
-            <Button className="lg:block hidden font-normal text-sm">+ New Goal</Button>
-            <Button className="font-normal text-sm lg:hidden">+</Button>
+        <div className="col-span-12 flex h-full flex-col lg:col-span-5">
+          <div className="flex w-full items-center justify-between pb-4 lg:pb-8">
+            <h2 className="text-2xl font-semibold">Goals</h2>
+            <Button className="hidden text-sm font-normal lg:block">+ New Goal</Button>
+            <Button className="text-sm font-normal lg:hidden">+</Button>
           </div>
-          <div className="flex lg:grid lg:grid-cols-2 grid-overflow-x overflow-x-scroll lg:overflow-x-hidden gap-4 lg:overflow-y-scroll pb-2 lg:pb-0 lg:h-80 pr-4">
+          <div className="grid-overflow-x flex gap-4 overflow-x-scroll pb-2 pr-4 lg:grid lg:h-80 lg:grid-cols-2 lg:overflow-x-hidden lg:overflow-y-scroll lg:pb-0">
             {[1, 2, 3, 4, 5, 6, 7].map(() => (
               <GoalCard title="Vacation" deadline={new Date().toLocaleDateString()} key={Math.random()} />
             ))}

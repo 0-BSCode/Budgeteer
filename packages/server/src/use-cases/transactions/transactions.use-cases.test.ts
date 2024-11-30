@@ -120,13 +120,19 @@ vi.mock("~/services/data-service", () => ({
 describe("findById", () => {
   it("should find a transaction and return it", async () => {
     vi.mocked(DataService.transactions.findById).mockResolvedValue(VALID_TRANSACTION)
-    const response = await TransactionUseCases.findById(1)
+    const response = await TransactionUseCases.findById(1, VALID_USER.id)
     expect(response.data).toEqual(VALID_TRANSACTION)
   })
 
   it("should throw an error if the transaction is not found", async () => {
     vi.mocked(DataService.transactions.findById).mockResolvedValue(null)
-    await expect(TransactionUseCases.findById(1)).rejects.toThrowError("Transaction not found")
+    await expect(TransactionUseCases.findById(1, VALID_USER.id)).rejects.toThrowError("Transaction not found")
+  })
+
+  it("should throw an error if the transaction does not belong to the user", async () => {
+    const FAKE_USER: UserDto = { ...VALID_USER, id: 2 }
+    vi.mocked(DataService.transactions.findById).mockResolvedValue(VALID_TRANSACTION)
+    await expect(TransactionUseCases.findById(1, FAKE_USER.id)).rejects.toThrowError("Transaction not found")
   })
 })
 
@@ -230,7 +236,7 @@ describe("update", () => {
     }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
     vi.mocked(DataService.transactions.update).mockResolvedValue({ ...transaction, ...transactionUpdateDto })
-    const response = await TransactionUseCases.update(1, transactionUpdateDto)
+    const response = await TransactionUseCases.update(1, VALID_USER.id, transactionUpdateDto)
     expect(response.data).toEqual({ ...transaction, ...transactionUpdateDto })
   })
 
@@ -238,14 +244,16 @@ describe("update", () => {
     const { id, ...data } = transaction
     const transactionUpdateDto: TransactionUpdateDto = { ...data }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(null)
-    await expect(TransactionUseCases.update(1, transactionUpdateDto)).rejects.toThrowError("Transaction not found")
+    await expect(TransactionUseCases.update(1, VALID_USER.id, transactionUpdateDto)).rejects.toThrowError(
+      "Transaction not found",
+    )
   })
 
   it("should throw an error if the category is invalid", async () => {
     const { id, ...data } = transaction
     const transactionUpdateDto: TransactionUpdateDto = { ...data, category: IncomeCategoryEnumValues.SALARY }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
-    await expect(TransactionUseCases.update(1, transactionUpdateDto)).rejects.toThrowError(
+    await expect(TransactionUseCases.update(1, VALID_USER.id, transactionUpdateDto)).rejects.toThrowError(
       `Invalid category for type ${TransactionTypeEnumValues.EXPENSE}`,
     )
   })
@@ -256,7 +264,9 @@ describe("update", () => {
     const transactionUpdateDto: TransactionUpdateDto = { ...data }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
     vi.mocked(DataService.transactions.update).mockRejectedValue(new Error("Database error!"))
-    await expect(TransactionUseCases.update(1, transactionUpdateDto)).rejects.toThrowError("Database error!")
+    await expect(TransactionUseCases.update(1, VALID_USER.id, transactionUpdateDto)).rejects.toThrowError(
+      "Database error!",
+    )
   })
 })
 
@@ -264,18 +274,18 @@ describe("delete", () => {
   it("should delete a transaction", async () => {
     vi.mocked(DataService.transactions.findById).mockResolvedValue(VALID_TRANSACTION)
     vi.mocked(DataService.transactions.delete)
-    const response = await TransactionUseCases.delete(1)
+    const response = await TransactionUseCases.delete(1, VALID_USER.id)
     expect(response.data).toEqual(null)
   })
 
   it("should throw an error if the transaction is not found", async () => {
     vi.mocked(DataService.transactions.findById).mockResolvedValue(null)
-    await expect(TransactionUseCases.delete(1)).rejects.toThrowError("Transaction not found")
+    await expect(TransactionUseCases.delete(1, VALID_USER.id)).rejects.toThrowError("Transaction not found")
   })
 
   it("should throw a db error", async () => {
     vi.mocked(DataService.transactions.findById).mockResolvedValue(VALID_TRANSACTION)
     vi.mocked(DataService.transactions.delete).mockRejectedValue(new Error("Database error!"))
-    await expect(TransactionUseCases.delete(1)).rejects.toThrowError("Database error!")
+    await expect(TransactionUseCases.delete(1, VALID_USER.id)).rejects.toThrowError("Database error!")
   })
 })
