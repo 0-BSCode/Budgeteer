@@ -15,9 +15,9 @@ export default function NavbarLinks({ className }: { className?: string }) {
       {navLinks.map(l => (
         <Button
           className={cn(
-            "text-muted-foreground transition-colors text-lg hover:text-foreground",
+            "text-lg text-muted-foreground transition-colors hover:text-foreground",
             {
-              "text-foreground font-bold": l.path === pathname,
+              "font-bold text-foreground": l.path === pathname,
             },
             className,
           )}

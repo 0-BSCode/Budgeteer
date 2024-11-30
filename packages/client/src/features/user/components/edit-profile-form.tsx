@@ -36,7 +36,10 @@ export default function EditProfileForm() {
 
   const handleSaveChanges = async () => {
     try {
-      await updateUserCredentials({ username: newUsername, password: newPassword })
+      await updateUserCredentials({
+        username: newUsername,
+        password: newPassword,
+      })
 
       toast({
         variant: "success",
@@ -64,7 +67,7 @@ export default function EditProfileForm() {
       </div>
 
       <div className="flex flex-col items-center gap-4">
-        <div className="space-y-2 w-full max-w-md">
+        <div className="w-full max-w-md space-y-2">
           <Label htmlFor="new-username">Username</Label>
 
           {isEditing ? (
@@ -81,7 +84,7 @@ export default function EditProfileForm() {
             </p>
           )}
         </div>
-        <div className="space-y-2 w-full max-w-md">
+        <div className="w-full max-w-md space-y-2">
           <Label htmlFor="new-password">Password</Label>
           {isEditing ? (
             <Input
@@ -102,9 +105,9 @@ export default function EditProfileForm() {
 
       <div className="flex justify-center">
         {isEditing ? (
-          <div className="grid gap-3 w-full max-w-md">
+          <div className="grid w-full max-w-md gap-3">
             <Button onClick={handleSaveChanges} disabled={isInvalidNewCredentials} size="lg" className="w-full">
-              <Save className="w-4 h-4" />
+              <Save className="h-4 w-4" />
               Save Changes
             </Button>
             <Button onClick={handleCancelEditing} variant="ghost" size="lg" className="w-full">
@@ -113,7 +116,7 @@ export default function EditProfileForm() {
           </div>
         ) : (
           <Button onClick={handleEditProfile} variant="outline" size="lg" className="w-full max-w-md">
-            <UserPen className="w-4 h-4" />
+            <UserPen className="h-4 w-4" />
             Edit Credentials
           </Button>
         )}

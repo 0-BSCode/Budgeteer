@@ -60,7 +60,7 @@ export default function EditAvatar() {
 
   return (
     <div className="relative">
-      <Avatar className="w-48 h-48">
+      <Avatar className="h-48 w-48">
         <AvatarImage src={getProfilePictureSrc(user?.profile_picture)} alt="Your profile picture" />
         <AvatarFallback>{USERNAME_INITIAL}</AvatarFallback>
       </Avatar>
@@ -76,15 +76,15 @@ export default function EditAvatar() {
             <DialogDescription className="sr-only">
               Choose your new avatar from our wide array of choices.
             </DialogDescription>
-            <div className="grid grid-cols-3 gap-4 p-4 place-items-center">
+            <div className="grid grid-cols-3 place-items-center gap-4 p-4">
               {AVAILABLE_PROFILE_PICTURES.map(pic => {
                 return (
                   <Avatar
                     onClick={() => handleSelectAvatar(pic)}
                     key={`profile-picture-id-${pic}`}
-                    className={cn("w-16 h-16 sm:w-24 sm:h-24", {
-                      "outline-4 outline outline-primary": pic === newProfilePicture,
-                      "opacity-70 hover:opacity-100 transition-all cursor-pointer": pic !== newProfilePicture,
+                    className={cn("h-16 w-16 sm:h-24 sm:w-24", {
+                      "outline outline-4 outline-primary": pic === newProfilePicture,
+                      "cursor-pointer opacity-70 transition-all hover:opacity-100": pic !== newProfilePicture,
                     })}
                   >
                     <AvatarImage src={getProfilePictureSrc(pic)} alt="Your profile picture" />
@@ -104,7 +104,7 @@ export default function EditAvatar() {
               disabled={CURRENT_USER_PROFILE_PICTURE === newProfilePicture || !updateUserProfilePicture}
               onClick={handleSaveChanges}
             >
-              <Save className="w-4 h-4" />
+              <Save className="h-4 w-4" />
               Save Changes
             </Button>
           </DialogFooter>
