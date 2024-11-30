@@ -1,22 +1,23 @@
 import { Metadata } from "next"
-import { IncomeDistributionSection } from "~/features/dashboard/income-distribution-section"
-import { StatisticsCards } from "~/features/dashboard/statistic-cards"
-import { TransactionsList } from "~/features/dashboard/transactions-list"
-import { TransactionsSection } from "~/features/dashboard/transactions-section"
+import DashboardPageContent from "~/features/dashboard/dashboard-page-content"
+import { TimeRangeEnumSchema } from "~/types/enums/TimeRangeEnum"
 
 export const metadata: Metadata = {
   title: "Dashboard | Budgeteer",
 }
 
-export default function Dashboard() {
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const timeSearchParam = (await searchParams).time
+  const { success, data } = TimeRangeEnumSchema.safeParse(timeSearchParam)
+  const timeRange = success ? data : TimeRangeEnumSchema.Values.daily
+
   return (
-    <main className="container relative flex-col col-span-full lg:max-w-none px-4 lg:px-0">
-      <div className="flex-col w-full justify-center items-center">
-        <StatisticsCards />
-        <TransactionsSection />
-        <IncomeDistributionSection />
-        <TransactionsList />
-      </div>
-    </main>
+    <div className="col-span-full">
+      <DashboardPageContent initialTimeRange={timeRange} />
+    </div>
   )
 }

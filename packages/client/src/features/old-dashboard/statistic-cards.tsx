@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { StatCard } from "./stat-card"
 import { StatisticsCarousel } from "./statistics-carousel"
-import { TimeRangeEnum } from "~/types/enums/time-range-enum"
+import { TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { statisticsCategories } from "~/types/constants/statistics-categories"
 
 export function StatisticsCards() {
@@ -16,23 +16,25 @@ export function StatisticsCards() {
           <TabsTrigger value={TimeRangeEnum.MONTHLY}>Monthly</TabsTrigger>
         </TabsList>
       </div>
-      <TabsContent value={TimeRangeEnum.DAILY} className="4">
-        <div className="hidden lg:grid lg:grid-cols-4 gap-4 ">
+      <div>
+        <TabsContent value={TimeRangeEnum.DAILY}>
+          <div className="hidden lg:grid lg:grid-cols-4 gap-4">
+            {statisticsCategories.map(category => (
+              <StatCard key={category} statisticsCategory={category} timeRange={TimeRangeEnum.DAILY} />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value={TimeRangeEnum.WEEKLY} className="hidden lg:grid lg:grid-cols-4 gap-4">
           {statisticsCategories.map(category => (
-            <StatCard key={category} statisticsCategory={category} timeRange={TimeRangeEnum.DAILY} />
+            <StatCard key={category} statisticsCategory={category} timeRange={TimeRangeEnum.WEEKLY} />
           ))}
-        </div>
-      </TabsContent>
-      <TabsContent value={TimeRangeEnum.WEEKLY} className="hidden lg:grid lg:grid-cols-4 gap-4">
-        {statisticsCategories.map(category => (
-          <StatCard key={category} statisticsCategory={category} timeRange={TimeRangeEnum.WEEKLY} />
-        ))}
-      </TabsContent>
-      <TabsContent value={TimeRangeEnum.MONTHLY} className="hidden lg:grid lg:grid-cols-4 gap-4 mt-[0.5px]">
-        {statisticsCategories.map(category => (
-          <StatCard key={category} statisticsCategory={category} timeRange={TimeRangeEnum.MONTHLY} />
-        ))}
-      </TabsContent>
+        </TabsContent>
+        <TabsContent value={TimeRangeEnum.MONTHLY} className="hidden lg:grid lg:grid-cols-4 gap-4 mt-[0.5px]">
+          {statisticsCategories.map(category => (
+            <StatCard key={category} statisticsCategory={category} timeRange={TimeRangeEnum.MONTHLY} />
+          ))}
+        </TabsContent>
+      </div>
     </Tabs>
   )
 }

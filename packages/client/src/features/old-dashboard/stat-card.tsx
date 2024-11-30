@@ -1,6 +1,6 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { StatisticsCategoryEnum } from "~/types/enums/statistics-category-enum"
-import { TimeRangeEnum } from "~/types/enums/time-range-enum"
+import { TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 
 interface StatCardProps {
   timeRange: TimeRangeEnum

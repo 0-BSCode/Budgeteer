@@ -4,7 +4,7 @@ import { GoalCard } from "./goal-card"
 export function IncomeDistributionSection() {
   return (
     <div className="col-span-full lg:px-8 pb-8 h-full  lg:mb-8">
-      <main className="h-full flex-col grid lg:max-w-none grid-cols-12  lg:px-0 gap-8">
+      <div className="h-full flex-col grid lg:max-w-none grid-cols-12  lg:px-0 gap-8">
         <div className="col-span-7 h-full">
           <div className="flex-col pb-4 lg:flex hidden">
             <h2 className="font-semibold text-2xl">Income Distribution</h2>
@@ -24,7 +24,7 @@ export function IncomeDistributionSection() {
             ))}
           </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }
