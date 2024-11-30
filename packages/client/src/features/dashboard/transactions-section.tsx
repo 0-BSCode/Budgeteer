@@ -13,19 +13,19 @@ export function TransactionsSection() {
   }
   return (
     <div className="lg:px-8 lg:pb-8">
-      <main className=" flex-col grid justify-center lg:max-w-none grid-cols-12 px-4 lg:px-0 gap-8">
-        <div className="col-span-full lg:col-span-7 lg:h-full bg-gray-200 dark:bg-card h-44 rounded-lg"></div>
-        <p className="hover:cursor-pointer lg:hidden text-sm font-normal text-muted-foreground my-[-28px] col-span-full text-end flex justify-end items-center">
+      <main className="grid grid-cols-12 flex-col justify-center gap-8 px-4 lg:max-w-none lg:px-0">
+        <div className="col-span-full h-44 rounded-lg bg-gray-200 dark:bg-card lg:col-span-7 lg:h-full"></div>
+        <p className="col-span-full my-[-28px] flex items-center justify-end text-end text-sm font-normal text-muted-foreground hover:cursor-pointer lg:hidden">
           View More Charts <ChevronRight height={20} width={20} />
         </p>
-        <div className="hidden col-span-5 h-full lg:flex flex-col">
-          <div className="flex justify-between w-full items-center pb-4">
-            <h2 className="font-semibold text-2xl">Transactions</h2>
-            <Button className="font-normal text-sm" onClick={handleNewTransactionRedirect}>
+        <div className="col-span-5 hidden h-full flex-col lg:flex">
+          <div className="flex w-full items-center justify-between pb-4">
+            <h2 className="text-2xl font-semibold">Transactions</h2>
+            <Button className="text-sm font-normal" onClick={handleNewTransactionRedirect}>
               + New Transaction
             </Button>
           </div>
-          <div className="overflow-y-scroll h-60 pr-4">
+          <div className="h-60 overflow-y-scroll pr-4">
             {[1, 2, 3, 4, 5].map(() => (
               <Transaction
                 type={TransactionTypeEnumValues.INCOME}

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function SignUpPage() {
   return (
-    <main className="container relative h-full flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 px-4 lg:px-0">
+    <main className="container relative grid h-full flex-col items-center justify-center px-4 lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Button asChild variant="ghost" className="absolute right-4 top-4 md:right-8 md:top-8">
         <Link href="/auth/login">Log In</Link>
       </Button>

@@ -4,10 +4,10 @@ import { TransactionTypeEnumValues } from "@budgeteer/types"
 
 export function TransactionsList() {
   return (
-    <div className="lg:hidden col-span-full h-full flex flex-col">
-      <div className="flex justify-between w-full items-center pb-4">
-        <h2 className="font-semibold text-2xl">Transactions</h2>
-        <Button className="font-normal text-sm">+</Button>
+    <div className="col-span-full flex h-full flex-col lg:hidden">
+      <div className="flex w-full items-center justify-between pb-4">
+        <h2 className="text-2xl font-semibold">Transactions</h2>
+        <Button className="text-sm font-normal">+</Button>
       </div>
       {[1, 2].map(() => (
         <Transaction

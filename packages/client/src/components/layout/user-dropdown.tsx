@@ -27,7 +27,7 @@ export default function UserDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="outline" className="h-10 w-10 rounded-full">
-          <CircleUserRound className="h-8 w-8d" />
+          <CircleUserRound className="w-8d h-8" />
           <span className="sr-only">Open user menu</span>
         </Button>
       </DropdownMenuTrigger>

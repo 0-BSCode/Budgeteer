@@ -9,18 +9,18 @@ interface GoalCardProps {
 
 export function GoalCard({ title, deadline }: GoalCardProps) {
   return (
-    <Card className="col-span-1 ">
+    <Card className="col-span-1">
       <CardHeader>
-        <div className="flex items-center justify-between w-32 lg:w-full">
-          <p className="lg:text-xl text-foreground font-bold">{title}</p>
-          <Edit className="w-4 h-4" />
+        <div className="flex w-32 items-center justify-between lg:w-full">
+          <p className="font-bold text-foreground lg:text-xl">{title}</p>
+          <Edit className="h-4 w-4" />
         </div>
 
         <CardDescription className="pb-2 lg:pb-2">
           <CardTitle className="text-xs font-normal text-muted-foreground">Ends on {deadline}</CardTitle>
         </CardDescription>
         <Progress value={50} />
-        <p className="text-sm font-normal text-muted-foreground pt-1 self-end">31.74%</p>
+        <p className="self-end pt-1 text-sm font-normal text-muted-foreground">31.74%</p>
       </CardHeader>
     </Card>
   )

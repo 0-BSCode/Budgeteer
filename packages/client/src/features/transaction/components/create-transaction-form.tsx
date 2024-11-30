@@ -66,9 +66,9 @@ export default function CreateTransactionForm() {
   }
 
   return (
-    <div className="space-y-8 flex flex-col items-center">
+    <div className="flex flex-col items-center space-y-8">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 w-full max-w-md">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full max-w-md flex-col gap-y-4">
           <FormField
             control={form.control}
             name="description"
@@ -199,8 +199,8 @@ export default function CreateTransactionForm() {
               </FormItem>
             )}
           />
-          <div className="space-y-4 w-full max-w-md py-8">
-            <div className="grid gap-3 w-full max-w-md">
+          <div className="w-full max-w-md space-y-4 py-8">
+            <div className="grid w-full max-w-md gap-3">
               <Button type="submit" disabled={isLoading}>
                 {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                 Add Transaction
