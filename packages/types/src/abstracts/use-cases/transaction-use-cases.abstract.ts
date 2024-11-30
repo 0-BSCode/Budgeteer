@@ -6,8 +6,8 @@ import type { TransactionDto, TransactionQueryDto } from "../../entities/transac
 export type ITransactionUseCases = {
   create: (dto: TransactionCreateDto) => Promise<ResponseDto<TransactionDto>>
   query: (dto: TransactionQueryDto) => Promise<ResponseDto<TransactionDto[]>>
-  findById: (id: number) => Promise<ResponseDto<TransactionDto>>
+  findById: (id: number, userId: number) => Promise<ResponseDto<TransactionDto>>
   findByUserId: (userId: number) => Promise<ResponseDto<TransactionDto[]>>
-  update: (id: number, dto: TransactionUpdateDto) => Promise<ResponseDto<TransactionDto>>
-  delete: (id: number) => Promise<ResponseDto<null>>
+  update: (id: number, userId: number, dto: TransactionUpdateDto) => Promise<ResponseDto<TransactionDto>>
+  delete: (id: number, userId: number) => Promise<ResponseDto<null>>
 }
