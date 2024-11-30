@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import DashboardPageContent from "~/features/dashboard/dashboard-page-content"
+import DashboardPageContent from "~/features/dashboard/components/dashboard-page-content"
 import { TimeRangeEnumSchema } from "~/types/enums/TimeRangeEnum"
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default async function Dashboard({
   const timeRange = success ? data : TimeRangeEnumSchema.Values.daily
 
   return (
-    <div className="col-span-full">
+    <div className="flex col-span-full flex-col">
       <DashboardPageContent initialTimeRange={timeRange} />
     </div>
   )

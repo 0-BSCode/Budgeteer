@@ -5,6 +5,8 @@ import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import { useRouter } from "next/navigation"
 import StatWidget from "./stat-widget"
+import { NetIncomeChart } from "./charts/net-income-chart"
+import { DistributionPieChart } from "./charts/distribution-pie-chart"
 
 interface Props {
   initialTimeRange: TimeRangeEnum
@@ -23,7 +25,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
 
   return (
     <>
-      <div className="flex justify-between w-full items-center mb-8 flex-col sm:flex-row gap-8">
+      <div className="flex justify-between w-full items-center mb-8 flex-col sm:flex-row gap-8 col-span-full">
         <h1 className="hidden sm:block text-3xl font-bold text-start">Dashboard</h1>
         <StatWidget className="sm:hidden" title="Net income" value="$56,381" description="31.74% up since last week" />
         <Tabs className="sm:w-1/2 w-full" onValueChange={handleTimeRangeChange} defaultValue={initialTimeRange}>
@@ -39,6 +41,13 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
             </TabsTrigger>
           </TabsList>
         </Tabs>
+      </div>
+      <div className="flex gap-8">
+        <section className="w-1/2 grid gap-8">
+          <NetIncomeChart />
+          <DistributionPieChart />
+        </section>
+        <section className="w-1/2">lorem1000</section>
       </div>
     </>
   )
