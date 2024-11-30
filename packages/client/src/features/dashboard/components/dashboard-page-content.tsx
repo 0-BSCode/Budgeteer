@@ -4,10 +4,11 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import { useRouter } from "next/navigation"
-import { StatCard } from "./stat-card"
+import { StatCard } from "./stats/stat-card"
 import { NetIncomeChart } from "./charts/net-income-chart"
 import { DistributionPieChart } from "./charts/distribution-pie-chart"
-import { MobileStatCarousel } from "./mobile-stat-carousel"
+import { MobileStatCarousel } from "./stats/mobile-stat-carousel"
+import { TransactionSection } from "./transactions/transaction-section"
 
 interface Props {
   initialTimeRange: TimeRangeEnum
@@ -48,7 +49,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
           <StatCard key={i} timeRange={initialTimeRange} />
         ))}
       </section>
-      <div className="flex flex-col md:flex-row gap-8 md:gap-16">
+      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
         <section className="md:w-3/5">
           <div className="mb-8">
             <h2 className="text-xl font-bold">Analytics</h2>
@@ -60,13 +61,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
           </div>
         </section>
         <div className="md:w-2/5 flex flex-col gap-8">
-          <section>
-            <div className="mb-8">
-              <h2 className="text-xl font-bold">Transactions</h2>
-              <p className="text-muted-foreground text-sm">A summary of your recent activity</p>
-            </div>
-            <div></div>
-          </section>
+          <TransactionSection />
           <section>
             <div className="mb-8">
               <h2 className="text-xl font-bold">Goals</h2>
