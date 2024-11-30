@@ -20,7 +20,7 @@ export function StatCard({ timeRange }: StatCardProps) {
   }
 
   return (
-    <Card className="col-span-1">
+    <Card className="rounded-md">
       <CardHeader>
         <CardTitle className="text-xs lg:text-sm font-normal text-muted-foreground">Something</CardTitle>
         <CardDescription>
