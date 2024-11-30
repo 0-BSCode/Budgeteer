@@ -1,11 +1,14 @@
-import { TransactionTypeEnum, IncomeCategoryEnum, ExpenseCategoryEnum } from "@budgeteer/types"
+import {
+  TransactionTypeEnumValues,
+  IncomeCategoryEnumValues,
+  ExpenseCategoryEnumValues,
+  type TransactionTypeEnum,
+  type TransactionCategoryEnum,
+} from "@budgeteer/types"
 
-export const isCategoryValid = (
-  type: keyof typeof TransactionTypeEnum,
-  category: keyof typeof IncomeCategoryEnum | keyof typeof ExpenseCategoryEnum,
-): boolean => {
-  const isValidExpenseCategory = type === TransactionTypeEnum.EXPENSE && category in ExpenseCategoryEnum
-  const isValidIncomeCategory = type === TransactionTypeEnum.INCOME && category in IncomeCategoryEnum
+export const isCategoryValid = (type: TransactionTypeEnum, category: TransactionCategoryEnum): boolean => {
+  const isValidExpenseCategory = type === TransactionTypeEnumValues.EXPENSE && category in ExpenseCategoryEnumValues
+  const isValidIncomeCategory = type === TransactionTypeEnumValues.INCOME && category in IncomeCategoryEnumValues
 
   return isValidExpenseCategory || isValidIncomeCategory
 }

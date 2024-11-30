@@ -6,7 +6,7 @@ import {
   type UserUpdateDto,
   HttpStatusEnum,
   type UserDto,
-  TransactionTypeEnum,
+  TransactionTypeEnumValues,
   type UserPublicDto,
 } from "@budgeteer/types"
 import { HTTPException } from "hono/http-exception"
@@ -16,8 +16,8 @@ import { HashService } from "~/services/hash-service"
 export const UsersUseCases: IUserUseCases = {
   async getBalance(id: number): Promise<ResponseDto<number>> {
     const transactions = await DataService.transactions.findByUserId(id)
-    const expenses = transactions.filter(transaction => transaction.type === TransactionTypeEnum.EXPENSE)
-    const incomes = transactions.filter(transaction => transaction.type === TransactionTypeEnum.INCOME)
+    const expenses = transactions.filter(transaction => transaction.type === TransactionTypeEnumValues.EXPENSE)
+    const incomes = transactions.filter(transaction => transaction.type === TransactionTypeEnumValues.INCOME)
     const balance =
       incomes.reduce((total, income) => total + income.amount, 0) -
       expenses.reduce((total, expense) => total + expense.amount, 0)
