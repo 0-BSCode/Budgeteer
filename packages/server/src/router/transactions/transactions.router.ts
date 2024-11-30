@@ -26,9 +26,10 @@ transactions.get("/", async c => {
 })
 
 transactions.get("/:id", zValidator("param", transactionIdSchema), async c => {
+  const userId = parseInt(c.get("id"))
   const id = c.req.param("id")
 
-  const response = await TransactionUseCases.findById(parseInt(id))
+  const response = await TransactionUseCases.findById(parseInt(id), userId)
   return c.json(response)
 })
 
@@ -74,6 +75,7 @@ transactions.put(
   zValidator("json", updateTransactionSchema),
   async c => {
     const { id } = c.req.valid("param")
+    const userId = parseInt(c.get("id"))
     const { description, type, amount, category, date } = c.req.valid("json")
 
     const data: TransactionUpdateDto = {
@@ -84,15 +86,16 @@ transactions.put(
       ...(date !== undefined && { date }),
     }
 
-    const response = await TransactionUseCases.update(id, data)
+    const response = await TransactionUseCases.update(id, userId, data)
     return c.json(response)
   },
 )
 
 transactions.delete("/:id", zValidator("param", transactionIdSchema), async c => {
   const { id } = c.req.valid("param")
+  const userId = parseInt(c.get("id"))
 
-  const response = await TransactionUseCases.delete(id)
+  const response = await TransactionUseCases.delete(id, userId)
   return c.json(response)
 })
 

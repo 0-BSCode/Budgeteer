@@ -196,7 +196,7 @@ describe("query", () => {
 
 describe("create", () => {
   it("should create a transaction", async () => {
-    const { id, ...data } = VALID_TRANSACTION
+    const { ...data } = VALID_TRANSACTION
     const transactionCreateDto: TransactionCreateDto = data
     vi.mocked(DataService.transactions.create).mockResolvedValue(VALID_TRANSACTION)
     const response = await TransactionUseCases.create(transactionCreateDto)
@@ -204,7 +204,7 @@ describe("create", () => {
   })
 
   it("should throw an error if the category is invalid", async () => {
-    const { id, ...data } = VALID_TRANSACTION
+    const { ...data } = VALID_TRANSACTION
     const transactionCreateDto: TransactionCreateDto = { ...data, category: IncomeCategoryEnumValues.SALARY }
     await expect(TransactionUseCases.create(transactionCreateDto)).rejects.toThrowError(
       `Invalid category for type ${TransactionTypeEnumValues.EXPENSE}`,
@@ -212,7 +212,7 @@ describe("create", () => {
   })
 
   it("should throw a db error", async () => {
-    const { id, ...data } = VALID_TRANSACTION
+    const { ...data } = VALID_TRANSACTION
     const transactionDto: TransactionCreateDto = data
     vi.mocked(DataService.transactions.create).mockRejectedValue(new Error("Database error!"))
     await expect(TransactionUseCases.create(transactionDto)).rejects.toThrowError("Database error!")
@@ -227,7 +227,7 @@ describe("update", () => {
   })
 
   it("should update a transaction", async () => {
-    const { id, ...data } = transaction
+    const { ...data } = transaction
     const transactionUpdateDto: TransactionUpdateDto = {
       ...data,
       description: "Updated",
@@ -241,7 +241,7 @@ describe("update", () => {
   })
 
   it("should throw an error if the transaction is not found", async () => {
-    const { id, ...data } = transaction
+    const { ...data } = transaction
     const transactionUpdateDto: TransactionUpdateDto = { ...data }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(null)
     await expect(TransactionUseCases.update(1, VALID_USER.id, transactionUpdateDto)).rejects.toThrowError(
@@ -250,7 +250,7 @@ describe("update", () => {
   })
 
   it("should throw an error if the category is invalid", async () => {
-    const { id, ...data } = transaction
+    const { ...data } = transaction
     const transactionUpdateDto: TransactionUpdateDto = { ...data, category: IncomeCategoryEnumValues.SALARY }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
     await expect(TransactionUseCases.update(1, VALID_USER.id, transactionUpdateDto)).rejects.toThrowError(
@@ -259,8 +259,7 @@ describe("update", () => {
   })
 
   it("should throw a db error", async () => {
-    const { id, ...data } = transaction
-    console.log(data)
+    const { ...data } = transaction
     const transactionUpdateDto: TransactionUpdateDto = { ...data }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
     vi.mocked(DataService.transactions.update).mockRejectedValue(new Error("Database error!"))
