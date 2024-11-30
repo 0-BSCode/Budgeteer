@@ -11,7 +11,7 @@ export const TransactionDtoSchema = z.object({
   description: z.string().max(MAX_TRANSACTION_DESCRIPTION_LENGTH),
   type: TransactionTypeEnumSchema,
   category: TransactionCategoryEnumSchema,
-  amount: z.number().min(MIN_TRANSACTION_AMOUNT),
+  amount: z.coerce.number().min(MIN_TRANSACTION_AMOUNT),
   date: z.coerce.date(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
