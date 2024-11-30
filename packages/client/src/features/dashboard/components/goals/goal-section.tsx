@@ -7,7 +7,7 @@ import { GoalCard } from "./goal-card"
 export function GoalSection() {
   return (
     <section>
-      <div className="flex justify-between w-full items-center mb-8 gap-4">
+      <div className="mb-8 flex w-full items-center justify-between gap-4">
         <DashboardSectionHeading
           className="mb-0"
           title="Goals 🎯"
@@ -19,7 +19,7 @@ export function GoalSection() {
           </Link>
         </Button>
       </div>
-      <div className="overflow-y-auto max-h-[370px] pr-2 grid gap-4">
+      <div className="grid max-h-[370px] gap-4 overflow-y-auto pr-3">
         {[1, 2, 3, 4, 5, 6, 7].map(k => (
           <GoalCard key={`goal-card-${k}`} title="Cool goal" deadline="Sunday" />
         ))}

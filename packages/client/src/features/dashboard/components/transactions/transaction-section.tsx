@@ -8,7 +8,7 @@ import { DashboardSectionHeading } from "../dashboard-section-heading"
 export function TransactionSection() {
   return (
     <section className="flex flex-col">
-      <div className="flex justify-between w-full items-center mb-8 gap-4">
+      <div className="mb-8 flex w-full items-center justify-between gap-4">
         <DashboardSectionHeading
           className="mb-0"
           title="Transactions 🧾"
@@ -20,7 +20,7 @@ export function TransactionSection() {
           </Link>
         </Button>
       </div>
-      <div className="overflow-y-auto max-h-[370px] pr-2">
+      <div className="max-h-[370px] overflow-y-auto pr-4">
         {[1, 2, 3, 4, 5, 6, 7].map(k => (
           <TransactionItem
             type={TransactionTypeEnumSchema.Values.INCOME}
