@@ -13,6 +13,7 @@ const transactionService = {
         Authorization: `Bearer ${token}`,
       },
     })
+
     const { data: transactions, success } = z.array(TransactionDtoSchema).safeParse(response.data)
 
     if (!success) {

@@ -2,10 +2,21 @@ import { TransactionDto } from "@budgeteer/types"
 import { StatCardsReport } from "../types/StatCardsReport"
 import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { formatValueWithPeso } from "~/features/transaction/lib/format-value-with-peso"
+import dayjs from "dayjs"
+import isBetween from "dayjs/plugin/isBetween"
+dayjs.extend(isBetween)
 
 interface Args {
   transactions: TransactionDto[]
   timeRange: TimeRangeEnum
+}
+
+interface ReportArgs {
+  transactions: TransactionDto[]
+  previousStart: Date
+  previousEnd: Date
+  currentStart: Date
+  currentEnd: Date
 }
 
 function calculatePercentDifference(current: number, previous: number): number {
@@ -17,14 +28,14 @@ function calculatePercentDifference(current: number, previous: number): number {
 
 function filterTransactionsByDate(transactions: TransactionDto[], startDate: Date, endDate: Date): TransactionDto[] {
   return transactions.filter(transaction => {
-    const transactionDate = new Date(transaction.date)
-    return transactionDate >= startDate && transactionDate < endDate
+    const transactionDate = dayjs(transaction.date)
+    return transactionDate.isBetween(startDate, endDate, null, "[]") // Include startDate and endDate
   })
 }
 
-function calculateNetIncomeReport(transactions: TransactionDto[], start: Date, previousStart: Date) {
-  const currentTransactions = filterTransactionsByDate(transactions, start, new Date())
-  const previousTransactions = filterTransactionsByDate(transactions, previousStart, start)
+function calculateNetIncomeReport({ transactions, previousStart, previousEnd, currentStart, currentEnd }: ReportArgs) {
+  const previousTransactions = filterTransactionsByDate(transactions, previousStart, previousEnd)
+  const currentTransactions = filterTransactionsByDate(transactions, currentStart, currentEnd)
 
   const netIncomeCurrent =
     currentTransactions.filter(t => t.type === "INCOME").reduce((sum, t) => sum + t.amount, 0) -
@@ -41,12 +52,11 @@ function calculateNetIncomeReport(transactions: TransactionDto[], start: Date, p
   }
 }
 
-function calculateIncomeReport(transactions: TransactionDto[], start: Date, previousStart: Date) {
-  const currentTransactions = filterTransactionsByDate(transactions, start, new Date())
-  const previousTransactions = filterTransactionsByDate(transactions, previousStart, start)
+function calculateIncomeReport({ transactions, previousStart, previousEnd, currentStart, currentEnd }: ReportArgs) {
+  const previousTransactions = filterTransactionsByDate(transactions, previousStart, previousEnd)
+  const currentTransactions = filterTransactionsByDate(transactions, currentStart, currentEnd)
 
   const totalIncomeCurrent = currentTransactions.filter(t => t.type === "INCOME").reduce((sum, t) => sum + t.amount, 0)
-
   const totalIncomePrevious = previousTransactions
     .filter(t => t.type === "INCOME")
     .reduce((sum, t) => sum + t.amount, 0)
@@ -58,9 +68,9 @@ function calculateIncomeReport(transactions: TransactionDto[], start: Date, prev
   }
 }
 
-function calculateExpensesReport(transactions: TransactionDto[], start: Date, previousStart: Date) {
-  const currentTransactions = filterTransactionsByDate(transactions, start, new Date())
-  const previousTransactions = filterTransactionsByDate(transactions, previousStart, start)
+function calculateExpensesReport({ transactions, previousStart, previousEnd, currentStart, currentEnd }: ReportArgs) {
+  const previousTransactions = filterTransactionsByDate(transactions, previousStart, previousEnd)
+  const currentTransactions = filterTransactionsByDate(transactions, currentStart, currentEnd)
 
   const totalExpenseCurrent = currentTransactions
     .filter(t => t.type === "EXPENSE")
@@ -78,37 +88,65 @@ function calculateExpensesReport(transactions: TransactionDto[], start: Date, pr
 }
 
 export function createStatCardsReport({ transactions, timeRange }: Args): StatCardsReport {
-  const now = new Date()
+  const now = dayjs() // Get current date using Day.js
 
-  let startDate: Date
-  let previousStartDate: Date
+  let previousStart: dayjs.Dayjs
+  let previousEnd: dayjs.Dayjs
+  let currentStart: dayjs.Dayjs
+  let currentEnd: dayjs.Dayjs
 
   switch (timeRange) {
     case TimeRangeEnumSchema.Values.daily:
-      startDate = new Date(now)
-      startDate.setDate(now.getDate() - 1) // yesterday
-      previousStartDate = new Date(now)
-      previousStartDate.setDate(now.getDate() - 2) // day before yesterday
+      currentStart = now.startOf("day") // Set to the beginning of today (00:00:00)
+      currentEnd = now.endOf("day") // Set to the end of today (23:59:59)
+
+      previousStart = now.subtract(1, "day").startOf("day") // Start of yesterday (00:00:00)
+      previousEnd = now.subtract(1, "day").endOf("day") // End of yesterday (23:59:59)
       break
+
     case TimeRangeEnumSchema.Values.weekly:
-      startDate = new Date(now)
-      startDate.setDate(now.getDate() - 7) // last week
-      previousStartDate = new Date(now)
-      previousStartDate.setDate(now.getDate() - 14) // two weeks ago
+      currentStart = now.subtract(7, "days") // Last week
+      currentEnd = now
+
+      previousStart = now.subtract(14, "days") // Two weeks ago
+      previousEnd = now.subtract(8, "days") // One week before last week
       break
+
     case TimeRangeEnumSchema.Values.monthly:
-      startDate = new Date(now)
-      startDate.setMonth(now.getMonth() - 1) // last month
-      previousStartDate = new Date(now)
-      previousStartDate.setMonth(now.getMonth() - 2) // two months ago
+      currentStart = now.subtract(1, "month") // Last month
+      currentEnd = now
+
+      previousStart = now.subtract(2, "months") // Two months ago
+      previousEnd = now.subtract(1, "month") // One month before last month
       break
+
     default:
       throw new Error("Invalid time range.")
   }
 
-  const netIncomeReport = calculateNetIncomeReport(transactions, startDate, previousStartDate)
-  const incomeReport = calculateIncomeReport(transactions, startDate, previousStartDate)
-  const expensesReport = calculateExpensesReport(transactions, startDate, previousStartDate)
+  const netIncomeReport = calculateNetIncomeReport({
+    transactions,
+    previousStart: previousStart.toDate(),
+    previousEnd: previousEnd.toDate(),
+    currentStart: currentStart.toDate(),
+    currentEnd: currentEnd.toDate(),
+  })
+
+  const incomeReport = calculateIncomeReport({
+    transactions,
+    previousStart: previousStart.toDate(),
+    previousEnd: previousEnd.toDate(),
+    currentStart: currentStart.toDate(),
+    currentEnd: currentEnd.toDate(),
+  })
+
+  const expensesReport = calculateExpensesReport({
+    transactions,
+    previousStart: previousStart.toDate(),
+    previousEnd: previousEnd.toDate(),
+    currentStart: currentStart.toDate(),
+    currentEnd: currentEnd.toDate(),
+  })
 
   return [netIncomeReport, incomeReport, expensesReport]
 }
