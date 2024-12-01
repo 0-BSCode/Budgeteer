@@ -35,7 +35,7 @@ export default function CreateTransactionForm() {
   })
 
   const handleCancelCreating = () => {
-    router.push("/dashboard")
+    router.push("/")
   }
 
   const onSubmit = async (values: RawTransactionCreateDto) => {
@@ -53,7 +53,7 @@ export default function CreateTransactionForm() {
         title: "Creation successful!",
         description: "Successfully created new transaction",
       })
-      router.push("/dashboard")
+      router.push("/")
     } catch (e) {
       toast({
         variant: "destructive",
