@@ -10,11 +10,23 @@ export default function useTransaction() {
     if (!authToken) {
       throw new Error("You cannot create a transaction while authenticated! Please log in first.")
     }
+
     const transaction = await transactionService.create(authToken, dto)
     return transaction
   }
 
+  const getAllTransactions = async (): Promise<TransactionDto[]> => {
+    if (!authToken) {
+      throw new Error("You cannot create a transaction while authenticated! Please log in first.")
+    }
+
+    const transactions = await transactionService.getAll(authToken)
+
+    return transactions
+  }
+
   return {
     create,
+    getAllTransactions,
   }
 }
