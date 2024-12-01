@@ -1,3 +1,7 @@
-import type { TransactionCreateDto } from "./transaction-create.dto"
+import type { z } from "zod"
+import { TransactionCreateDtoSchema } from "./transaction-create.dto"
 
-export type TransactionUpdateDto = Partial<TransactionCreateDto>
+export const TransactionUpdateDtoSchema = TransactionCreateDtoSchema.omit({
+  userId: true,
+}).partial()
+export type TransactionUpdateDto = z.infer<typeof TransactionUpdateDtoSchema>
