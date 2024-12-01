@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS "goals" (
 	"userId" integer NOT NULL,
 	"description" varchar(255) NOT NULL,
 	"amount" real DEFAULT 0 NOT NULL,
-	"createdAt" date DEFAULT now() NOT NULL,
-	"deadline" date DEFAULT now() NOT NULL
+	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+	"deadline" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "transactions" (
@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 	"type" "transaction_type" DEFAULT 'EXPENSE' NOT NULL,
 	"category" "transaction_category" NOT NULL,
 	"amount" real DEFAULT 0 NOT NULL,
-	"date" date NOT NULL,
-	"createdAt" date DEFAULT now() NOT NULL,
-	"updatedAt" date DEFAULT now() NOT NULL
+	"date" timestamp with time zone NOT NULL,
+	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+	"updatedAt" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"username" varchar(30) NOT NULL,
 	"password" varchar(255) NOT NULL,
 	"profile_picture" varchar(255) DEFAULT '' NOT NULL,
-	"createdAt" date DEFAULT now() NOT NULL,
+	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "users_username_unique" UNIQUE("username")
 );
 --> statement-breakpoint
