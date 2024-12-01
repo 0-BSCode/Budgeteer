@@ -6,7 +6,6 @@ import { useState, useEffect } from "react"
 import { TransactionDto } from "@budgeteer/types"
 import { useRouter } from "next/navigation"
 import { useToast } from "~/hooks/use-toast"
-import dayjs from "dayjs"
 
 type TransactionContext = {
   transactions: TransactionDto[] | null
@@ -16,7 +15,7 @@ type TransactionContext = {
 const Context = createContext<TransactionContext | undefined>(undefined)
 
 export function TransactionContextProvider({ children }: { children: ReactNode }) {
-  const [isUpdated, setIsUpdated] = useState<string | null>(null)
+  const [isUpdated, setIsUpdated] = useState<boolean>(false)
   const [transactions, setTransactions] = useState<TransactionDto[] | null>(null)
   const router = useRouter()
   const { toast } = useToast()
@@ -37,7 +36,7 @@ export function TransactionContextProvider({ children }: { children: ReactNode }
         router.replace("/auth/login")
       }
 
-      setIsUpdated(dayjs().format("YYYY-MM-DD HH:mm:ss"))
+      setIsUpdated(true)
     }
 
     if (!isUpdated) {
@@ -47,7 +46,7 @@ export function TransactionContextProvider({ children }: { children: ReactNode }
 
   // Hacky way to maintain cache & invalidate without using a library
   const invalidateTransactionCache = () => {
-    setIsUpdated(null)
+    setIsUpdated(false)
   }
 
   return (
