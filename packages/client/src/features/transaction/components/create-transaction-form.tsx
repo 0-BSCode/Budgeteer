@@ -19,12 +19,14 @@ import { CalendarIcon, LoaderCircle } from "lucide-react"
 import { cn } from "~/lib/utils"
 import { format } from "date-fns"
 import { RawTransactionCreateDto, RawTransactionCreateDtoSchema } from "~/types/entities/raw-transaction-create.dto"
+import { useTransactionContext } from "../providers/transaction-provider"
 
 export default function CreateTransactionForm() {
   const router = useRouter()
   const { create } = useTransaction()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const { invalidateTransactionCache } = useTransactionContext()
 
   const form = useForm<RawTransactionCreateDto>({
     resolver: zodResolver(RawTransactionCreateDtoSchema),
@@ -35,7 +37,7 @@ export default function CreateTransactionForm() {
   })
 
   const handleCancelCreating = () => {
-    router.push("/dashboard")
+    router.push("/")
   }
 
   const onSubmit = async (values: RawTransactionCreateDto) => {
@@ -53,7 +55,12 @@ export default function CreateTransactionForm() {
         title: "Creation successful!",
         description: "Successfully created new transaction",
       })
-      router.push("/dashboard")
+
+      if (invalidateTransactionCache) {
+        invalidateTransactionCache()
+      }
+
+      router.push("/")
     } catch (e) {
       toast({
         variant: "destructive",

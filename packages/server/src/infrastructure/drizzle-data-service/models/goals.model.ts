@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar, date, real } from "drizzle-orm/pg-core"
+import { integer, pgTable, varchar, timestamp, real } from "drizzle-orm/pg-core"
 import { MAX_TRANSACTION_DESCRIPTION_LENGTH } from "@budgeteer/types"
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import { usersTable } from "./user.model"
@@ -10,8 +10,8 @@ export const goalsTable = pgTable("goals", {
     .notNull(),
   description: varchar({ length: MAX_TRANSACTION_DESCRIPTION_LENGTH }).notNull(),
   amount: real().notNull().default(0),
-  createdAt: date().defaultNow().notNull(),
-  deadline: date().defaultNow().notNull(),
+  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
+  deadline: timestamp({ withTimezone: true }).defaultNow().notNull(),
 })
 
 export type SelectGoal = InferSelectModel<typeof goalsTable>

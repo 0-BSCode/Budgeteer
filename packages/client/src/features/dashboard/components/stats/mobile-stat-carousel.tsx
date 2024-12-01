@@ -1,8 +1,11 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "~/components/ui/carousel"
 import { TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
-import { StatisticsCategoryEnumSchema } from "~/types/enums/StatisticsCategoryEnum"
 import { MobileStatWidget } from "./mobile-stat-widget"
 import { cn } from "~/lib/utils"
+import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
+import { createStatCardsReport } from "../../lib/create-stat-cards-report"
+import { getStatDescription } from "../../lib/get-stat-description"
+import { Skeleton } from "~/components/ui/skeleton"
 
 interface Props {
   timeRange: TimeRangeEnum
@@ -10,14 +13,26 @@ interface Props {
 }
 
 export function MobileStatCarousel({ timeRange, className }: Props) {
+  const { transactions } = useTransactionContext()
+
+  if (!transactions) {
+    return <Skeleton className="h-24 w-full max-w-sm" />
+  }
+
+  const report = createStatCardsReport({ transactions, timeRange })
+
   return (
     <div className={cn("max-w-sm", className)}>
       <Carousel>
         <CarouselContent>
-          {StatisticsCategoryEnumSchema._def.values.map(category => {
+          {report.map(r => {
             return (
-              <CarouselItem key={`mobile-stat-widget-${category}`}>
-                <MobileStatWidget title={category} value="₱123.45" description={timeRange} />
+              <CarouselItem key={`mobile-stat-widget-${r.title}`}>
+                <MobileStatWidget
+                  title={r.title}
+                  value={`${r.value}`}
+                  description={getStatDescription(r.percentDifference, timeRange)}
+                />
               </CarouselItem>
             )
           })}

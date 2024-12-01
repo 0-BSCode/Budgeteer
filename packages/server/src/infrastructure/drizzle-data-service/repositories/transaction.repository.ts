@@ -36,11 +36,11 @@ export const transactionRepository: ITransactionRepository = {
 
     // Query by date
     if (dto.startDate) {
-      whereConditions.push(gte(transactionsTable.date, dto.startDate.toISOString()))
+      whereConditions.push(gte(transactionsTable.date, dto.startDate))
     }
 
     if (dto.endDate) {
-      whereConditions.push(lte(transactionsTable.date, dto.endDate.toISOString()))
+      whereConditions.push(lte(transactionsTable.date, dto.endDate))
     }
 
     // Query by amount
@@ -91,7 +91,7 @@ export const transactionRepository: ITransactionRepository = {
       type: dto.type,
       amount: dto.amount,
       category: dto.category,
-      date: dto.date.toISOString(),
+      date: dto.date,
     }
 
     const records = await db.insert(transactionsTable).values(data).returning()
@@ -107,7 +107,7 @@ export const transactionRepository: ITransactionRepository = {
         type: dto.type,
         amount: dto.amount,
         category: dto.category,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date(),
       })
       .where(eq(transactionsTable.id, id))
       .returning()

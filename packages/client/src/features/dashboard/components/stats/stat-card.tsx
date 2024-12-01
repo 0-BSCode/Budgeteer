@@ -1,33 +1,19 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
-import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 
-interface StatCardProps {
-  timeRange: TimeRangeEnum
+interface Props {
+  title: string
+  value: string
+  description: string
 }
 
-export function StatCard({ timeRange }: StatCardProps) {
-  const getTimeRangeForCardDescription = (timeRange: TimeRangeEnum) => {
-    switch (timeRange) {
-      case TimeRangeEnumSchema.Values.daily:
-        return "yesterday"
-      case TimeRangeEnumSchema.Values.weekly:
-        return "last week"
-      case TimeRangeEnumSchema.Values.monthly:
-        return "last month"
-      default:
-        return "last time"
-    }
-  }
-
+export function StatCard({ title, value, description }: Props) {
   return (
     <Card className="rounded-md">
       <CardHeader>
-        <CardTitle className="text-xs lg:text-sm font-normal text-muted-foreground">Something</CardTitle>
+        <CardTitle className="text-xs font-normal text-muted-foreground lg:text-sm">{title}</CardTitle>
         <CardDescription>
-          <p className="text-2xl lg:text-3xl text-foreground font-bold pb-2">₱123.45</p>
-          <p className="text-xs lg:text-sm font-normal text-muted-foreground">
-            31.74% up since {getTimeRangeForCardDescription(timeRange)}
-          </p>
+          <p className="truncate pb-2 text-2xl font-bold text-foreground lg:text-3xl">{value}</p>
+          <p className="text-xs font-normal text-muted-foreground lg:text-sm">{description}</p>
         </CardDescription>
       </CardHeader>
     </Card>

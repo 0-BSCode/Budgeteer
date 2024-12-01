@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar, date, pgEnum, real } from "drizzle-orm/pg-core"
+import { integer, pgTable, varchar, timestamp, pgEnum, real } from "drizzle-orm/pg-core"
 import { enumsToPgEnum } from "../utils/enumsToPgEnum"
 import {
   ExpenseCategoryEnumValues,
@@ -24,9 +24,9 @@ export const transactionsTable = pgTable("transactions", {
   type: transactionTypeEnum().notNull().default(TransactionTypeEnumValues.EXPENSE),
   category: transactionCategoryEnum().notNull(),
   amount: real().notNull().default(0),
-  date: date().notNull(),
-  createdAt: date().defaultNow().notNull(),
-  updatedAt: date().defaultNow().notNull(),
+  date: timestamp({ withTimezone: true }).notNull(),
+  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
 })
 
 export type SelectTransaction = InferSelectModel<typeof transactionsTable>

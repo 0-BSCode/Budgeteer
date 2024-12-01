@@ -4,13 +4,13 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import { useRouter } from "next/navigation"
-import { StatCard } from "./stats/stat-card"
 import { NetIncomeChart } from "./charts/net-income-chart"
 import { DistributionPieChart } from "./charts/distribution-pie-chart"
 import { MobileStatCarousel } from "./stats/mobile-stat-carousel"
 import { TransactionSection } from "./transactions/transaction-section"
 import { DashboardSectionHeading } from "./dashboard-section-heading"
 import { GoalSection } from "./goals/goal-section"
+import { StatCardGridSection } from "./stats/stat-card-grid-section"
 
 interface Props {
   initialTimeRange: TimeRangeEnum
@@ -29,10 +29,10 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
 
   return (
     <>
-      <div className="flex justify-between w-full items-center mb-8 flex-col sm:flex-row gap-8 col-span-full overflow-hidden">
-        <h1 className="hidden sm:block text-3xl font-bold text-start">Dashboard</h1>
+      <div className="col-span-full mb-8 flex w-full flex-col items-center justify-between gap-8 overflow-hidden sm:flex-row">
+        <h1 className="hidden text-start text-3xl font-bold sm:block">Dashboard</h1>
         <MobileStatCarousel className="sm:hidden" timeRange={initialTimeRange} />
-        <Tabs className="sm:w-1/2 w-full" onValueChange={handleTimeRangeChange} defaultValue={initialTimeRange}>
+        <Tabs className="w-full sm:w-1/2" onValueChange={handleTimeRangeChange} defaultValue={initialTimeRange}>
           <TabsList className="grid grid-cols-3">
             <TabsTrigger value={TimeRangeEnumSchema.Values.daily}>
               {convertToTitleCase(TimeRangeEnumSchema.Values.daily)}
@@ -46,12 +46,8 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
           </TabsList>
         </Tabs>
       </div>
-      <section className="hidden sm:grid sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {[1, 2, 3, 4].map(i => (
-          <StatCard key={i} timeRange={initialTimeRange} />
-        ))}
-      </section>
-      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+      <StatCardGridSection timeRange={initialTimeRange} />
+      <div className="flex flex-col gap-8 md:flex-row lg:gap-12">
         <section className="md:w-3/5">
           <DashboardSectionHeading title="Analytics 📊" description="Overview of your financial performance" />
           <div className="grid gap-8">
@@ -59,7 +55,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
             <DistributionPieChart />
           </div>
         </section>
-        <div className="md:w-2/5 flex flex-col gap-8">
+        <div className="flex flex-col gap-8 md:w-2/5">
           <TransactionSection />
           <GoalSection />
         </div>
