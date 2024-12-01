@@ -12,7 +12,7 @@ export function StatCard({ title, value, description }: Props) {
       <CardHeader>
         <CardTitle className="text-xs font-normal text-muted-foreground lg:text-sm">{title}</CardTitle>
         <CardDescription>
-          <p className="pb-2 text-2xl font-bold text-foreground lg:text-3xl">{value}</p>
+          <p className="truncate pb-2 text-2xl font-bold text-foreground lg:text-3xl">{value}</p>
           <p className="text-xs font-normal text-muted-foreground lg:text-sm">{description}</p>
         </CardDescription>
       </CardHeader>
