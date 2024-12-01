@@ -1,11 +1,16 @@
 import { Button } from "~/components/ui/button"
 import { TransactionItem } from "./transaction-item"
-import { TransactionTypeEnumSchema } from "@budgeteer/types"
 import { Plus } from "lucide-react"
 import Link from "next/link"
 import { DashboardSectionHeading } from "../dashboard-section-heading"
+import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
+import { Skeleton } from "~/components/ui/skeleton"
+import dayjs from "dayjs"
+import { emojifyTransactionCategory } from "~/features/transaction/lib/emojify-transaction-category"
 
 export function TransactionSection() {
+  const { transactions } = useTransactionContext()
+
   return (
     <section className="flex flex-col">
       <div className="mb-8 flex w-full items-center justify-between gap-4">
@@ -20,15 +25,20 @@ export function TransactionSection() {
           </Link>
         </Button>
       </div>
-      <div className="max-h-[370px] overflow-y-auto pr-4">
-        {[1, 2, 3, 4, 5, 6, 7].map(k => (
-          <TransactionItem
-            type={TransactionTypeEnumSchema.Values.INCOME}
-            description="💸 Salary • 5:00PM, 11/03/2024"
-            key={`transaction-item-${k}`}
-          />
-        ))}
-      </div>
+      {!transactions ? (
+        <Skeleton className="h-[370px] w-full" />
+      ) : (
+        <div className="max-h-[370px] overflow-y-auto pr-4">
+          {transactions.map(t => (
+            <TransactionItem
+              type={t.type}
+              description={`${emojifyTransactionCategory(t.category)} • ${dayjs(t.date).format("HH:mm, MMMM D, YYYY")}`}
+              value={t.amount}
+              key={t.id}
+            />
+          ))}
+        </div>
+      )}
     </section>
   )
 }

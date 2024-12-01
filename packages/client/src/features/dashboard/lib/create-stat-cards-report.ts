@@ -1,6 +1,7 @@
 import { TransactionDto } from "@budgeteer/types"
 import { StatCardsReport } from "../types/StatCardsReport"
 import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
+import { formatValueWithPeso } from "~/features/transaction/lib/format-value-with-peso"
 
 interface Args {
   transactions: TransactionDto[]
@@ -19,11 +20,6 @@ function filterTransactionsByDate(transactions: TransactionDto[], startDate: Dat
     const transactionDate = new Date(transaction.date)
     return transactionDate >= startDate && transactionDate < endDate
   })
-}
-
-function formatValueWithPeso(value: number): string {
-  const absoluteValue = Math.abs(value).toFixed(2)
-  return value < 0 ? `-₱${absoluteValue}` : `₱${absoluteValue}`
 }
 
 function calculateNetIncomeReport(transactions: TransactionDto[], start: Date, previousStart: Date) {
