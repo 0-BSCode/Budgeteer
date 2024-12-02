@@ -17,12 +17,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useToast } from "~/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import { Input } from "~/components/ui/input"
-import { Popover, PopoverContent } from "@radix-ui/react-popover"
 import { TimePicker } from "~/components/ui/datetime-picker"
 import { Button } from "~/components/ui/button"
 import { cn } from "~/lib/utils"
 import { format } from "date-fns"
-import { PopoverTrigger } from "~/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { Calendar } from "~/components/ui/calendar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
@@ -212,7 +211,7 @@ export default function EditTransactionForm({ id }: Props) {
                   }}
                 >
                   <FormControl>
-                    <SelectTrigger className="block w-full max-w-md rounded border border-input px-3 py-1">
+                    <SelectTrigger className="flex w-full max-w-md rounded border border-input px-3 py-1">
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>
                   </FormControl>
@@ -243,7 +242,7 @@ export default function EditTransactionForm({ id }: Props) {
                   }}
                 >
                   <FormControl>
-                    <SelectTrigger className="block w-full max-w-md rounded border border-input px-3 py-1">
+                    <SelectTrigger className="flex w-full max-w-md rounded border border-input px-3 py-1">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                   </FormControl>

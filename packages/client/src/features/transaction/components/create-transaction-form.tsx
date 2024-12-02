@@ -1,12 +1,11 @@
 "use client"
 
 import { ExpenseCategoryEnumValues, IncomeCategoryEnumValues, TransactionTypeEnumValues } from "@budgeteer/types"
-import { SelectTrigger, SelectValue } from "@radix-ui/react-select"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
-import { Select, SelectContent, SelectItem } from "~/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
 import useTransaction from "../hooks/use-transaction"
 import { useToast } from "~/hooks/use-toast"
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
@@ -151,7 +150,7 @@ export default function CreateTransactionForm() {
                   }}
                 >
                   <FormControl>
-                    <SelectTrigger className="block w-full max-w-md rounded border border-input px-3 py-1">
+                    <SelectTrigger className="flex w-full max-w-md rounded border border-input px-3 py-1">
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>
                   </FormControl>
@@ -181,7 +180,7 @@ export default function CreateTransactionForm() {
                   }}
                 >
                   <FormControl>
-                    <SelectTrigger className="block w-full max-w-md rounded border border-input px-3 py-1">
+                    <SelectTrigger className="flex w-full max-w-md rounded border border-input px-3 py-1">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                   </FormControl>
