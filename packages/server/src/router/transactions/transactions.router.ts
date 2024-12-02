@@ -86,8 +86,6 @@ transactions.patch(
       ...(date !== undefined && { date }),
     }
 
-    console.log(data)
-
     const response = await TransactionUseCases.update(id, userId, data)
     return c.json(response)
   },
