@@ -29,6 +29,16 @@ import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import Link from "next/link"
 import { isEqual } from "date-fns"
 import { useTransactionContext } from "../providers/transaction-provider"
+import {
+  Dialog,
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogContent,
+} from "~/components/ui/dialog"
 
 interface Props {
   id: string
@@ -89,7 +99,6 @@ export default function EditTransactionForm({ id }: Props) {
   const handleDeletion = async () => {
     setIsLoading(true)
     try {
-      // TODO: Add modal to confirm deletion
       await remove(id)
 
       toast({
@@ -264,10 +273,28 @@ export default function EditTransactionForm({ id }: Props) {
                 {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                 Update Transaction
               </Button>
-              <Button variant="destructive" disabled={isLoading} onClick={handleDeletion}>
-                {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                Delete Transaction
-              </Button>
+              {/* Delete transaction modal */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" disabled={isLoading}>
+                    Delete Transaction
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Delete Transaction</DialogTitle>
+                    <DialogDescription>Are you sure you want to delete this transaction?</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="sm:justify-center">
+                    <DialogClose asChild>
+                      <Button variant="ghost">Close</Button>
+                    </DialogClose>
+                    <Button variant="destructive" onClick={handleDeletion}>
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
               <Link href="/" className="w-full text-center">
                 Go Back
               </Link>
