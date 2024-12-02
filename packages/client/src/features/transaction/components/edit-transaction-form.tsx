@@ -1,59 +1,109 @@
 "use client"
 
-import { ExpenseCategoryEnumValues, IncomeCategoryEnumValues, TransactionTypeEnumValues } from "@budgeteer/types"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { Button } from "~/components/ui/button"
-import { Input } from "~/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
+import {
+  ExpenseCategoryEnumValues,
+  IncomeCategoryEnumValues,
+  TransactionDto,
+  TransactionTypeEnumValues,
+  TransactionUpdateDto,
+} from "@budgeteer/types"
+import { useEffect, useState } from "react"
 import useTransaction from "../hooks/use-transaction"
-import { useToast } from "~/hooks/use-toast"
-import { convertToTitleCase } from "~/lib/convertToTitleCase"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form"
-import { Calendar } from "~/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { CalendarIcon, LoaderCircle } from "lucide-react"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form"
+import { useForm } from "react-hook-form"
+import { RawTransactionCreateDto, RawTransactionCreateDtoSchema } from "~/types/entities/raw-transaction-create.dto"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useToast } from "~/hooks/use-toast"
+import { useRouter } from "next/navigation"
+import { Input } from "~/components/ui/input"
+import { TimePicker } from "~/components/ui/datetime-picker"
+import { Button } from "~/components/ui/button"
 import { cn } from "~/lib/utils"
 import { format } from "date-fns"
-import { RawTransactionCreateDto, RawTransactionCreateDtoSchema } from "~/types/entities/raw-transaction-create.dto"
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
+import { Calendar } from "~/components/ui/calendar"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
+import { convertToTitleCase } from "~/lib/convertToTitleCase"
+import Link from "next/link"
+import { isEqual } from "date-fns"
 import { useTransactionContext } from "../providers/transaction-provider"
-import { TimePicker } from "~/components/ui/datetime-picker"
+import {
+  Dialog,
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogContent,
+} from "~/components/ui/dialog"
 
-export default function CreateTransactionForm() {
+interface Props {
+  id: string
+}
+
+export default function EditTransactionForm({ id }: Props) {
   const router = useRouter()
-  const { create } = useTransaction()
   const { toast } = useToast()
+  const [transaction, setTransaction] = useState<TransactionDto | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const { getTransaction, update, remove } = useTransaction()
   const { invalidateTransactionCache } = useTransactionContext()
 
   const form = useForm<RawTransactionCreateDto>({
     resolver: zodResolver(RawTransactionCreateDtoSchema),
-    defaultValues: {
-      type: TransactionTypeEnumValues.EXPENSE,
-      category: ExpenseCategoryEnumValues.OTHER,
-    },
   })
-
-  const handleCancelCreating = () => {
-    router.push("/")
-  }
 
   const onSubmit = async (values: RawTransactionCreateDto) => {
     setIsLoading(true)
     try {
-      await create({
-        description: values.description,
-        date: values.date,
-        type: values.type,
-        category: values.category,
-        amount: values.amount,
+      const updatedTransaction: TransactionUpdateDto = {
+        ...(values.amount !== transaction?.amount && { amount: values.amount }),
+        ...(values.category !== transaction?.category && { category: values.category }),
+        ...(transaction && !isEqual(values.date, transaction.date) && { date: values.date }),
+        ...(values.description !== transaction?.description && { description: values.description }),
+        ...(values.type !== transaction?.type && { type: values.type }),
+      }
+
+      if (Object.keys(updatedTransaction).length > 0) {
+        await update(id, updatedTransaction)
+        toast({
+          variant: "success",
+          title: "Update successful!",
+          description: "Successfully updated transaction",
+        })
+
+        if (invalidateTransactionCache) {
+          invalidateTransactionCache()
+        }
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Nothing to update!",
+          description: "No changes were made",
+        })
+      }
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "An error occured!",
+        description: (e as Error).message,
       })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDeletion = async () => {
+    setIsLoading(true)
+    try {
+      await remove(id)
+
       toast({
         variant: "success",
-        title: "Creation successful!",
-        description: "Successfully created new transaction",
+        title: "Deletion successful!",
+        description: "Successfully deleted transaction",
       })
 
       if (invalidateTransactionCache) {
@@ -72,6 +122,14 @@ export default function CreateTransactionForm() {
     }
   }
 
+  useEffect(() => {
+    getTransaction(id).then(setTransaction)
+  }, [])
+
+  if (!transaction) {
+    return <LoaderCircle className="mx-auto h-4 w-4 animate-spin" />
+  }
+
   return (
     <div className="flex flex-col items-center space-y-8">
       <Form {...form}>
@@ -79,6 +137,7 @@ export default function CreateTransactionForm() {
           <FormField
             control={form.control}
             name="description"
+            defaultValue={transaction.description}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
@@ -92,6 +151,7 @@ export default function CreateTransactionForm() {
           <FormField
             control={form.control}
             name="amount"
+            defaultValue={transaction.amount}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Amount</FormLabel>
@@ -104,7 +164,7 @@ export default function CreateTransactionForm() {
           />
           <FormField
             control={form.control}
-            defaultValue={new Date()}
+            defaultValue={transaction.date}
             name="date"
             render={({ field }) => (
               <FormItem>
@@ -133,6 +193,7 @@ export default function CreateTransactionForm() {
           />
           <FormField
             control={form.control}
+            defaultValue={transaction.type}
             name="type"
             render={({ field }) => (
               <FormItem>
@@ -169,6 +230,7 @@ export default function CreateTransactionForm() {
           />
           <FormField
             control={form.control}
+            defaultValue={transaction.category}
             name="category"
             render={({ field }) => (
               <FormItem>
@@ -203,15 +265,38 @@ export default function CreateTransactionForm() {
               </FormItem>
             )}
           />
+
           <div className="w-full max-w-md space-y-4 py-8">
             <div className="grid w-full max-w-md gap-3">
               <Button type="submit" disabled={isLoading}>
                 {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                Add Transaction
+                Update Transaction
               </Button>
-              <Button variant="ghost" onClick={handleCancelCreating} className="w-full">
-                Cancel
-              </Button>
+              {/* Delete transaction modal */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" disabled={isLoading}>
+                    Delete Transaction
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Delete Transaction</DialogTitle>
+                    <DialogDescription>Are you sure you want to delete this transaction?</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="sm:justify-center">
+                    <DialogClose asChild>
+                      <Button variant="ghost">Close</Button>
+                    </DialogClose>
+                    <Button variant="destructive" onClick={handleDeletion}>
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Link href="/" className="w-full text-center">
+                Go Back
+              </Link>
             </div>
           </div>
         </form>

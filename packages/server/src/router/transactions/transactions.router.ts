@@ -69,7 +69,7 @@ transactions.post("/", zValidator("json", createTransactionSchema), async c => {
   return c.json(response)
 })
 
-transactions.put(
+transactions.patch(
   "/:id",
   zValidator("param", transactionIdSchema),
   zValidator("json", updateTransactionSchema),

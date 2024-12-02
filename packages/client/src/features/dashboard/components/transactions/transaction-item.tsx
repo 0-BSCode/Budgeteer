@@ -1,19 +1,24 @@
 import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import { formatValueWithPeso } from "~/features/transaction/lib/format-value-with-peso"
 import { TransactionTypeEnumSchema } from "@budgeteer/types"
+import Link from "next/link"
 
 interface Props {
+  id: string
   type: string
   description: string
   value: number
 }
 
-export function TransactionItem({ type, description, value }: Props) {
+export function TransactionItem({ id, type, description, value }: Props) {
   const { data, success } = TransactionTypeEnumSchema.safeParse(type)
   const transactionType = success ? data : undefined
 
   return (
-    <div className="mb-4 flex w-full items-center justify-between gap-4">
+    <Link
+      href={`/transaction/${id}`}
+      className="mb-4 flex w-full items-center justify-between gap-4 px-1 transition-colors hover:bg-muted"
+    >
       <div className="flex items-center gap-4">
         <div className="flex max-w-64 flex-col">
           <p className="truncate font-semibold text-foreground">{convertToTitleCase(type)}</p>
@@ -21,6 +26,6 @@ export function TransactionItem({ type, description, value }: Props) {
         </div>
       </div>
       <p className="text-lg font-bold text-foreground lg:text-2xl">{formatValueWithPeso(value, transactionType)}</p>
-    </div>
+    </Link>
   )
 }

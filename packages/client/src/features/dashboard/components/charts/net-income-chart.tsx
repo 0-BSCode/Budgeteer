@@ -27,7 +27,7 @@ export function NetIncomeChart() {
       <CardHeader>
         <CardTitle>Net Income</CardTitle>
         <CardDescription>
-          <div className="ml-auto flex text-sm items-center gap-2 font-medium leading-none text-muted-foreground dark:text-primary">
+          <div className="ml-auto flex items-center gap-2 text-sm font-medium leading-none text-muted-foreground dark:text-primary">
             Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
           </div>
         </CardDescription>

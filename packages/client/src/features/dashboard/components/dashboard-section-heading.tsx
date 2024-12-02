@@ -11,7 +11,7 @@ export function DashboardSectionHeading({ title, description, className }: Props
     <div className={cn("mb-8", className)}>
       <div>
         <h2 className="text-xl font-bold">{title}</h2>
-        <p className="text-muted-foreground text-sm">{description}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
     </div>
   )

@@ -14,10 +14,10 @@ export function GoalCard({ title, deadline }: GoalCardProps) {
     <Card className="rounded-md">
       <CardHeader className="p-4">
         <div className="flex items-center justify-between lg:w-full">
-          <p className="lg:text-xl text-foreground font-bold">{title}</p>
+          <p className="font-bold text-foreground lg:text-xl">{title}</p>
           <Button className="relative -right-2 -top-1" variant="ghost" size="icon" asChild>
             <Link href="#">
-              <Edit className="w-4 h-4" />
+              <Edit className="h-4 w-4" />
             </Link>
           </Button>
         </div>
@@ -26,7 +26,7 @@ export function GoalCard({ title, deadline }: GoalCardProps) {
           <CardTitle className="text-sm font-normal text-muted-foreground">Ends on {deadline}</CardTitle>
         </CardDescription>
         <Progress value={50} />
-        <p className="text-sm font-normal text-muted-foreground pt-1 self-end">
+        <p className="self-end pt-1 text-sm font-normal text-muted-foreground">
           ₱123.45 / ₱123.45 <span className="text-foreground">(31.74%)</span>
         </p>
       </CardHeader>
