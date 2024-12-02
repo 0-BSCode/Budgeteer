@@ -69,7 +69,7 @@ transactions.post("/", zValidator("json", createTransactionSchema), async c => {
   return c.json(response)
 })
 
-transactions.put(
+transactions.patch(
   "/:id",
   zValidator("param", transactionIdSchema),
   zValidator("json", updateTransactionSchema),
@@ -85,6 +85,8 @@ transactions.put(
       ...(category !== undefined && { category }),
       ...(date !== undefined && { date }),
     }
+
+    console.log(data)
 
     const response = await TransactionUseCases.update(id, userId, data)
     return c.json(response)

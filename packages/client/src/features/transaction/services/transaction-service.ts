@@ -46,7 +46,7 @@ const transactionService = {
     return transaction
   },
   update: async (token: string, id: string, dto: TransactionUpdateDto): Promise<TransactionDto> => {
-    const { data: response } = await axios.put<ResponseDto<TransactionDto>>(`${BASE_URL}/${id}`, dto, {
+    const { data: response } = await axios.patch<ResponseDto<TransactionDto>>(`${BASE_URL}/${id}`, dto, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
