@@ -9,7 +9,7 @@ export default function useTransaction() {
 
   const create = async (dto: RawTransactionCreateDto): Promise<TransactionDto> => {
     if (!authToken) {
-      throw new Error("You cannot create a transaction while authenticated! Please log in first.")
+      throw new Error("You cannot create a transaction while unauthenticated! Please log in first.")
     }
 
     const transaction = await transactionService.create(authToken, dto)
@@ -18,7 +18,7 @@ export default function useTransaction() {
 
   const getTransaction = async (id: string): Promise<TransactionDto> => {
     if (!authToken) {
-      throw new Error("You cannot fetch transactions while authenticated! Please log in first.")
+      throw new Error("You cannot fetch transactions while unauthenticated! Please log in first.")
     }
 
     const transaction = await transactionService.getById(authToken, id)
@@ -27,7 +27,7 @@ export default function useTransaction() {
 
   const getAllTransactions = useCallback(async (): Promise<TransactionDto[]> => {
     if (!authToken) {
-      throw new Error("You cannot fetch transactions while authenticated! Please log in first.")
+      throw new Error("You cannot fetch transactions while unauthenticated! Please log in first.")
     }
 
     const transactions = await transactionService.getAll(authToken)
@@ -37,7 +37,7 @@ export default function useTransaction() {
 
   const update = async (id: string, dto: TransactionUpdateDto): Promise<TransactionDto> => {
     if (!authToken) {
-      throw new Error("You cannot update a transaction while authenticated! Please log in first.")
+      throw new Error("You cannot update a transaction while unauthenticated! Please log in first.")
     }
 
     const transaction = await transactionService.update(authToken, id, dto)
@@ -46,7 +46,7 @@ export default function useTransaction() {
 
   const remove = async (id: string): Promise<void> => {
     if (!authToken) {
-      throw new Error("You cannot delete a transaction while authenticated! Please log in first.")
+      throw new Error("You cannot delete a transaction while unauthenticated! Please log in first.")
     }
 
     await transactionService.delete(authToken, id)
