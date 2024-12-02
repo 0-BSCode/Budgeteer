@@ -31,6 +31,7 @@ export function TransactionSection() {
         <div className="max-h-[370px] overflow-y-auto pr-4">
           {transactions.map(t => (
             <TransactionItem
+              id={t.id.toString()}
               type={t.type}
               description={`${emojifyTransactionCategory(t.category)} • ${dayjs(t.date).format("HH:mm, MMMM D, YYYY")}`}
               value={t.amount}
