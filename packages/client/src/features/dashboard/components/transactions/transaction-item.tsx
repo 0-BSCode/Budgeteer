@@ -15,7 +15,10 @@ export function TransactionItem({ id, type, description, value }: Props) {
   const transactionType = success ? data : undefined
 
   return (
-    <Link href={`/transaction/${id}`} className="mb-4 flex w-full items-center justify-between gap-4">
+    <Link
+      href={`/transaction/${id}`}
+      className="mb-4 flex w-full items-center justify-between gap-4 px-1 transition-colors hover:bg-muted"
+    >
       <div className="flex items-center gap-4">
         <div className="flex max-w-64 flex-col">
           <p className="truncate font-semibold text-foreground">{convertToTitleCase(type)}</p>
