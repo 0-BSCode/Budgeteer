@@ -1,36 +1,36 @@
 "use client"
 
 import { createContext, ReactNode, useContext } from "react"
-import useTransaction from "../hooks/use-transaction"
+import useGoal from "../hooks/use-goal"
 import { useState, useEffect } from "react"
-import { TransactionDto } from "@budgeteer/types"
+import { GoalDto } from "@budgeteer/types"
 import { useRouter } from "next/navigation"
 import { useToast } from "~/hooks/use-toast"
 
-type TransactionContext = {
-  transactions: TransactionDto[] | null
-  invalidateTransactionCache: (() => void) | null
+type GoalContext = {
+  goals: GoalDto[] | null
+  invalidateGoalCache: (() => void) | null
 }
 
-const Context = createContext<TransactionContext | undefined>(undefined)
+const Context = createContext<GoalContext | undefined>(undefined)
 
-export function TransactionContextProvider({ children }: { children: ReactNode }) {
+export function GoalContextProvider({ children }: { children: ReactNode }) {
   const [isUpdated, setIsUpdated] = useState<boolean>(false)
-  const [transactions, setTransactions] = useState<TransactionDto[] | null>(null)
+  const [goals, setGoals] = useState<GoalDto[] | null>(null)
   const router = useRouter()
   const { toast } = useToast()
-  const { getAllTransactions } = useTransaction()
+  const { getAllGoals } = useGoal()
 
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchGoals = async () => {
       try {
-        const transactions = await getAllTransactions()
+        const goals = await getAllGoals()
 
-        setTransactions(transactions)
+        setGoals(goals)
       } catch (e) {
         toast({
           variant: "destructive",
-          title: "An error occured while fetching transactions.",
+          title: "An error occured while fetching goals.",
           description: (e as Error).message,
         })
         router.replace("/auth/login")
@@ -40,20 +40,20 @@ export function TransactionContextProvider({ children }: { children: ReactNode }
     }
 
     if (!isUpdated) {
-      fetchTransactions()
+      fetchGoals()
     }
-  }, [router, toast, getAllTransactions, isUpdated])
+  }, [router, toast, getAllGoals, isUpdated])
 
   // Hacky way to maintain cache & invalidate without using a library
-  const invalidateTransactionCache = () => {
+  const invalidateGoalCache = () => {
     setIsUpdated(false)
   }
 
   return (
     <Context.Provider
       value={{
-        transactions,
-        invalidateTransactionCache,
+        goals,
+        invalidateGoalCache,
       }}
     >
       {children}
@@ -61,8 +61,8 @@ export function TransactionContextProvider({ children }: { children: ReactNode }
   )
 }
 
-export function useTransactionContext() {
+export function useGoalContext() {
   const context = useContext(Context)
-  if (context === undefined) throw new Error("useTransactionContext was used outside of the provider!")
+  if (context === undefined) throw new Error("useGoalContext was used outside of the provider!")
   return context
 }
