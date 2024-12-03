@@ -1,61 +1,60 @@
-import { TransactionDto, TransactionUpdateDto } from "@budgeteer/types"
-import transactionService from "../services/transaction-service"
-import { RawTransactionCreateDto } from "~/types/entities/raw-transaction-create.dto"
+import { GoalCreateDto, GoalDto, GoalUpdateDto } from "@budgeteer/types"
+import goalService from "../services/goal-service"
 import useAuth from "~/features/auth/hooks/use-auth"
 import { useCallback } from "react"
 
-export default function useTransaction() {
+export default function useGoal() {
   const { authToken } = useAuth()
 
-  const create = async (dto: RawTransactionCreateDto): Promise<TransactionDto> => {
+  const create = async (dto: GoalCreateDto): Promise<GoalDto> => {
     if (!authToken) {
-      throw new Error("You cannot create a transaction while unauthenticated! Please log in first.")
+      throw new Error("You cannot create a goal while unauthenticated! Please log in first.")
     }
 
-    const transaction = await transactionService.create(authToken, dto)
-    return transaction
+    const goal = await goalService.create(authToken, dto)
+    return goal
   }
 
-  const getTransaction = async (id: string): Promise<TransactionDto> => {
+  const getGoal = async (id: string): Promise<GoalDto> => {
     if (!authToken) {
-      throw new Error("You cannot fetch transactions while unauthenticated! Please log in first.")
+      throw new Error("You cannot fetch goals while unauthenticated! Please log in first.")
     }
 
-    const transaction = await transactionService.getById(authToken, id)
-    return transaction
+    const goal = await goalService.getById(authToken, id)
+    return goal
   }
 
-  const getAllTransactions = useCallback(async (): Promise<TransactionDto[]> => {
+  const getAllGoals = useCallback(async (): Promise<GoalDto[]> => {
     if (!authToken) {
-      throw new Error("You cannot fetch transactions while unauthenticated! Please log in first.")
+      throw new Error("You cannot fetch goals while unauthenticated! Please log in first.")
     }
 
-    const transactions = await transactionService.getAll(authToken)
+    const goals = await goalService.getAllByUserId(authToken)
 
-    return transactions
+    return goals
   }, [authToken])
 
-  const update = async (id: string, dto: TransactionUpdateDto): Promise<TransactionDto> => {
+  const update = async (id: string, dto: GoalUpdateDto): Promise<GoalDto> => {
     if (!authToken) {
-      throw new Error("You cannot update a transaction while unauthenticated! Please log in first.")
+      throw new Error("You cannot update a goal while unauthenticated! Please log in first.")
     }
 
-    const transaction = await transactionService.update(authToken, id, dto)
-    return transaction
+    const goal = await goalService.update(authToken, id, dto)
+    return goal
   }
 
   const remove = async (id: string): Promise<void> => {
     if (!authToken) {
-      throw new Error("You cannot delete a transaction while unauthenticated! Please log in first.")
+      throw new Error("You cannot delete a goal while unauthenticated! Please log in first.")
     }
 
-    await transactionService.delete(authToken, id)
+    await goalService.delete(authToken, id)
   }
 
   return {
     create,
-    getAllTransactions,
-    getTransaction,
+    getAllGoals,
+    getGoal,
     update,
     remove,
   }
