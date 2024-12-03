@@ -3,7 +3,7 @@ import { zValidator } from "@hono/zod-validator"
 import { goalIdSchema, createGoalSchema, updateGoalSchema } from "./goals-dto.router"
 import { type GoalCreateDto, type GoalUpdateDto } from "@budgeteer/types"
 import { authenticate } from "~/middleware/authenticate"
-import { GoalUseCases } from "~/use-cases/goals.use-cases.ts/goals.use-cases"
+import { GoalUseCases } from "~/use-cases/goals/goals.use-cases"
 
 type Variables = {
   id: string

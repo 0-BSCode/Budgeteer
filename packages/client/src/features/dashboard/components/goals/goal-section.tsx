@@ -14,7 +14,7 @@ export function GoalSection() {
           description="Track your progress toward key milestones"
         />
         <Button asChild>
-          <Link href="/transaction/new">
+          <Link href="/goal/new">
             <Plus /> New <span className="hidden lg:inline">Goal</span>
           </Link>
         </Button>
