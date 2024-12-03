@@ -1,14 +1,10 @@
 "use client"
 
-import { ExpenseCategoryEnumValues, IncomeCategoryEnumValues, TransactionTypeEnumValues } from "@budgeteer/types"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
-import useTransaction from "~/features/transaction/hooks/use-transaction"
 import { useToast } from "~/hooks/use-toast"
-import { convertToTitleCase } from "~/lib/convertToTitleCase"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form"
@@ -17,47 +13,42 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { CalendarIcon, LoaderCircle } from "lucide-react"
 import { cn } from "~/lib/utils"
 import { format } from "date-fns"
-import { RawTransactionCreateDto, RawTransactionCreateDtoSchema } from "~/types/entities/raw-transaction-create.dto"
-import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
 import { TimePicker } from "~/components/ui/datetime-picker"
+import useGoal from "../hooks/use-goal"
+import { useGoalContext } from "../providers/goal-provider"
+import { RawGoalCreateDto, RawGoalCreateDtoSchema } from "~/types/entities/raw-goal-create.dto"
 
 export default function CreateGoalForm() {
   const router = useRouter()
-  const { create } = useTransaction()
+  const { create } = useGoal()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
-  const { invalidateTransactionCache } = useTransactionContext()
+  const { invalidateGoalCache } = useGoalContext()
 
-  const form = useForm<RawTransactionCreateDto>({
-    resolver: zodResolver(RawTransactionCreateDtoSchema),
-    defaultValues: {
-      type: TransactionTypeEnumValues.EXPENSE,
-      category: ExpenseCategoryEnumValues.OTHER,
-    },
+  const form = useForm<RawGoalCreateDto>({
+    resolver: zodResolver(RawGoalCreateDtoSchema),
   })
 
   const handleCancelCreating = () => {
     router.push("/")
   }
 
-  const onSubmit = async (values: RawTransactionCreateDto) => {
+  const onSubmit = async (values: RawGoalCreateDto) => {
     setIsLoading(true)
     try {
       await create({
         description: values.description,
-        date: values.date,
-        type: values.type,
-        category: values.category,
+        deadline: values.deadline,
         amount: values.amount,
       })
       toast({
         variant: "success",
         title: "Creation successful!",
-        description: "Successfully created new transaction",
+        description: "Successfully created new goal",
       })
 
-      if (invalidateTransactionCache) {
-        invalidateTransactionCache()
+      if (invalidateGoalCache) {
+        invalidateGoalCache()
       }
 
       router.push("/")
@@ -96,7 +87,7 @@ export default function CreateGoalForm() {
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} type="number" onChange={e => field.onChange(Number(e.target.value))} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -105,10 +96,10 @@ export default function CreateGoalForm() {
           <FormField
             control={form.control}
             defaultValue={new Date()}
-            name="date"
+            name="deadline"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Transaction Date</FormLabel>
+                <FormLabel>Goal Deadline</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -131,83 +122,12 @@ export default function CreateGoalForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Type</FormLabel>
-                <Select
-                  value={field.value}
-                  onValueChange={value => {
-                    form.setValue(
-                      "category",
-                      value === TransactionTypeEnumValues.EXPENSE
-                        ? ExpenseCategoryEnumValues.OTHER
-                        : IncomeCategoryEnumValues.OTHER,
-                    )
-                    field.onChange(value)
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger className="flex w-full max-w-md rounded border border-input px-3 py-1">
-                      <SelectValue placeholder="Select a type" />
-                    </SelectTrigger>
-                  </FormControl>
 
-                  <SelectContent>
-                    {Object.values(TransactionTypeEnumValues).map(type => (
-                      <SelectItem key={type} value={type}>
-                        {convertToTitleCase(type)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  value={field.value}
-                  onValueChange={value => {
-                    field.onChange(value)
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger className="flex w-full max-w-md rounded border border-input px-3 py-1">
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {form.getValues("type") === TransactionTypeEnumValues.EXPENSE &&
-                      Object.values(ExpenseCategoryEnumValues).map(category => (
-                        <SelectItem key={category} value={category}>
-                          {convertToTitleCase(category)}
-                        </SelectItem>
-                      ))}
-                    {form.getValues("type") === TransactionTypeEnumValues.INCOME &&
-                      Object.values(IncomeCategoryEnumValues).map(category => (
-                        <SelectItem key={category} value={category}>
-                          {convertToTitleCase(category)}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <div className="w-full max-w-md space-y-4 py-8">
             <div className="grid w-full max-w-md gap-3">
               <Button type="submit" disabled={isLoading}>
                 {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                Add Transaction
+                Add Goal
               </Button>
               <Button variant="ghost" onClick={handleCancelCreating} className="w-full">
                 Cancel

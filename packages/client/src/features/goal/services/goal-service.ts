@@ -1,7 +1,8 @@
 import { z } from "zod"
-import { GoalCreateDto, GoalDto, GoalDtoSchema, GoalUpdateDto, ResponseDto } from "@budgeteer/types"
+import { GoalDto, GoalDtoSchema, GoalUpdateDto, ResponseDto } from "@budgeteer/types"
 import axios from "axios"
 import config from "~/lib/config"
+import { RawGoalCreateDto } from "~/types/entities/raw-goal-create.dto"
 
 const BASE_URL = `${config.NEXT_PUBLIC_API_BASE_URL}/goals`
 
@@ -32,7 +33,7 @@ const goalService = {
 
     return goal
   },
-  create: async (token: string, dto: GoalCreateDto): Promise<GoalDto> => {
+  create: async (token: string, dto: RawGoalCreateDto): Promise<GoalDto> => {
     const { data: response } = await axios.post<ResponseDto<GoalDto>>(`${BASE_URL}`, dto, {
       headers: {
         Authorization: `Bearer ${token}`,

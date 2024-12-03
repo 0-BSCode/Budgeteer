@@ -1,7 +1,7 @@
-import { TransactionCreateDtoSchema } from "@budgeteer/types"
+import { GoalCreateDtoSchema } from "@budgeteer/types"
 import { z } from "zod"
 
-export const RawGoalCreateDtoSchema = TransactionCreateDtoSchema.omit({
+export const RawGoalCreateDtoSchema = GoalCreateDtoSchema.omit({
   userId: true,
 })
-export type RawTransactionCreateDto = z.infer<typeof RawTransactionCreateDtoSchema>
+export type RawGoalCreateDto = z.infer<typeof RawGoalCreateDtoSchema>

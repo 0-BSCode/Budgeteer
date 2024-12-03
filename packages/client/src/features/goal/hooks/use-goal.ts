@@ -1,12 +1,13 @@
-import { GoalCreateDto, GoalDto, GoalUpdateDto } from "@budgeteer/types"
+import { GoalDto, GoalUpdateDto } from "@budgeteer/types"
 import goalService from "../services/goal-service"
 import useAuth from "~/features/auth/hooks/use-auth"
 import { useCallback } from "react"
+import { RawGoalCreateDto } from "~/types/entities/raw-goal-create.dto"
 
 export default function useGoal() {
   const { authToken } = useAuth()
 
-  const create = async (dto: GoalCreateDto): Promise<GoalDto> => {
+  const create = async (dto: RawGoalCreateDto): Promise<GoalDto> => {
     if (!authToken) {
       throw new Error("You cannot create a goal while unauthenticated! Please log in first.")
     }
