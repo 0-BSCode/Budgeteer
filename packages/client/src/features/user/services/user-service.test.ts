@@ -1,5 +1,5 @@
 import { expect, it, describe, beforeAll } from "vitest"
-import { setupTestUser, sharedTestState, createRandomString } from "~/lib/test/setupTestUser"
+import { setupTestUser, sharedTestState, createRandomString } from "~/lib/test/setup-test-user"
 import userService from "~/features/user/services/user-service"
 import authService from "~/features/auth/services/auth-service"
 
