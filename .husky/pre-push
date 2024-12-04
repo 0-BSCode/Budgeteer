@@ -1,2 +1,3 @@
 bun run all:build
 bun run test:push
+bun run all:down
