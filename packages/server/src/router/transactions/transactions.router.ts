@@ -18,6 +18,8 @@ const transactions = new Hono<{ Variables: Variables }>()
 
 transactions.use("*", authenticate)
 
+// TODO: Remove zValidator so that input validation errors
+// are handled by the global error handler as well
 transactions.get("/", async c => {
   const userId = c.get("id")
 
