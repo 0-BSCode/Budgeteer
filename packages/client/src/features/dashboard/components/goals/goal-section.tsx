@@ -3,8 +3,14 @@ import { Button } from "~/components/ui/button"
 import Link from "next/link"
 import { Plus } from "lucide-react"
 import { GoalCard } from "./goal-card"
+import { useGoalContext } from "~/features/goal/providers/goal-provider"
+import { Skeleton } from "~/components/ui/skeleton"
+import dayjs from "dayjs"
 
 export function GoalSection() {
+  const { goals } = useGoalContext()
+
+  console.log(goals)
   return (
     <section>
       <div className="mb-8 flex w-full items-center justify-between gap-4">
@@ -20,9 +26,18 @@ export function GoalSection() {
         </Button>
       </div>
       <div className="grid max-h-[370px] gap-4 overflow-y-auto pr-3">
-        {[1, 2, 3, 4, 5, 6, 7].map(k => (
-          <GoalCard key={`goal-card-${k}`} title="Cool goal" deadline="Sunday" />
-        ))}
+        {!goals?.length ? (
+          <Skeleton className="h-[370px] w-full" />
+        ) : (
+          goals.map(g => (
+            <GoalCard
+              key={`goal-card-${g.id}`}
+              amount={g.amount}
+              description={g.description}
+              deadline={`${dayjs(g.deadline).format("MMMM D, YYYY")}`}
+            />
+          ))
+        )}
       </div>
     </section>
   )

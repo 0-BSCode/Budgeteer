@@ -25,7 +25,7 @@ export function TransactionSection() {
           </Link>
         </Button>
       </div>
-      {!transactions ? (
+      {!transactions?.length ? (
         <Skeleton className="h-[370px] w-full" />
       ) : (
         <div className="max-h-[370px] overflow-y-auto pr-4">
