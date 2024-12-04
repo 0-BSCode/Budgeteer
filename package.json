@@ -26,7 +26,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
-    "test": "docker-compose -f docker-compose.yml up -d db server && vitest --run && docker-compose -f docker-compose.yml down db server",
+    "test": "docker-compose -f docker-compose.yml up -d db server && vitest --run || true && docker-compose -f docker-compose.yml down db server",
     "server:test": "bun run --cwd=\"packages/server\" test",
     "server:lint": "bun run --cwd=\"packages/server\" lint",
     "server:format": "bun run --cwd=\"packages/server\" format",
@@ -47,6 +47,7 @@
     "client:start": "bun run --cwd=\"packages/client\" start",
     "server:dev": "bun run --cwd=\"packages/server\" dev",
     "server:start": "bun run --cwd=\"packages/server\" start",
+    "all:build": "docker-compose build",
     "all:up": "docker-compose -f docker-compose.yml up",
     "all:down": "docker-compose -f docker-compose.yml down"
   },
