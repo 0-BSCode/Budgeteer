@@ -5,19 +5,20 @@ import { Button } from "~/components/ui/button"
 import Link from "next/link"
 
 interface GoalCardProps {
+  id: number
   description: string
   deadline: string
   amount: number
 }
 
-export function GoalCard({ description, deadline, amount }: GoalCardProps) {
+export function GoalCard({ id, description, deadline, amount }: GoalCardProps) {
   return (
     <Card className="rounded-md">
       <CardHeader className="p-4">
         <div className="flex items-center justify-between lg:w-full">
           <p className="font-bold text-foreground lg:text-xl">{description}</p>
           <Button className="relative -right-2 -top-1" variant="ghost" size="icon" asChild>
-            <Link href="#">
+            <Link href={`/goal/${id}`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>

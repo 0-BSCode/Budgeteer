@@ -31,6 +31,7 @@ export function GoalSection() {
         ) : (
           goals.map(g => (
             <GoalCard
+              id={g.id}
               key={`goal-card-${g.id}`}
               amount={g.amount}
               description={g.description}
