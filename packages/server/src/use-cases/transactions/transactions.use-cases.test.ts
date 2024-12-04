@@ -233,6 +233,7 @@ describe("update", () => {
       description: "Updated",
       amount: 100,
       category: ExpenseCategoryEnumValues.FOOD,
+      date: new Date(),
     }
     vi.mocked(DataService.transactions.findById).mockResolvedValue(transaction)
     vi.mocked(DataService.transactions.update).mockResolvedValue({ ...transaction, ...transactionUpdateDto })
