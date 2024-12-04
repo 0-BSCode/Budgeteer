@@ -1,1 +1,2 @@
+bun run all:build
 bun run test:push
