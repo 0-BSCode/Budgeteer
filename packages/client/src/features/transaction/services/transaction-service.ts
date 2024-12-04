@@ -13,7 +13,7 @@ import { RawTransactionCreateDto } from "~/types/entities/raw-transaction-create
 const BASE_URL = `${config.NEXT_PUBLIC_API_BASE_URL}/transactions`
 
 const transactionService = {
-  getAll: async (token: string): Promise<TransactionDto[]> => {
+  getByUserId: async (token: string): Promise<TransactionDto[]> => {
     let data: TransactionDto[] | null
     try {
       const { data: response } = await axios.get<ResponseDto<TransactionDto[] | null>>(BASE_URL, {

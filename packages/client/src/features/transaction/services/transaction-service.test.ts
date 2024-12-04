@@ -99,13 +99,13 @@ describe.only("transaction-service", () => {
 
   describe("getAll", () => {
     it("should fetch all transactions successfully & respond with an array of transaction dtos", async () => {
-      const transactions = await transactionService.getAll(sharedUserTestState.token)
+      const transactions = await transactionService.getByUserId(sharedUserTestState.token)
 
       expect(transactions).toBeInstanceOf(Array)
     })
 
     it("should throw an error if user is unauthenticated", async () => {
-      await expect(transactionService.getAll("")).rejects.toThrowError("Unable to fetch transactions.")
+      await expect(transactionService.getByUserId("")).rejects.toThrowError("Unable to fetch transactions.")
     })
   })
 
