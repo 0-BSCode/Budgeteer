@@ -16,6 +16,7 @@ app.onError((err, c) => {
   console.error(err)
 
   const response: ResponseDto<null> = {
+    // TODO: Get status of HTTP Exceptions
     status: HttpStatusEnum.INTERNAL_SERVER_ERROR,
     data: null,
     message: err.message,
