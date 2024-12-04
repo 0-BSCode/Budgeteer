@@ -73,7 +73,7 @@ export const GoalUseCases: IGoalUseCases = {
   async update(id: number, userId: number, dto: GoalUpdateDto): Promise<ResponseDto<GoalDto>> {
     const goal = await this.findById(id, userId)
 
-    if (dto.deadline && dto.deadline < goal.createdAt && dto.deadline < new Date()) {
+    if (dto.deadline && dto.deadline < goal.data.createdAt && dto.deadline < new Date()) {
       throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Deadline must be in the future" })
     }
 

@@ -15,13 +15,9 @@ export const goalRepository: IGoalRepository = {
 
     return records.map(this.convertToDto)
   },
-  async findById(id: number): Promise<GoalDto | null> {
+  async findById(id: number): Promise<GoalDto> {
     const records = await db.select().from(goalsTable).where(eq(goalsTable.id, id))
     const record: SelectGoal = records[0]
-
-    if (!record) {
-      return null
-    }
 
     return this.convertToDto(record)
   },

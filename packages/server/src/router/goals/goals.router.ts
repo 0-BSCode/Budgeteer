@@ -41,7 +41,7 @@ goals.post("/", zValidator("json", createGoalSchema), async c => {
   return c.json(response)
 })
 
-goals.put("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGoalSchema), async c => {
+goals.patch("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGoalSchema), async c => {
   const { id } = c.req.valid("param")
   const userId = parseInt(c.get("id"))
   const { description, deadline, amount } = c.req.valid("json")

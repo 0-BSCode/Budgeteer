@@ -28,6 +28,7 @@ import {
   DialogTrigger,
   DialogContent,
 } from "~/components/ui/dialog"
+import Link from "next/link"
 
 interface Props {
   id: string
@@ -44,16 +45,12 @@ export default function EditGoalForm({ id }: Props) {
     resolver: zodResolver(RawGoalCreateDtoSchema),
   })
 
-  const handleCancelEditing = () => {
-    router.push("/")
-  }
-
   const onSubmit = async (values: RawGoalCreateDto) => {
     setIsLoading(true)
     try {
       const updatedGoal: GoalUpdateDto = {
         ...(values.amount !== goal?.amount && { amount: values.amount }),
-        ...(goal && !isEqual(values.deadline, goal.deadline) && { date: values.deadline }),
+        ...(goal && !isEqual(values.deadline, goal.deadline) && { deadline: values.deadline }),
         ...(values.description !== goal?.description && { description: values.description }),
       }
 
@@ -210,9 +207,9 @@ export default function EditGoalForm({ id }: Props) {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-              <Button variant="ghost" onClick={handleCancelEditing} className="w-full">
+              <Link href="/" className="w-full text-center">
                 Go Back
-              </Button>
+              </Link>
             </div>
           </div>
         </form>

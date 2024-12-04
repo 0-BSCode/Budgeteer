@@ -41,6 +41,7 @@ export default function useGoal() {
     }
 
     const goal = await goalService.update(authToken, id, dto)
+
     return goal
   }
 

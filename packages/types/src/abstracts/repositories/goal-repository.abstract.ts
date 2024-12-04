@@ -4,7 +4,7 @@ import type { GoalUpdateDto } from "../../entities/goals/goal-update.dto"
 
 export type IGoalRepository = {
   findByUserId: (userId: number) => Promise<GoalDto[]>
-  findById: (id: number) => Promise<GoalDto | null>
+  findById: (id: number) => Promise<GoalDto>
   create: (dto: GoalCreateDto) => Promise<GoalDto>
   update: (id: number, dto: GoalUpdateDto) => Promise<GoalDto>
   delete: (id: number) => Promise<void>

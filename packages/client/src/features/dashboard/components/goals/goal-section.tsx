@@ -10,7 +10,6 @@ import dayjs from "dayjs"
 export function GoalSection() {
   const { goals } = useGoalContext()
 
-  console.log(goals)
   return (
     <section>
       <div className="mb-8 flex w-full items-center justify-between gap-4">
