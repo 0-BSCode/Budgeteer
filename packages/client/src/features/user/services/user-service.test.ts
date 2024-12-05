@@ -1,5 +1,5 @@
 import { expect, it, describe, beforeAll } from "vitest"
-import { setupTestUser, sharedTestState, createRandomString } from "~/lib/test/setupTestUser"
+import { setupTestUser, sharedUserTestState, createRandomString } from "~/lib/test/setup-test-user"
 import userService from "~/features/user/services/user-service"
 import authService from "~/features/auth/services/auth-service"
 
@@ -16,9 +16,9 @@ describe.only("user-service", () => {
 
   describe("fetchUserDetails", () => {
     it("should fetch user details with a valid token", async () => {
-      const user = await userService.fetchUserDetails(sharedTestState.token)
+      const user = await userService.fetchUserDetails(sharedUserTestState.token)
 
-      expect(user).toHaveProperty("username", sharedTestState.username)
+      expect(user).toHaveProperty("username", sharedUserTestState.username)
       expect(user).toHaveProperty("id")
       expect(user).toHaveProperty("createdAt")
       expect(user).toHaveProperty("profile_picture")
@@ -27,7 +27,7 @@ describe.only("user-service", () => {
 
   describe("updateUserCredentials", () => {
     it("should update user credentials", async () => {
-      const updatedProfile = await userService.updateUserCredentials(sharedTestState.token, {
+      const updatedProfile = await userService.updateUserCredentials(sharedUserTestState.token, {
         username: NEW_CREDENTIALS.username,
         password: NEW_CREDENTIALS.password,
       })
@@ -39,16 +39,16 @@ describe.only("user-service", () => {
       const token = await authService.login(NEW_CREDENTIALS.username, NEW_CREDENTIALS.password)
 
       expect(token).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/)
-      sharedTestState.token = token
-      sharedTestState.username = NEW_CREDENTIALS.username
-      sharedTestState.password = NEW_CREDENTIALS.password
+      sharedUserTestState.token = token
+      sharedUserTestState.username = NEW_CREDENTIALS.username
+      sharedUserTestState.password = NEW_CREDENTIALS.password
     })
   })
 
   describe("updateUserProfilePicture", () => {
     it("should update the profile picture successfully", async () => {
       const updatedProfile = await userService.updateUserProfilePicture(
-        sharedTestState.token,
+        sharedUserTestState.token,
         NEW_CREDENTIALS.profile_picture,
       )
 

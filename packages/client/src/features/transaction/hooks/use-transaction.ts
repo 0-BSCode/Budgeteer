@@ -30,7 +30,7 @@ export default function useTransaction() {
       throw new Error("You cannot fetch transactions while unauthenticated! Please log in first.")
     }
 
-    const transactions = await transactionService.getAll(authToken)
+    const transactions = await transactionService.getByUserId(authToken)
 
     return transactions
   }, [authToken])

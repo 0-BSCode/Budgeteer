@@ -2,7 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
-import { convertToTitleCase } from "~/lib/convertToTitleCase"
+import { convertToTitleCase } from "~/lib/convert-to-title-case"
 import { useRouter } from "next/navigation"
 import { NetIncomeChart } from "./charts/net-income-chart"
 import { DistributionPieChart } from "./charts/distribution-pie-chart"

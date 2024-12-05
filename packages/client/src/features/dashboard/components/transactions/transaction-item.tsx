@@ -1,4 +1,4 @@
-import { convertToTitleCase } from "~/lib/convertToTitleCase"
+import { convertToTitleCase } from "~/lib/convert-to-title-case"
 import { formatValueWithPeso } from "~/features/transaction/lib/format-value-with-peso"
 import { TransactionTypeEnumSchema } from "@budgeteer/types"
 import Link from "next/link"
