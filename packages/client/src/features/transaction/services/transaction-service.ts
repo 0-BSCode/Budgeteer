@@ -28,7 +28,7 @@ const transactionService = {
 
       data = response.data
     } catch (e) {
-      if ((e as Error).name === "AxiosError") {
+      if (e instanceof Error && (e as Error).name === "AxiosError") {
         if ((e as AxiosError).status) {
           throw new Error((e as AxiosError).message)
         }
@@ -60,7 +60,7 @@ const transactionService = {
 
       data = response.data
     } catch (e) {
-      if ((e as Error).name === "AxiosError") {
+      if (e instanceof Error && (e as Error).name === "AxiosError") {
         if ((e as AxiosError).status) {
           throw new Error((e as AxiosError).message)
         }
@@ -87,7 +87,7 @@ const transactionService = {
 
       data = response.data
     } catch (e) {
-      if ((e as Error).name === "AxiosError") {
+      if (e instanceof Error && (e as Error).name === "AxiosError") {
         if ((e as AxiosError).status) {
           throw new Error("AxiosError:" + (e as AxiosError).message)
         }
@@ -114,7 +114,7 @@ const transactionService = {
 
       data = response.data
     } catch (e) {
-      if ((e as Error).name === "AxiosError") {
+      if (e instanceof Error && (e as Error).name === "AxiosError") {
         if ((e as AxiosError).status) {
           throw new Error("AxiosError: " + (e as AxiosError).message)
         }
@@ -137,7 +137,7 @@ const transactionService = {
         throw new Error(response.message)
       }
     } catch (e) {
-      if ((e as Error).name === "AxiosError") {
+      if (e instanceof Error && (e as Error).name === "AxiosError") {
         if ((e as AxiosError).status) {
           throw new Error((e as AxiosError).message)
         }
