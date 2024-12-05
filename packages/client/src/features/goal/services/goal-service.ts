@@ -7,7 +7,7 @@ import { RawGoalCreateDto } from "~/types/entities/raw-goal-create.dto"
 const BASE_URL = `${config.NEXT_PUBLIC_API_BASE_URL}/goals`
 
 const goalService = {
-  getAllByUserId: async (token: string): Promise<GoalDto[]> => {
+  getByUserId: async (token: string): Promise<GoalDto[]> => {
     const { data: response } = await axios.get<ResponseDto<GoalDto>>(BASE_URL, {
       headers: {
         Authorization: `Bearer ${token}`,

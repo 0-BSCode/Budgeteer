@@ -28,7 +28,7 @@ export function TransactionSection() {
       {!transactions?.length ? (
         <Skeleton className="h-[370px] w-full" />
       ) : (
-        <div className="max-h-[370px] min-h-[370px] overflow-y-auto pr-4">
+        <div className="h-[370px] overflow-y-auto pr-4">
           {transactions.map(t => (
             <TransactionItem
               id={t.id.toString()}

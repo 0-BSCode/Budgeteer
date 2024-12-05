@@ -30,7 +30,7 @@ export default function useGoal() {
       throw new Error("You cannot fetch goals while unauthenticated! Please log in first.")
     }
 
-    const goals = await goalService.getAllByUserId(authToken)
+    const goals = await goalService.getByUserId(authToken)
 
     return goals
   }, [authToken])
