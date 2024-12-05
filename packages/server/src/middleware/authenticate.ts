@@ -2,6 +2,8 @@ import { verify } from "hono/jwt"
 import { createMiddleware } from "hono/factory"
 import { ConfigService } from "~/services/config-service"
 import type { SignatureKey } from "hono/utils/jwt/jws"
+import { HTTPException } from "hono/http-exception"
+import { HttpStatusEnum } from "@budgeteer/types"
 
 const authenticate = createMiddleware(async (c, next) => {
   const authHeader = c.req.header("authorization")
@@ -21,8 +23,10 @@ const authenticate = createMiddleware(async (c, next) => {
     c.set("id", id)
     c.set("username", username)
   } catch (err) {
-    console.log(err)
-    return c.json({ msg: `An error occurred while verifying token` }, 403)
+    if (err instanceof Error) {
+      throw new HTTPException(HttpStatusEnum.FORBIDDEN, { message: err.message })
+    }
+    throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to verify token" })
   }
 
   await next()
