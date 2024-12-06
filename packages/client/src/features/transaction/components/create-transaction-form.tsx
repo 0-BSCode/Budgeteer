@@ -36,10 +36,6 @@ export default function CreateTransactionForm() {
     },
   })
 
-  const handleCancelCreating = () => {
-    router.push("/")
-  }
-
   const onSubmit = async (values: RawTransactionCreateDto) => {
     setIsLoading(true)
     try {
@@ -209,9 +205,12 @@ export default function CreateTransactionForm() {
                 {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                 Add Transaction
               </Button>
-              <Button variant="ghost" onClick={handleCancelCreating} className="w-full">
-                Cancel
-              </Button>
+              <div
+                onClick={() => router.back()}
+                className="w-full text-center text-sm text-primary hover:cursor-pointer hover:underline"
+              >
+                Go Back
+              </div>
             </div>
           </div>
         </form>
