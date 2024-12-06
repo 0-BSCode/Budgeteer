@@ -41,6 +41,10 @@ export const GoalUseCases: IGoalUseCases = {
 
     const goal = await DataService.goals.findById(id)
 
+    if (!goal || goal.userId !== userId) {
+      throw new HTTPException(HttpStatusEnum.NOT_FOUND, { message: "Goal not found" })
+    }
+
     const response: ResponseDto<GoalDto | null> = {
       status: HttpStatusEnum.OK,
       data: goal,

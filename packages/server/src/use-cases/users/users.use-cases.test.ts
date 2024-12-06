@@ -3,6 +3,21 @@ import { DataService } from "~/services/data-service"
 import { type UserDto, type UserPublicDto } from "@budgeteer/types"
 import { UsersUseCases } from "../users/users.use-cases"
 
+const VALID_USER: UserPublicDto = {
+  id: 1,
+  username: "johndoe",
+  profile_picture: "image_url",
+  createdAt: new Date(),
+}
+
+const VALID_USER_WITH_PASSWORD: UserDto = {
+  id: 1,
+  username: "johndoe",
+  password: "password",
+  profile_picture: "image_url",
+  createdAt: new Date(),
+}
+
 vi.mock("~/services/data-service", () => ({
   DataService: {
     users: {
@@ -16,16 +31,9 @@ vi.mock("~/services/data-service", () => ({
 
 describe("findById", () => {
   it("should find a user and return their credentials without a password field", async () => {
-    const user: UserPublicDto = {
-      id: 1,
-      username: "johndoe",
-      profile_picture: "image_url",
-      createdAt: new Date(),
-    }
-
-    vi.mocked(DataService.users.findById).mockResolvedValue(user)
-    const response = await UsersUseCases.findById(1)
-    expect(response.data).toEqual(user)
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
+    const response = await UsersUseCases.findById(VALID_USER.id)
+    expect(response.data).toEqual(VALID_USER)
   })
 
   it("should throw an error if the user is not found", async () => {
@@ -36,17 +44,9 @@ describe("findById", () => {
 
 describe("findByUsername", () => {
   it("should find a user with an encrypted password field", async () => {
-    const user: UserDto = {
-      id: 1,
-      username: "johndoe",
-      profile_picture: "image_url",
-      password: "TestEncryptedPassword123123123",
-      createdAt: new Date(),
-    }
-
-    vi.mocked(DataService.users.findByUsername).mockResolvedValue(user)
+    vi.mocked(DataService.users.findByUsername).mockResolvedValue(VALID_USER_WITH_PASSWORD)
     const response = await UsersUseCases.findByUsername("johndoe")
-    expect(response.data).toEqual(user)
+    expect(response.data).toEqual(VALID_USER_WITH_PASSWORD)
   })
 
   it("should throw an error if the user is not found", async () => {
@@ -57,37 +57,21 @@ describe("findByUsername", () => {
 
 describe("create", () => {
   it("should create a user", async () => {
-    const user: UserDto = {
-      id: 1,
-      username: "johndoe",
-      profile_picture: "image_url",
-      password: "TestEncryptedPassword123123123",
-      createdAt: new Date(),
-    }
-
-    vi.mocked(DataService.users.create).mockResolvedValue(user)
+    vi.mocked(DataService.users.create).mockResolvedValue(VALID_USER_WITH_PASSWORD)
     const response = await UsersUseCases.create({
-      username: user.username,
-      password: user.password,
+      username: VALID_USER_WITH_PASSWORD.username,
+      password: VALID_USER_WITH_PASSWORD.password,
     })
 
-    expect(response.data).toEqual(user)
+    expect(response.data).toEqual(VALID_USER_WITH_PASSWORD)
   })
   it("should throw an error if the username is already taken by another user", async () => {
-    const user: UserDto = {
-      id: 1,
-      username: "johndoe",
-      profile_picture: "image_url",
-      password: "TestEncryptedPassword123123123",
-      createdAt: new Date(),
-    }
-
-    vi.mocked(DataService.users.findByUsername).mockResolvedValue(user)
+    vi.mocked(DataService.users.findByUsername).mockResolvedValue(VALID_USER_WITH_PASSWORD)
 
     await expect(
       UsersUseCases.create({
-        username: user.username,
-        password: user.password,
+        username: VALID_USER_WITH_PASSWORD.username,
+        password: VALID_USER_WITH_PASSWORD.password,
       }),
     ).rejects.toThrowError()
   })
@@ -107,19 +91,12 @@ describe("create", () => {
 
 describe("updateProfilePicture", () => {
   it("should update a user's profile picture URL", async () => {
-    const user: UserPublicDto = {
-      id: 1,
-      username: "johndoe",
-      profile_picture: "image_url",
-      createdAt: new Date(),
-    }
-
-    vi.mocked(DataService.users.findById).mockResolvedValue(user)
-    vi.mocked(DataService.users.updateProfilePictureUrl).mockResolvedValue(user)
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
+    vi.mocked(DataService.users.updateProfilePictureUrl).mockResolvedValue(VALID_USER)
     const response = await UsersUseCases.updateProfilePictureUrl(1, {
       profile_picture: "updated_image_url",
     })
-    expect(response.data).toEqual(user)
+    expect(response.data).toEqual(VALID_USER)
   })
 
   it("should throw an error if the user is not found", async () => {
@@ -133,14 +110,7 @@ describe("updateProfilePicture", () => {
   })
 
   it("should throw a db error", async () => {
-    const user: UserPublicDto = {
-      id: 1,
-      username: "johndoe",
-      profile_picture: "image_url",
-      createdAt: new Date(),
-    }
-
-    vi.mocked(DataService.users.findById).mockResolvedValue(user)
+    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
 
     vi.mocked(DataService.users.updateProfilePictureUrl).mockRejectedValue(new Error("Database error!"))
 
