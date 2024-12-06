@@ -228,7 +228,7 @@ export function TransactionsDataTable() {
 
   // TODO: Remove backend endpoint for querying transactions
   return (
-    <div className="ml-16 flex flex-col space-y-5">
+    <div className="flex min-w-[600px] max-w-[1200px] flex-col space-y-5">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>
