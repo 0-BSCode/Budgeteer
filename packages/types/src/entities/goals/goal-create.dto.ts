@@ -1,4 +1,11 @@
-import type { GoalDto } from "./goal.dto"
+import type { z } from "zod"
+import { GoalDtoSchema } from "./goal.dto"
 
-type OmittedFields = Pick<GoalDto, "id" | "createdAt">
-export type GoalCreateDto = Omit<GoalDto, keyof OmittedFields>
+// type OmittedFields = Pick<GoalDto, "id" | "createdAt">
+
+export const GoalCreateDtoSchema = GoalDtoSchema.omit({
+  id: true,
+  createdAt: true,
+})
+
+export type GoalCreateDto = z.infer<typeof GoalCreateDtoSchema>

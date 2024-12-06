@@ -5,18 +5,20 @@ import { Button } from "~/components/ui/button"
 import Link from "next/link"
 
 interface GoalCardProps {
-  title: string
+  id: number
+  description: string
   deadline: string
+  amount: number
 }
 
-export function GoalCard({ title, deadline }: GoalCardProps) {
+export function GoalCard({ id, description, deadline, amount }: GoalCardProps) {
   return (
     <Card className="rounded-md">
       <CardHeader className="p-4">
         <div className="flex items-center justify-between lg:w-full">
-          <p className="font-bold text-foreground lg:text-xl">{title}</p>
+          <p className="font-bold text-foreground lg:text-xl">{description}</p>
           <Button className="relative -right-2 -top-1" variant="ghost" size="icon" asChild>
-            <Link href="#">
+            <Link href={`/goal/${id}`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>
@@ -27,7 +29,7 @@ export function GoalCard({ title, deadline }: GoalCardProps) {
         </CardDescription>
         <Progress value={50} />
         <p className="self-end pt-1 text-sm font-normal text-muted-foreground">
-          ₱123.45 / ₱123.45 <span className="text-foreground">(31.74%)</span>
+          ₱123.45 / ₱{amount} <span className="text-foreground">(31.74%)</span>
         </p>
       </CardHeader>
     </Card>
