@@ -226,7 +226,6 @@ export function TransactionsDataTable() {
     table.getColumn("category")?.setFilterValue(categories)
   }, [amountRange, dateRange, type, categories])
 
-  // TODO: Remove backend endpoint for querying transactions
   return (
     <div className="flex min-w-[600px] max-w-[1200px] flex-col space-y-5">
       <Accordion type="single" collapsible>
