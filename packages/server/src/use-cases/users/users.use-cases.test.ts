@@ -32,7 +32,7 @@ vi.mock("~/services/data-service", () => ({
 describe("findById", () => {
   it("should find a user and return their credentials without a password field", async () => {
     vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
-    const response = await UsersUseCases.findById(1)
+    const response = await UsersUseCases.findById(VALID_USER.id)
     expect(response.data).toEqual(VALID_USER)
   })
 
