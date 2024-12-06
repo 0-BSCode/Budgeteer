@@ -3,7 +3,6 @@ import {
   type ResponseDto,
   type TransactionDto,
   type TransactionCreateDto,
-  type TransactionQueryDto,
   HttpStatusEnum,
   type TransactionUpdateDto,
 } from "@budgeteer/types"
@@ -32,34 +31,6 @@ export const TransactionUseCases: ITransactionUseCases = {
 
     try {
       const transactions = await DataService.transactions.findByUserId(userId)
-
-      const response: ResponseDto<TransactionDto[]> = {
-        status: HttpStatusEnum.OK,
-        data: transactions,
-      }
-
-      return response
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: e.message })
-      }
-
-      throw new HTTPException(HttpStatusEnum.INTERNAL_SERVER_ERROR, { message: "Unable to fetch transactions" })
-    }
-  },
-  async query(dto: TransactionQueryDto): Promise<ResponseDto<TransactionDto[]>> {
-    await UsersUseCases.findById(dto.userId)
-
-    if (dto.minAmount && dto.maxAmount && dto.minAmount > dto.maxAmount) {
-      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Min amount cannot be greater than max amount" })
-    }
-
-    if (dto.startDate && dto.endDate && dto.startDate > dto.endDate) {
-      throw new HTTPException(HttpStatusEnum.BAD_REQUEST, { message: "Start date cannot be greater than end date" })
-    }
-
-    try {
-      const transactions = await DataService.transactions.query(dto)
 
       const response: ResponseDto<TransactionDto[]> = {
         status: HttpStatusEnum.OK,
