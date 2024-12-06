@@ -282,8 +282,6 @@ export function TransactionsDataTable() {
               value={categories}
               placeholder="Select categories"
               variant="default"
-              animation={2}
-              maxCount={3}
             />
           </div>
         )}
