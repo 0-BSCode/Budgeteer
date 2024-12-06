@@ -14,6 +14,7 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
@@ -158,8 +159,11 @@ export function TransactionsDataTable() {
       sorting,
       columnFilters,
     },
+    getPaginationRowModel: getPaginationRowModel(),
   })
 
+  // TODO: Styling
+  // TODO: Remove backend endpoint for querying transactions
   return (
     <div>
       <div className="flex items-center py-4">
@@ -317,6 +321,26 @@ export function TransactionsDataTable() {
             )}
           </TableBody>
         </Table>
+        <div className="flex w-full justify-center space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="w-[100px]"
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="w-[100px]"
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   )
