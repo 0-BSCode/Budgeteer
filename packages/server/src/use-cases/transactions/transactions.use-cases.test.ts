@@ -4,12 +4,9 @@ import { TransactionUseCases } from "./transactions.use-cases"
 import {
   ExpenseCategoryEnumValues,
   IncomeCategoryEnumValues,
-  SortOrderEnum,
-  TransactionSortColumnEnum,
   TransactionTypeEnumValues,
   type TransactionCreateDto,
   type TransactionDto,
-  type TransactionQueryDto,
   type TransactionUpdateDto,
   type UserDto,
 } from "@budgeteer/types"
@@ -20,15 +17,6 @@ const VALID_USER: UserDto = {
   password: "password",
   profile_picture: "image_url",
   createdAt: new Date(),
-}
-
-const VALID_QUERY: TransactionQueryDto = {
-  userId: VALID_USER.id,
-  limit: 10,
-  page: 1,
-  categories: [],
-  sortBy: TransactionSortColumnEnum.DATE,
-  sortOrder: SortOrderEnum.ASC,
 }
 
 const VALID_TRANSACTION: TransactionDto = {
@@ -109,7 +97,6 @@ vi.mock("~/services/data-service", () => ({
       create: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
-      query: vi.fn(),
     },
     users: {
       findById: vi.fn(),
@@ -153,44 +140,6 @@ describe("findByUserId", () => {
     vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
     vi.mocked(DataService.transactions.findByUserId).mockRejectedValue(new Error("Database error!"))
     await expect(TransactionUseCases.findByUserId(1)).rejects.toThrowError("Database error!")
-  })
-})
-
-// This just tests the business logic specified in the use-cases
-describe("query", () => {
-  it("should return all transactions", async () => {
-    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
-    vi.mocked(DataService.transactions.query).mockResolvedValue(VALID_TRANSACTIONS)
-    const response = await TransactionUseCases.query(VALID_QUERY)
-    expect(response.data).toEqual(VALID_TRANSACTIONS)
-  })
-
-  it("should throw an error if user is not found", async () => {
-    const queryDto: TransactionQueryDto = { ...VALID_QUERY }
-    vi.mocked(DataService.users.findById).mockResolvedValue(null)
-    await expect(TransactionUseCases.query(queryDto)).rejects.toThrowError("User not found")
-  })
-
-  it("should throw an error if startDate is greater than endDate", async () => {
-    const queryDto: TransactionQueryDto = {
-      ...VALID_QUERY,
-      startDate: new Date("2023-01-01"),
-      endDate: new Date("2022-01-01"),
-    }
-    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
-    await expect(TransactionUseCases.query(queryDto)).rejects.toThrowError("Start date cannot be greater than end date")
-  })
-
-  it("should throw an error if minAmount is greater than maxAmount", async () => {
-    const queryDto: TransactionQueryDto = { ...VALID_QUERY, minAmount: 100, maxAmount: 50 }
-    vi.mocked(DataService.users.findById).mockResolvedValue(VALID_USER)
-    await expect(TransactionUseCases.query(queryDto)).rejects.toThrowError(
-      "Min amount cannot be greater than max amount",
-    )
-  })
-
-  it("should throw a db error", async () => {
-    // Initialize a categories then pass one or multiple
   })
 })
 

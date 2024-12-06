@@ -1,12 +1,7 @@
 import { Hono } from "hono"
 import { zValidator } from "@hono/zod-validator"
-import {
-  createTransactionSchema,
-  transactionIdSchema,
-  updateTransactionSchema,
-  transactionQuerySchema,
-} from "./transactions-dto.router"
-import { type TransactionCreateDto, type TransactionQueryDto, type TransactionUpdateDto } from "@budgeteer/types"
+import { createTransactionSchema, transactionIdSchema, updateTransactionSchema } from "./transactions-dto.router"
+import { type TransactionCreateDto, type TransactionUpdateDto } from "@budgeteer/types"
 import { TransactionUseCases } from "~/use-cases/transactions/transactions.use-cases"
 import { authenticate } from "~/middleware/authenticate"
 
@@ -32,27 +27,6 @@ transactions.get("/:id", zValidator("param", transactionIdSchema), async c => {
   const id = c.req.param("id")
 
   const response = await TransactionUseCases.findById(parseInt(id), userId)
-  return c.json(response)
-})
-
-transactions.get("/query", zValidator("query", transactionQuerySchema), async c => {
-  const userId = c.get("id")
-  const query: Omit<TransactionQueryDto, "userId"> = c.req.valid("query")
-  const data: TransactionQueryDto = {
-    userId: parseInt(userId),
-    ...(query.minAmount !== undefined && { minAmount: query.minAmount }),
-    ...(query.maxAmount !== undefined && { maxAmount: query.maxAmount }),
-    ...(query.startDate !== undefined && { startDate: query.startDate }),
-    ...(query.endDate !== undefined && { endDate: query.endDate }),
-    ...(query.type !== undefined && { type: query.type }),
-    categories: query.categories,
-    page: query.page,
-    limit: query.limit,
-    sortBy: query.sortBy,
-    sortOrder: query.sortOrder,
-  }
-
-  const response = await TransactionUseCases.query(data)
   return c.json(response)
 })
 
