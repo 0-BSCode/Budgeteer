@@ -5,7 +5,6 @@ import { Plus } from "lucide-react"
 import { GoalCard } from "./goal-card"
 import { useGoalContext } from "~/features/goal/providers/goal-provider"
 import { Skeleton } from "~/components/ui/skeleton"
-import dayjs from "dayjs"
 
 export function GoalSection() {
   const { goals } = useGoalContext()
@@ -34,7 +33,8 @@ export function GoalSection() {
               key={`goal-card-${g.id}`}
               amount={g.amount}
               description={g.description}
-              deadline={`${dayjs(g.deadline).format("MMMM D, YYYY")}`}
+              deadline={g.deadline}
+              createdAt={g.createdAt}
             />
           ))
         )}

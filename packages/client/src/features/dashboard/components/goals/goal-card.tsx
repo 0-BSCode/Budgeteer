@@ -3,15 +3,25 @@ import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/ca
 import { Progress } from "~/components/ui/progress"
 import { Button } from "~/components/ui/button"
 import Link from "next/link"
+import dayjs from "dayjs"
+import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
+import { calculateIncomeInDateRange } from "../../lib/calculate-goal-progress"
 
 interface GoalCardProps {
   id: number
   description: string
-  deadline: string
+  deadline: Date
   amount: number
+  createdAt: Date
 }
 
-export function GoalCard({ id, description, deadline, amount }: GoalCardProps) {
+export function GoalCard({ id, createdAt, description, deadline, amount }: GoalCardProps) {
+  const { transactions } = useTransactionContext()
+
+  const progressPercentage = (calculateIncomeInDateRange(transactions || [], createdAt, deadline) / amount) * 100
+
+  console.log(progressPercentage)
+
   return (
     <Card className="rounded-md">
       <CardHeader className="p-4">
@@ -25,11 +35,14 @@ export function GoalCard({ id, description, deadline, amount }: GoalCardProps) {
         </div>
 
         <CardDescription className="pb-4">
-          <CardTitle className="text-sm font-normal text-muted-foreground">Ends on {deadline}</CardTitle>
+          <CardTitle className="text-sm font-normal text-muted-foreground">
+            Ends on {dayjs(deadline).format("MMMM D, YYYY")}
+          </CardTitle>
         </CardDescription>
-        <Progress value={50} />
+        <Progress value={progressPercentage} />
         <p className="self-end pt-1 text-sm font-normal text-muted-foreground">
-          ₱123.45 / ₱{amount} <span className="text-foreground">(31.74%)</span>
+          ₱{calculateIncomeInDateRange(transactions || [], createdAt, deadline)} / ₱{amount}{" "}
+          <span className="text-foreground">({progressPercentage.toFixed(2)}%)</span>
         </p>
       </CardHeader>
     </Card>
