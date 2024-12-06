@@ -3,7 +3,7 @@ import { zValidator } from "@hono/zod-validator"
 import { goalIdSchema, createGoalSchema, updateGoalSchema } from "./goals-dto.router"
 import { type GoalCreateDto, type GoalUpdateDto } from "@budgeteer/types"
 import { authenticate } from "~/middleware/authenticate"
-import { GoalUseCases } from "~/use-cases/goals.use-cases.ts/goals.use-cases"
+import { GoalUseCases } from "~/use-cases/goals/goals.use-cases"
 
 type Variables = {
   id: string
@@ -41,7 +41,7 @@ goals.post("/", zValidator("json", createGoalSchema), async c => {
   return c.json(response)
 })
 
-goals.put("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGoalSchema), async c => {
+goals.patch("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGoalSchema), async c => {
   const { id } = c.req.valid("param")
   const userId = parseInt(c.get("id"))
   const { description, deadline, amount } = c.req.valid("json")
