@@ -25,7 +25,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { Calendar } from "~/components/ui/calendar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
 import { convertToTitleCase } from "~/lib/convert-to-title-case"
-import Link from "next/link"
 import { isEqual } from "date-fns"
 import { useTransactionContext } from "../providers/transaction-provider"
 import {
@@ -294,9 +293,12 @@ export default function EditTransactionForm({ id }: Props) {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-              <Link href="/" className="w-full text-center">
+              <div
+                onClick={() => router.back()}
+                className="w-full text-center text-sm text-primary hover:cursor-pointer hover:underline"
+              >
                 Go Back
-              </Link>
+              </div>
             </div>
           </div>
         </form>
