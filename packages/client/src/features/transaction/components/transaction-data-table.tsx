@@ -9,6 +9,7 @@ import {
   TransactionTypeEnumValues,
 } from "@budgeteer/types"
 import {
+  Cell,
   ColumnDef,
   ColumnFiltersState,
   flexRender,
@@ -19,8 +20,8 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, CalendarIcon } from "lucide-react"
-import { useState } from "react"
+import { ArrowUpDown, CalendarIcon, ExternalLinkIcon, FilterIcon, TrashIcon } from "lucide-react"
+import { TdHTMLAttributes, useEffect, useState } from "react"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 
@@ -33,18 +34,21 @@ import { cn } from "~/lib/utils"
 import { format } from "date-fns"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
 import { MultiSelect } from "~/components/ui/multi-select"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion"
+import Link from "next/link"
+import { Badge } from "~/components/ui/badge"
 
-export const incomeCategoryList = Object.values(IncomeCategoryEnumValues).map(incomeCategory => ({
+const incomeCategoryList = Object.values(IncomeCategoryEnumValues).map(incomeCategory => ({
   value: incomeCategory,
   label: convertToTitleCase(incomeCategory),
 }))
 
-export const expenseCategoryList = Object.values(ExpenseCategoryEnumValues).map(expenseCategory => ({
+const expenseCategoryList = Object.values(ExpenseCategoryEnumValues).map(expenseCategory => ({
   value: expenseCategory,
   label: convertToTitleCase(expenseCategory),
 }))
 
-export const transactionTableColumns: ColumnDef<TransactionDto>[] = [
+const transactionTableColumns: ColumnDef<TransactionDto>[] = [
   {
     accessorKey: "description",
     header: "Description",
@@ -138,6 +142,52 @@ export const transactionTableColumns: ColumnDef<TransactionDto>[] = [
   },
 ]
 
+const determineCellAlignment = (cell: TdHTMLAttributes<HTMLTableCellElement>) => {
+  const [_id, tag] = cell.id!.split("_")
+  switch (tag) {
+    case "type":
+    case "category":
+      return "center"
+    case "amount":
+    case "date":
+      return "right"
+    default:
+      return "left"
+  }
+}
+
+const renderCellContent = (cell: Cell<TransactionDto, unknown>) => {
+  const [_id, tag] = cell.id!.split("_")
+  const content = flexRender(cell.column.columnDef.cell, cell.getContext())
+  switch (tag) {
+    case "description":
+      return (
+        <Link key={cell.id} href={`/transaction/${cell.row.original.id}`} className="pl-4 hover:underline">
+          <ExternalLinkIcon className="mr-2 inline h-4 w-4" />
+          {content}
+        </Link>
+      )
+    case "type":
+      return (
+        <Badge
+          variant={"outline"}
+          className={cn("font-bold", {
+            "bg-red-400 text-slate-900": cell.row.original.type === "EXPENSE",
+            "bg-green-400 text-slate-900": cell.row.original.type === "INCOME",
+          })}
+        >
+          {content}
+        </Badge>
+      )
+    case "category":
+      return <div className="font-thin">{content}</div>
+    case "date":
+      return <div className="pr-4">{content}</div>
+    default:
+      return <div>{content}</div>
+  }
+}
+
 export function TransactionsDataTable() {
   const { transactions } = useTransactionContext()
   const [sorting, setSorting] = useState<SortingState>([])
@@ -162,130 +212,161 @@ export function TransactionsDataTable() {
     getPaginationRowModel: getPaginationRowModel(),
   })
 
-  // TODO: Styling
+  const resetFilters = () => {
+    setAmountRange([undefined, undefined])
+    setDateRange([undefined, undefined])
+    setType(undefined)
+    setCategories([])
+  }
+
+  useEffect(() => {
+    table.getColumn("amount")?.setFilterValue(amountRange)
+    table.getColumn("date")?.setFilterValue(dateRange)
+    table.getColumn("type")?.setFilterValue(type)
+    table.getColumn("category")?.setFilterValue(categories)
+  }, [amountRange, dateRange, type, categories])
+
   // TODO: Remove backend endpoint for querying transactions
   return (
-    <div>
-      <div className="flex items-center py-4">
-        <div>
-          <Input
-            placeholder="Minimum amount"
-            type="number"
-            value={amountRange[0]}
-            onChange={event => {
-              const newValue = [Number(event.target.value) || undefined, amountRange[1]]
-              setAmountRange(newValue)
-              table.getColumn("amount")?.setFilterValue(newValue)
-            }}
-            className="max-w-sm"
-          />
-          <Input
-            placeholder="Maximum amount"
-            type="number"
-            value={amountRange[1]}
-            onChange={event => {
-              const newValue = [amountRange[0], Number(event.target.value) || undefined]
-              setAmountRange(newValue)
-              table.getColumn("amount")?.setFilterValue(newValue)
-            }}
-            className="max-w-sm"
-          />
-        </div>
-        <div>
-          <div>
-            <p>Minimum Date</p>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn("w-full pl-3 text-left font-normal", !dateRange[0] && "text-muted-foreground")}
-                >
-                  {dateRange[0] ? format(dateRange[0], "PPP") : <span>Pick a date</span>}
-                  <CalendarIcon className="ml-auto h-4 w-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={dateRange[0]}
-                  onSelect={day => {
-                    const newValue = [day, dateRange[1]]
-                    setDateRange(newValue)
-                    table.getColumn("date")?.setFilterValue(newValue)
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div>
-            <p>Maximum Date</p>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn("w-full pl-3 text-left font-normal", !dateRange[0] && "text-muted-foreground")}
-                >
-                  {dateRange[1] ? format(dateRange[1], "PPP") : <span>Pick a date</span>}
-                  <CalendarIcon className="ml-auto h-4 w-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={dateRange[1]}
-                  onSelect={day => {
-                    const newValue = [dateRange[0], day]
-                    setDateRange(newValue)
-                    table.getColumn("date")?.setFilterValue(newValue)
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-        <div>
-          <p>Type</p>
-          <Select
-            value={type}
-            onValueChange={value => {
-              setType(value as TransactionTypeEnum)
-              table.getColumn("type")?.setFilterValue(value)
+    <div className="ml-16 flex flex-col space-y-5">
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>
+            <p>
+              <FilterIcon className="mr-2 inline h-4 w-4" />
+              Filters
+            </p>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="ml-6 flex flex-col space-y-5 py-4">
+              <div className="flex flex-col space-y-2">
+                <p className="font-bold">Amount Range</p>
+                <div className="flex items-center space-x-5">
+                  <Input
+                    placeholder="Minimum amount"
+                    type="number"
+                    value={amountRange[0] ?? ""}
+                    onChange={event => {
+                      const newValue = [Number(event.target.value) || undefined, amountRange[1]]
+                      setAmountRange(newValue)
+                    }}
+                    className="max-w-sm"
+                  />
+                  <p>to</p>
+                  <Input
+                    placeholder="Maximum amount"
+                    type="number"
+                    value={amountRange[1] ?? ""}
+                    onChange={event => {
+                      const newValue = [amountRange[0], Number(event.target.value) || undefined]
+                      setAmountRange(newValue)
+                    }}
+                    className="max-w-sm"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <p className="font-bold">Date Range</p>
+                <div className="flex items-center space-x-5">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn("w-[24rem] pl-3 text-left font-normal", !dateRange[0] && "text-muted-foreground")}
+                      >
+                        {dateRange[0] ? format(dateRange[0], "PPP") : <span>Minimum date</span>}
+                        <CalendarIcon className="ml-auto h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={dateRange[0]}
+                        onSelect={day => {
+                          const newValue = [day, dateRange[1]]
+                          setDateRange(newValue)
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <p>to</p>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn("w-[24rem] pl-3 text-left font-normal", !dateRange[0] && "text-muted-foreground")}
+                      >
+                        {dateRange[1] ? format(dateRange[1], "PPP") : <span>Maximum date</span>}
+                        <CalendarIcon className="ml-auto h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={dateRange[1]}
+                        onSelect={day => {
+                          const newValue = [dateRange[0], day]
+                          setDateRange(newValue)
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <p className="font-bold">Type</p>
+                <Select
+                  value={type ?? ""}
+                  onValueChange={value => {
+                    setType(value as TransactionTypeEnum)
 
-              // Reset categories
-              setCategories([])
-              table.getColumn("category")?.setFilterValue([])
-            }}
-          >
-            <SelectTrigger className="flex w-full max-w-md rounded border border-input px-3 py-1">
-              <SelectValue placeholder="Select a type" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.values(TransactionTypeEnumValues).map(type => (
-                <SelectItem key={type} value={type}>
-                  {convertToTitleCase(type)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        {type && (
-          <div>
-            <p>Category</p>
-            <MultiSelect
-              options={type === "INCOME" ? incomeCategoryList : expenseCategoryList}
-              onValueChange={values => {
-                setCategories(values as TransactionCategoryEnum[])
-                table.getColumn("category")?.setFilterValue(values)
-              }}
-              value={categories}
-              placeholder="Select categories"
-              variant="default"
-            />
-          </div>
-        )}
-      </div>
+                    // Reset categories
+                    setCategories([])
+                  }}
+                >
+                  <SelectTrigger className="flex w-full max-w-sm rounded border border-input px-3 py-1">
+                    <SelectValue placeholder="Select a type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(TransactionTypeEnumValues).map(type => (
+                      <SelectItem key={type} value={type}>
+                        {convertToTitleCase(type)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <p className="font-bold">Category</p>
+                <MultiSelect
+                  disabled={!type}
+                  className={cn("w-full max-w-sm", {
+                    "text-muted-foreground": !type,
+                  })}
+                  options={type === "INCOME" ? incomeCategoryList : expenseCategoryList}
+                  onValueChange={values => {
+                    setCategories(values as TransactionCategoryEnum[])
+                  }}
+                  value={categories}
+                  placeholder="Select categories"
+                  variant="default"
+                />
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => resetFilters()}
+                className="w-[200px] text-red-500 hover:text-red-300"
+              >
+                <TrashIcon className="mr-2 inline h-4 w-4" />
+                Clear Filters
+              </Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -294,7 +375,9 @@ export function TransactionsDataTable() {
                 {headerGroup.headers.map(header => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      <p className="text-center">
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      </p>
                     </TableHead>
                   )
                 })}
@@ -306,7 +389,9 @@ export function TransactionsDataTable() {
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id} align={determineCellAlignment(cell)}>
+                      {renderCellContent(cell)}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
