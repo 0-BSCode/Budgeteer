@@ -107,6 +107,7 @@ export const transactionRepository: ITransactionRepository = {
         type: dto.type,
         amount: dto.amount,
         category: dto.category,
+        date: dto.date,
         updatedAt: new Date(),
       })
       .where(eq(transactionsTable.id, id))

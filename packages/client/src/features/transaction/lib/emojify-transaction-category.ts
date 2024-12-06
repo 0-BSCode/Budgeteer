@@ -1,5 +1,5 @@
 import { TransactionCategoryEnum } from "@budgeteer/types"
-import { convertToTitleCase } from "./convert-to-title-case"
+import { convertToTitleCase } from "~/lib/convert-to-title-case"
 
 export function emojifyTransactionCategory(category: TransactionCategoryEnum) {
   const emojifiedCategories: Record<TransactionCategoryEnum, string> = {

@@ -8,6 +8,7 @@ import { TransactionSortColumnEnum, TransactionSortColumnEnumSchema } from "../.
 export const TransactionDtoSchema = z.object({
   id: z.number(),
   userId: z.number(),
+  // TODO: Add minimum length
   description: z.string().max(MAX_TRANSACTION_DESCRIPTION_LENGTH),
   type: TransactionTypeEnumSchema,
   category: TransactionCategoryEnumSchema,
