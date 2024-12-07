@@ -33,7 +33,12 @@ export async function setupTestUser() {
     sharedUserTestState.token = token
     sharedUserTestState.username = username
     sharedUserTestState.password = password
+    return
+  }
+}
 
+export async function setupTestTransaction() {
+  if (sharedUserTestState.token) {
     const transaction = await transactionService.create(sharedUserTestState.token, {
       amount: sharedTransactionTestState.amount,
       description: sharedTransactionTestState.description,
@@ -46,9 +51,7 @@ export async function setupTestUser() {
     sharedTransactionTestState.userId = transaction.userId
     sharedTransactionTestState.createdAt = transaction.createdAt
     sharedTransactionTestState.updatedAt = transaction.updatedAt
-
-    return
   }
 }
 
-// TODO: Add function to delete generated test data from db
+// TODO: Add function to delete user from db

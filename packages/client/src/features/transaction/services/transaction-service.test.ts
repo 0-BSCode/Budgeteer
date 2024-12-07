@@ -7,11 +7,17 @@ import {
 import { beforeAll, describe, expect, it } from "vitest"
 import { RawTransactionCreateDto } from "~/types/entities/raw-transaction-create.dto"
 import transactionService from "./transaction-service"
-import { setupTestUser, sharedTransactionTestState, sharedUserTestState } from "~/lib/test/setup-test-user"
+import {
+  setupTestTransaction,
+  setupTestUser,
+  sharedTransactionTestState,
+  sharedUserTestState,
+} from "~/lib/test/setup-test-user"
 
 describe.only("transaction-service", () => {
   beforeAll(async () => {
     await setupTestUser()
+    await setupTestTransaction()
   })
 
   describe("create", () => {
