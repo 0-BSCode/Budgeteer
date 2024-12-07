@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
+import { toast } from "~/hooks/use-toast"
 
 interface GoalCardHeaderProps {
   goal: GoalDto
@@ -24,15 +25,43 @@ export function GoalCardHeader({ goal }: GoalCardHeaderProps) {
   const router = useRouter()
 
   const handleMarkAsDone = async () => {
-    await update(id.toString(), { ...goal, isAccomplished: !goal.isAccomplished })
+    try {
+      await update(id.toString(), { ...goal, isAccomplished: !goal.isAccomplished })
 
-    invalidateGoalCache()
+      toast({
+        variant: "success",
+        title: "Update successful!",
+        description: "Successfully updated goal",
+      })
+
+      invalidateGoalCache()
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "An error occured!",
+        description: (e as Error).message,
+      })
+    }
   }
 
   const handleDelete = async () => {
-    await remove(id.toString())
+    try {
+      await remove(id.toString())
 
-    invalidateGoalCache()
+      toast({
+        variant: "success",
+        title: "Deletion successful!",
+        description: "Successfully deleted goal",
+      })
+
+      invalidateGoalCache()
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "An error occured!",
+        description: (e as Error).message,
+      })
+    }
   }
 
   const handleEdit = () => {

@@ -35,7 +35,6 @@ goals.post("/", zValidator("json", createGoalSchema), async c => {
     deadline,
     amount,
     userId: parseInt(c.get("id")),
-    isAccomplished: false,
   }
 
   const response = await GoalUseCases.create(data)

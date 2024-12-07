@@ -16,8 +16,17 @@ export function GoalCard({ goal, goalsList }: GoalCardProps) {
   const { transactions } = useTransactionContext()
 
   const netIncome = calculateIncomeBeforeDeadline(id, amount, goalsList, transactions || [], deadline)
-
   const progressPercentage = (netIncome / amount) * 100
+
+  const formattedNetIncome = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "PHP",
+  }).format(netIncome)
+
+  const formattedGoalAmount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "PHP",
+  }).format(amount)
 
   return (
     <Card className={isAccomplished ? "rounded-md opacity-50" : "rounded-md"}>
@@ -30,7 +39,8 @@ export function GoalCard({ goal, goalsList }: GoalCardProps) {
         </CardDescription>
         <Progress value={progressPercentage} />
         <p className="self-end pb-2 pt-1 text-sm font-normal text-muted-foreground">
-          ₱{netIncome} / ₱{amount} <span className="text-foreground">({progressPercentage.toFixed(2)}%)</span>
+          {formattedNetIncome} / {formattedGoalAmount}{" "}
+          <span className="text-foreground">({progressPercentage.toFixed(2)}%)</span>
         </p>
       </CardHeader>
     </Card>
