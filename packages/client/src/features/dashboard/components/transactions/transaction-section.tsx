@@ -41,7 +41,8 @@ export function TransactionSection() {
             <TransactionItem
               id={t.id.toString()}
               type={t.type}
-              description={`${emojifyTransactionCategory(t.category)} • ${dayjs(t.date).format("HH:mm, MMMM D, YYYY")}`}
+              description={t.description}
+              category={`${emojifyTransactionCategory(t.category)} • ${dayjs(t.date).format("HH:mm, MMMM D, YYYY")}`}
               value={t.amount}
               key={t.id}
             />
