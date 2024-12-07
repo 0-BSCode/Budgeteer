@@ -118,6 +118,7 @@ describe("create", () => {
       amount: VALID_GOAL.amount,
       deadline: VALID_GOAL.deadline,
       userId: VALID_USER.id,
+      isAccomplished: false,
     })
 
     expect(response.data).toEqual(VALID_GOAL)

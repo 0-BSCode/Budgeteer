@@ -31,6 +31,7 @@ export const goalRepository: IGoalRepository = {
       userId: dto.userId,
       description: dto.description,
       amount: dto.amount,
+      deadline: dto.deadline,
     }
 
     const records = await db.insert(goalsTable).values(data).returning()

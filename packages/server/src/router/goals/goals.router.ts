@@ -29,12 +29,13 @@ goals.get("/:id", zValidator("param", goalIdSchema), async c => {
 })
 
 goals.post("/", zValidator("json", createGoalSchema), async c => {
-  const { description, amount } = c.req.valid("json")
+  const { description, amount, deadline } = c.req.valid("json")
   const data: GoalCreateDto = {
     description,
-    deadline: new Date(),
+    deadline,
     amount,
     userId: parseInt(c.get("id")),
+    isAccomplished: false,
   }
 
   const response = await GoalUseCases.create(data)
@@ -44,12 +45,13 @@ goals.post("/", zValidator("json", createGoalSchema), async c => {
 goals.patch("/:id", zValidator("param", goalIdSchema), zValidator("json", updateGoalSchema), async c => {
   const { id } = c.req.valid("param")
   const userId = parseInt(c.get("id"))
-  const { description, deadline, amount } = c.req.valid("json")
+  const { description, deadline, amount, isAccomplished } = c.req.valid("json")
 
   const data: GoalUpdateDto = {
     ...(description !== undefined && { description }),
     ...(deadline !== undefined && { deadline }),
     ...(amount !== undefined && { amount }),
+    ...(isAccomplished !== undefined && { isAccomplished }),
   }
 
   const response = await GoalUseCases.update(id, userId, data)

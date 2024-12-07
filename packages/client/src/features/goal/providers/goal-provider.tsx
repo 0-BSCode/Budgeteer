@@ -35,7 +35,6 @@ export function GoalContextProvider({ children }: { children: ReactNode }) {
           description: (e as Error).message,
         })
 
-        console.log(e)
         router.replace("/auth/login")
       }
 
