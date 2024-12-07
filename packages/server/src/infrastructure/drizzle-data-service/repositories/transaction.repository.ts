@@ -7,7 +7,7 @@ import {
 } from "@budgeteer/types"
 import { db } from ".."
 import { transactionsTable, type InsertTransaction, type SelectTransaction } from "../models/transaction.model"
-import { eq } from "drizzle-orm"
+import { desc, eq } from "drizzle-orm"
 
 export const transactionRepository: ITransactionRepository = {
   async findById(id: number): Promise<TransactionDto | null> {
@@ -25,6 +25,7 @@ export const transactionRepository: ITransactionRepository = {
       .select()
       .from(transactionsTable)
       .where(eq(transactionsTable.userId, userId))
+      .orderBy(desc(transactionsTable.date))
 
     return records.map(this.convertToDto)
   },
