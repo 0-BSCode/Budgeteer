@@ -56,7 +56,7 @@ describe.only("transaction-service", () => {
     it("should throw an error if amount is invalid", async () => {
       await expect(
         transactionService.create(sharedUserTestState.token, INVALID_AMOUNT_CREATE_INPUT),
-      ).rejects.toThrowError("AxiosError")
+      ).rejects.toThrowError("Unable to create transaction")
     })
 
     it("should throw an error if user is unauthenticated", async () => {
@@ -176,7 +176,7 @@ describe.only("transaction-service", () => {
           sharedTransactionTestState.id.toString(),
           INVALID_AMOUNT_UPDATE_INPUT,
         ),
-      ).rejects.toThrowError("AxiosError")
+      ).rejects.toThrowError("Unable to update transaction.")
     })
   })
 
