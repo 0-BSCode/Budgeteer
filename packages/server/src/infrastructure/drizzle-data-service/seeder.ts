@@ -37,7 +37,7 @@ const transactionData: InsertTransaction[] = [
   {
     userId: 1,
     date: new Date("2022-02-05"),
-    description: "Rent",
+    description: "Pay for rent",
     type: TransactionTypeEnumValues.EXPENSE,
     category: ExpenseCategoryEnumValues.UTILITIES,
     amount: 500,
