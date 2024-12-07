@@ -7,11 +7,17 @@ import {
 import { beforeAll, describe, expect, it } from "vitest"
 import { RawTransactionCreateDto } from "~/types/entities/raw-transaction-create.dto"
 import transactionService from "./transaction-service"
-import { setupTestUser, sharedTransactionTestState, sharedUserTestState } from "~/lib/test/setup-test-user"
+import {
+  setupTestTransaction,
+  setupTestUser,
+  sharedTransactionTestState,
+  sharedUserTestState,
+} from "~/lib/test/setup-test-user"
 
 describe.only("transaction-service", () => {
   beforeAll(async () => {
     await setupTestUser()
+    await setupTestTransaction()
   })
 
   describe("create", () => {
@@ -31,6 +37,11 @@ describe.only("transaction-service", () => {
     const INVALID_AMOUNT_CREATE_INPUT: RawTransactionCreateDto = {
       ...GOOD_CREATE_INPUT,
       amount: -100,
+    }
+
+    const INVALID_DESCRIPTION_CREATE_INPUT: RawTransactionCreateDto = {
+      ...GOOD_CREATE_INPUT,
+      description: "",
     }
 
     it("should create a transaction successfully & respond with a transaction dto", async () => {
@@ -56,7 +67,13 @@ describe.only("transaction-service", () => {
     it("should throw an error if amount is invalid", async () => {
       await expect(
         transactionService.create(sharedUserTestState.token, INVALID_AMOUNT_CREATE_INPUT),
-      ).rejects.toThrowError("AxiosError")
+      ).rejects.toThrowError("Unable to create transaction")
+    })
+
+    it("should throw an error if description is invalid", async () => {
+      await expect(
+        transactionService.create(sharedUserTestState.token, INVALID_DESCRIPTION_CREATE_INPUT),
+      ).rejects.toThrowError("Unable to create transaction")
     })
 
     it("should throw an error if user is unauthenticated", async () => {
@@ -176,7 +193,7 @@ describe.only("transaction-service", () => {
           sharedTransactionTestState.id.toString(),
           INVALID_AMOUNT_UPDATE_INPUT,
         ),
-      ).rejects.toThrowError("AxiosError")
+      ).rejects.toThrowError("Unable to update transaction.")
     })
   })
 

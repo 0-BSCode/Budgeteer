@@ -6,6 +6,7 @@ import transactions from "./router/transactions/transactions.router"
 import { HttpStatusEnum, type ResponseDto } from "@budgeteer/types"
 import { logger } from "hono/logger"
 import { cors } from "hono/cors"
+import { HTTPException } from "hono/http-exception"
 
 const app = new Hono()
 
@@ -16,11 +17,16 @@ app.onError((err, c) => {
   console.error(err)
 
   const response: ResponseDto<null> = {
-    // TODO: Get status of HTTP Exceptions
     status: HttpStatusEnum.INTERNAL_SERVER_ERROR,
     data: null,
     message: err.message,
   }
+
+  if (err instanceof HTTPException) {
+    const errResponse = err.getResponse()
+    response.status = errResponse.status
+  }
+
   return c.json(response)
 })
 
