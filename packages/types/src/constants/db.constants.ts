@@ -1,5 +1,6 @@
 // Transaction constants
 export const MIN_TRANSACTION_AMOUNT = 0
+export const MIN_DESCRIPTION_LENGTH = 5
 export const MAX_TRANSACTION_DESCRIPTION_LENGTH = 255
 
 // Goal constants

@@ -47,6 +47,8 @@ export const TransactionUseCases: ITransactionUseCases = {
     }
   },
   async create(dto: TransactionCreateDto): Promise<ResponseDto<TransactionDto>> {
+    UsersUseCases.findById(dto.userId)
+
     try {
       // Check if category is valid for transaction type
       if (dto.type && !isCategoryValid(dto.type, dto.category)) {
