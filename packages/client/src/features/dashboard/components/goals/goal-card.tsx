@@ -17,7 +17,7 @@ export function GoalCard({ goal, goalsList }: GoalCardProps) {
 
   const netIncome = calculateIncomeBeforeDeadline(id, amount, goalsList, transactions || [], deadline)
 
-  const progressPercentage = netIncome * 100
+  const progressPercentage = (netIncome / amount) * 100
 
   return (
     <Card className={isAccomplished ? "rounded-md opacity-50" : "rounded-md"}>
