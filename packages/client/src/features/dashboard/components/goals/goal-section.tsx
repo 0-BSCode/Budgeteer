@@ -27,16 +27,7 @@ export function GoalSection() {
         {!goals?.length ? (
           <Skeleton className="h-[370px] w-full" />
         ) : (
-          goals.map(g => (
-            <GoalCard
-              id={g.id}
-              key={`goal-card-${g.id}`}
-              amount={g.amount}
-              description={g.description}
-              deadline={g.deadline}
-              createdAt={g.createdAt}
-            />
-          ))
+          goals.map(g => <GoalCard goal={g} key={`goal-card-${g.id}`} />)
         )}
       </div>
     </section>

@@ -9,7 +9,7 @@ import { useToast } from "~/hooks/use-toast"
 
 type GoalContext = {
   goals: GoalDto[] | null
-  invalidateGoalCache: (() => void) | null
+  invalidateGoalCache: () => void
 }
 
 const Context = createContext<GoalContext | undefined>(undefined)
