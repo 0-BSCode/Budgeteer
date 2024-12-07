@@ -46,6 +46,7 @@ export const goalRepository: IGoalRepository = {
         description: dto.description,
         amount: dto.amount,
         deadline: dto.deadline,
+        isAccomplished: dto.isAccomplished,
       })
       .where(eq(goalsTable.id, id))
       .returning()

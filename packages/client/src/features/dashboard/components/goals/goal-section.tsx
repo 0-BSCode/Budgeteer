@@ -9,6 +9,14 @@ import { Skeleton } from "~/components/ui/skeleton"
 export function GoalSection() {
   const { goals } = useGoalContext()
 
+  const sortedGoals = goals?.sort((a, b) => {
+    //  place accomplished goals at the end
+    if (a.isAccomplished !== b.isAccomplished) return a.isAccomplished ? 1 : -1
+
+    // sort by deadline in ascending order
+    return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+  })
+
   return (
     <section>
       <div className="mb-8 flex w-full items-center justify-between gap-4">
@@ -24,10 +32,10 @@ export function GoalSection() {
         </Button>
       </div>
       <div className="grid max-h-[370px] gap-4 overflow-y-auto pr-3">
-        {!goals?.length ? (
+        {!sortedGoals?.length ? (
           <Skeleton className="h-[370px] w-full" />
         ) : (
-          goals.map(g => <GoalCard goal={g} key={`goal-card-${g.id}`} />)
+          sortedGoals.map(g => <GoalCard goalsList={sortedGoals} goal={g} key={`goal-card-${g.id}`} />)
         )}
       </div>
     </section>
