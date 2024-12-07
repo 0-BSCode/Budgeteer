@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button"
 import Link from "next/link"
 import dayjs from "dayjs"
 import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
-import { calculateIncomeInDateRange } from "../../lib/calculate-goal-progress"
+import { calculateIncomeBeforeDeadline } from "../../lib/calculate-goal-progress"
 
 interface GoalCardProps {
   id: number
@@ -18,9 +18,7 @@ interface GoalCardProps {
 export function GoalCard({ id, createdAt, description, deadline, amount }: GoalCardProps) {
   const { transactions } = useTransactionContext()
 
-  const progressPercentage = (calculateIncomeInDateRange(transactions || [], createdAt, deadline) / amount) * 100
-
-  console.log(progressPercentage)
+  const progressPercentage = (calculateIncomeBeforeDeadline(transactions || [], createdAt, deadline) / amount) * 100
 
   return (
     <Card className="rounded-md">
@@ -41,7 +39,7 @@ export function GoalCard({ id, createdAt, description, deadline, amount }: GoalC
         </CardDescription>
         <Progress value={progressPercentage} />
         <p className="self-end pt-1 text-sm font-normal text-muted-foreground">
-          ₱{calculateIncomeInDateRange(transactions || [], createdAt, deadline)} / ₱{amount}{" "}
+          ₱{calculateIncomeBeforeDeadline(transactions || [], createdAt, deadline)} / ₱{amount}{" "}
           <span className="text-foreground">({progressPercentage.toFixed(2)}%)</span>
         </p>
       </CardHeader>

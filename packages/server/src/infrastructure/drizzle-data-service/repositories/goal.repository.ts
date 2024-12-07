@@ -63,6 +63,7 @@ export const goalRepository: IGoalRepository = {
       userId: goalData.userId,
       description: goalData.description,
       amount: goalData.amount,
+      isAccomplished: goalData.isAccomplished,
       createdAt: goalData.createdAt,
       deadline: goalData.deadline,
     }

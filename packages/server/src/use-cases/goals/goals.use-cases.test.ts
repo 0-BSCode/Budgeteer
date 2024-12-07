@@ -15,6 +15,7 @@ const VALID_GOAL: GoalDto = {
   userId: VALID_USER.id,
   description: "Wife's Birthday Gift",
   amount: 1000,
+  isAccomplished: false,
   createdAt: new Date(),
   // Set to 1 day after createdAt
   deadline: new Date(Date.now() + 3600 * 1000 * 24),
@@ -27,6 +28,7 @@ const VALID_GOALS: GoalDto[] = [
     description: "Vacation in the Bahamas",
     amount: 1000,
     createdAt: new Date(),
+    isAccomplished: false,
     // Set to 1 day after createdAt
     deadline: new Date(Date.now() + 3600 * 1000 * 24),
   },
@@ -36,6 +38,7 @@ const VALID_GOALS: GoalDto[] = [
     description: "Rent",
     amount: 2000,
     createdAt: new Date(),
+    isAccomplished: false,
     // Set to 1 day after createdAt
     deadline: new Date(Date.now() + 3600 * 1000 * 24),
   },
@@ -44,6 +47,7 @@ const VALID_GOALS: GoalDto[] = [
     userId: VALID_USER.id,
     description: "Wedding Ring",
     amount: 3000,
+    isAccomplished: false,
     createdAt: new Date(),
     // Set to 1 day after createdAt
     deadline: new Date(Date.now() + 3600 * 1000 * 24),

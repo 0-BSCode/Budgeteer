@@ -17,6 +17,7 @@ const Context = createContext<GoalContext | undefined>(undefined)
 export function GoalContextProvider({ children }: { children: ReactNode }) {
   const [isUpdated, setIsUpdated] = useState<boolean>(false)
   const [goals, setGoals] = useState<GoalDto[] | null>(null)
+  const [goalProgress, setGoalProgress] = useState<number>(0)
   const router = useRouter()
   const { toast } = useToast()
   const { getAllGoals } = useGoal()
@@ -33,6 +34,8 @@ export function GoalContextProvider({ children }: { children: ReactNode }) {
           title: "An error occured while fetching goals.",
           description: (e as Error).message,
         })
+
+        console.log(e)
         router.replace("/auth/login")
       }
 

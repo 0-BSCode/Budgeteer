@@ -6,6 +6,7 @@ export const GoalDtoSchema = z.object({
   userId: z.number(),
   amount: z.number().min(MIN_GOAL_AMOUNT),
   description: z.string().max(MAX_GOAL_DESCRIPTION_LENGTH),
+  isAccomplished: z.boolean(),
   createdAt: z.coerce.date(),
   deadline: z.coerce.date(),
 })
