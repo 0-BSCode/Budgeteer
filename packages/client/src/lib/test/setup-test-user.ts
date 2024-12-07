@@ -15,7 +15,7 @@ export const sharedUserTestState = {
 export const sharedTransactionTestState: TransactionDto = {
   id: 0,
   amount: 0,
-  description: "",
+  description: "Fixture transaction",
   date: new Date(),
   category: ExpenseCategoryEnumValues.OTHER,
   type: TransactionTypeEnumValues.EXPENSE,

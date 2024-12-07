@@ -33,6 +33,11 @@ describe.only("transaction-service", () => {
       amount: -100,
     }
 
+    const INVALID_DESCRIPTION_CREATE_INPUT: RawTransactionCreateDto = {
+      ...GOOD_CREATE_INPUT,
+      description: "",
+    }
+
     it("should create a transaction successfully & respond with a transaction dto", async () => {
       const transaction = await transactionService.create(sharedUserTestState.token, GOOD_CREATE_INPUT)
 
@@ -56,6 +61,12 @@ describe.only("transaction-service", () => {
     it("should throw an error if amount is invalid", async () => {
       await expect(
         transactionService.create(sharedUserTestState.token, INVALID_AMOUNT_CREATE_INPUT),
+      ).rejects.toThrowError("Unable to create transaction")
+    })
+
+    it("should throw an error if description is invalid", async () => {
+      await expect(
+        transactionService.create(sharedUserTestState.token, INVALID_DESCRIPTION_CREATE_INPUT),
       ).rejects.toThrowError("Unable to create transaction")
     })
 

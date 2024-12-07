@@ -74,14 +74,14 @@ const transactionService = {
   create: async (token: string, dto: RawTransactionCreateDto): Promise<TransactionDto> => {
     let data: TransactionDto | null
     try {
-      const { data: response, status } = await axios.post<ResponseDto<TransactionDto | null>>(`${BASE_URL}`, dto, {
+      const { data: response } = await axios.post<ResponseDto<TransactionDto | null>>(`${BASE_URL}`, dto, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       })
 
-      if (response.status !== HttpStatusEnum.CREATED || status !== HttpStatusEnum.OK) {
+      if (response.status !== HttpStatusEnum.CREATED) {
         throw new Error(response.message)
       }
 
