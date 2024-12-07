@@ -46,8 +46,7 @@ goals.patch("/:id", zValidator("param", goalIdSchema), zValidator("json", update
   const { id } = c.req.valid("param")
   const userId = parseInt(c.get("id"))
   const { description, deadline, amount, isAccomplished } = c.req.valid("json")
-  console.log("API -------------------")
-  console.log(isAccomplished)
+
   const data: GoalUpdateDto = {
     ...(description !== undefined && { description }),
     ...(deadline !== undefined && { deadline }),

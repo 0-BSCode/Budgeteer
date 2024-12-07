@@ -53,9 +53,6 @@ const goalService = {
       },
     })
 
-    console.log("DTO -------------------")
-    console.log(dto)
-
     const goal = validateResponseData(response.data)
 
     return goal
@@ -75,8 +72,6 @@ const validateResponseData = (data: GoalDto): GoalDto => {
   if (!success) {
     throw new Error("The server sent malformatted data. Please contact the website admin.")
   }
-  console.log("safeparse -------------------")
-  console.log(goal)
 
   return goal
 }
