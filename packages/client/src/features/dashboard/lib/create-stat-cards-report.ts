@@ -4,6 +4,7 @@ import { TimeRangeEnumSchema, TimeRangeEnum } from "~/types/enums/TimeRangeEnum"
 import { formatValueWithPeso } from "~/features/transaction/lib/format-value-with-peso"
 import dayjs from "dayjs"
 import isBetween from "dayjs/plugin/isBetween"
+import filterTransactionsByDate from "./filter-transactions-by-date"
 dayjs.extend(isBetween)
 
 interface Args {
@@ -24,13 +25,6 @@ function calculatePercentDifference(current: number, previous: number): number {
     return current === 0 ? 0 : current > 0 ? 100 : -100
   }
   return ((current - previous) / previous) * 100
-}
-
-function filterTransactionsByDate(transactions: TransactionDto[], startDate: Date, endDate: Date): TransactionDto[] {
-  return transactions.filter(transaction => {
-    const transactionDate = dayjs(transaction.date)
-    return transactionDate.isBetween(startDate, endDate, null, "[]") // Include startDate and endDate
-  })
 }
 
 function calculateNetIncomeReport({ transactions, previousStart, previousEnd, currentStart, currentEnd }: ReportArgs) {

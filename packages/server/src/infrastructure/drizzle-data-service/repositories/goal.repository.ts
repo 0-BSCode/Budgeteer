@@ -31,6 +31,7 @@ export const goalRepository: IGoalRepository = {
       userId: dto.userId,
       description: dto.description,
       amount: dto.amount,
+      deadline: dto.deadline,
     }
 
     const records = await db.insert(goalsTable).values(data).returning()
@@ -45,6 +46,7 @@ export const goalRepository: IGoalRepository = {
         description: dto.description,
         amount: dto.amount,
         deadline: dto.deadline,
+        isAccomplished: dto.isAccomplished,
       })
       .where(eq(goalsTable.id, id))
       .returning()
@@ -63,6 +65,7 @@ export const goalRepository: IGoalRepository = {
       userId: goalData.userId,
       description: goalData.description,
       amount: goalData.amount,
+      isAccomplished: goalData.isAccomplished,
       createdAt: goalData.createdAt,
       deadline: goalData.deadline,
     }

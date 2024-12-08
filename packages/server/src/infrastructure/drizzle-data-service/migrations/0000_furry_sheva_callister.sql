@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS "goals" (
 	"userId" integer NOT NULL,
 	"description" varchar(255) NOT NULL,
 	"amount" real DEFAULT 0 NOT NULL,
+	"isAccomplished" boolean DEFAULT false NOT NULL,
 	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
 	"deadline" timestamp with time zone DEFAULT now() NOT NULL
 );

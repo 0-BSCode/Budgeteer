@@ -34,6 +34,14 @@ export default function CreateGoalForm() {
   }
 
   const onSubmit = async (values: RawGoalCreateDto) => {
+    if (values.deadline <= new Date()) {
+      form.setError("deadline", {
+        type: "manual",
+        message: "Deadline must be in the future",
+      })
+      return
+    }
+
     setIsLoading(true)
     try {
       await create({
@@ -112,6 +120,7 @@ export default function CreateGoalForm() {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
+                  <FormMessage />
                   <PopoverContent className="w-auto p-0">
                     <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
                     <div className="border-t border-border p-3">

@@ -9,7 +9,7 @@ import { useToast } from "~/hooks/use-toast"
 
 type GoalContext = {
   goals: GoalDto[] | null
-  invalidateGoalCache: (() => void) | null
+  invalidateGoalCache: () => void
 }
 
 const Context = createContext<GoalContext | undefined>(undefined)
@@ -33,6 +33,7 @@ export function GoalContextProvider({ children }: { children: ReactNode }) {
           title: "An error occured while fetching goals.",
           description: (e as Error).message,
         })
+
         router.replace("/auth/login")
       }
 

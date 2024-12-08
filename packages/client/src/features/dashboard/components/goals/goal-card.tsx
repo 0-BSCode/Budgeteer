@@ -1,35 +1,46 @@
-import { Edit } from "lucide-react"
 import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Progress } from "~/components/ui/progress"
-import { Button } from "~/components/ui/button"
-import Link from "next/link"
+import dayjs from "dayjs"
+import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
+import { calculateIncomeBeforeDeadline } from "../../lib/calculate-goal-progress"
+import { GoalDto } from "@budgeteer/types"
+import { GoalCardHeader } from "./goal-card-header"
 
 interface GoalCardProps {
-  id: number
-  description: string
-  deadline: string
-  amount: number
+  goalsList: GoalDto[]
+  goal: GoalDto
 }
 
-export function GoalCard({ id, description, deadline, amount }: GoalCardProps) {
-  return (
-    <Card className="rounded-md">
-      <CardHeader className="p-4">
-        <div className="flex items-center justify-between lg:w-full">
-          <p className="font-bold text-foreground lg:text-xl">{description}</p>
-          <Button className="relative -right-2 -top-1" variant="ghost" size="icon" asChild>
-            <Link href={`/goal/${id}`}>
-              <Edit className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
+export function GoalCard({ goal, goalsList }: GoalCardProps) {
+  const { id, amount, deadline, isAccomplished } = goal
+  const { transactions } = useTransactionContext()
 
+  const netIncome = calculateIncomeBeforeDeadline(id, amount, goalsList, transactions || [], deadline)
+  const progressPercentage = (netIncome / amount) * 100
+
+  const formattedNetIncome = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "PHP",
+  }).format(netIncome)
+
+  const formattedGoalAmount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "PHP",
+  }).format(amount)
+
+  return (
+    <Card className={isAccomplished ? "rounded-md opacity-50" : "rounded-md"}>
+      <CardHeader className="p-4">
+        <GoalCardHeader goal={goal} />
         <CardDescription className="pb-4">
-          <CardTitle className="text-sm font-normal text-muted-foreground">Ends on {deadline}</CardTitle>
+          <CardTitle className="text-sm font-normal text-muted-foreground">
+            Ends on {dayjs(deadline).format("MMMM D, YYYY")}
+          </CardTitle>
         </CardDescription>
-        <Progress value={50} />
-        <p className="self-end pt-1 text-sm font-normal text-muted-foreground">
-          ₱123.45 / ₱{amount} <span className="text-foreground">(31.74%)</span>
+        <Progress value={progressPercentage} />
+        <p className="self-end pb-2 pt-1 text-sm font-normal text-muted-foreground">
+          {formattedNetIncome} / {formattedGoalAmount}{" "}
+          <span className="text-foreground">({progressPercentage.toFixed(2)}%)</span>
         </p>
       </CardHeader>
     </Card>
