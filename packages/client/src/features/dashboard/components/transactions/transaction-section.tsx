@@ -20,23 +20,24 @@ export function TransactionSection() {
             title="Transactions 🧾"
             description="A summary of your recent activity"
           />
-          <Button asChild>
-            <Link href="/transaction/new">
-              <Plus /> New <span className="hidden lg:inline">Transaction</span>
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline">
+              <Link href="/transaction">
+                <TableIcon className="inline h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/transaction/new">
+                <Plus /> Create
+              </Link>
+            </Button>
+          </div>
         </div>
-        <Button variant="ghost">
-          <Link href="/transaction">
-            <TableIcon className="mr-2 inline h-4 w-4" />
-            Query Transactions
-          </Link>
-        </Button>
       </div>
       {!transactions?.length ? (
         <Skeleton className="h-[370px] w-full" />
       ) : (
-        <div className="h-[370px] overflow-y-auto pr-4">
+        <div className="h-[370px] gap-2 overflow-y-scroll pr-4">
           {transactions.map(t => (
             <TransactionItem
               id={t.id.toString()}
