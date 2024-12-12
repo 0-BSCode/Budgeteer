@@ -27,7 +27,7 @@ export function GoalSection() {
         />
         <Button asChild>
           <Link href="/goal/new">
-            <Plus /> New <span className="hidden lg:inline">Goal</span>
+            <Plus /> Create
           </Link>
         </Button>
       </div>
