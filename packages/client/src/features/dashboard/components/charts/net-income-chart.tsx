@@ -41,7 +41,6 @@ function calculatePreviousRange(timeRange: TimeRangeEnum): { startDate: Date; en
 export function NetIncomeChart({ timeRange }: Props) {
   const { transactions } = useTransactionContext()
 
-  // Determine the current time range
   const now = dayjs()
   let startDate: dayjs.Dayjs
   let endDate: dayjs.Dayjs
@@ -124,13 +123,12 @@ export function NetIncomeChart({ timeRange }: Props) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={
-                value =>
-                  timeRange === TimeRangeEnumSchema.Values.daily
-                    ? dayjs(value).format("HH:mm") // Show hours for daily
-                    : timeRange === TimeRangeEnumSchema.Values.weekly
-                      ? dayjs(value).format("MMM DD") // Show date for weekly
-                      : dayjs(value).format("MMM DD") // Show date for monthly (since grouping by day)
+              tickFormatter={value =>
+                timeRange === TimeRangeEnumSchema.Values.daily
+                  ? dayjs(value).format("HH:mm")
+                  : timeRange === TimeRangeEnumSchema.Values.weekly
+                    ? dayjs(value).format("MMM DD")
+                    : dayjs(value).format("MMM DD")
               }
             />
             <ChartTooltip

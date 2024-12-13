@@ -17,11 +17,9 @@ export function groupTransactionsByTimeRange(
 
     let key: string
     if (timeRange === "daily") {
-      key = date.format("YYYY-MM-DD") // Group by exact date
-    } else if (timeRange === "weekly") {
-      key = date.format("YYYY-MM-DD") // Group by day within the week
-    } else if (timeRange === "monthly") {
-      key = date.format("YYYY-MM-DD") // Group by day within the month
+      key = date.format("YYYY-MM-DD HH:00") // Group by hour
+    } else if (timeRange === "weekly" || timeRange === "monthly") {
+      key = date.format("YYYY-MM-DD")
     } else {
       throw new Error("Invalid time range")
     }

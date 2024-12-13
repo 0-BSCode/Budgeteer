@@ -36,7 +36,7 @@ function calculateTimeRange(timeRange: TimeRangeEnum): { startDate: Date; endDat
     case TimeRangeEnumSchema.Values.daily:
       return { startDate: now.startOf("day").toDate(), endDate: now.endOf("day").toDate() }
     case TimeRangeEnumSchema.Values.weekly:
-      return { startDate: now.startOf("week").toDate(), endDate: now.endOf("week").toDate() }
+      return { startDate: now.subtract(6, "days").startOf("day").toDate(), endDate: now.endOf("day").toDate() }
     case TimeRangeEnumSchema.Values.monthly:
       return { startDate: now.startOf("month").toDate(), endDate: now.endOf("month").toDate() }
     default:
@@ -69,6 +69,15 @@ export function DistributionPieChart({ timeRange }: Props) {
   }))
 
   const formatToPhp = (value: number) => `₱${value.toLocaleString("en-PH", { minimumFractionDigits: 2 })}`
+
+  let footerMessage: string
+  if (timeRange === TimeRangeEnumSchema.Values.daily) {
+    footerMessage = `Today, ${dayjs(startDate).format("MMMM DD, YYYY")}`
+  } else if (timeRange === TimeRangeEnumSchema.Values.weekly) {
+    footerMessage = "Last 7 days"
+  } else {
+    footerMessage = dayjs(startDate).format("MMMM YYYY")
+  }
 
   return (
     <Card className="rounded-md">
@@ -111,11 +120,7 @@ export function DistributionPieChart({ timeRange }: Props) {
       </CardContent>
       <CardFooter>
         {chartData.length > 0 ? (
-          <p className="ml-auto text-sm text-muted-foreground">
-            {dayjs(startDate).isSame(dayjs(endDate), "month")
-              ? dayjs(startDate).format("MMMM YYYY") // Single month
-              : `${dayjs(startDate).format("MMM YYYY")} - ${dayjs(endDate).format("MMM YYYY")}`}{" "}
-          </p>
+          <p className="ml-auto text-sm text-muted-foreground">{footerMessage}</p>
         ) : (
           <p className="ml-auto text-sm text-muted-foreground">No data available</p>
         )}
