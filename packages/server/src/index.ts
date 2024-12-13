@@ -7,11 +7,13 @@ import { HttpStatusEnum, type ResponseDto } from "@budgeteer/types"
 import { logger } from "hono/logger"
 import { cors } from "hono/cors"
 import { HTTPException } from "hono/http-exception"
+import { limiter } from "./middleware/rate-limiter"
 
 const app = new Hono()
 
 app.use(logger())
 app.use(cors())
+app.use(limiter)
 
 app.onError((err, c) => {
   console.error(err)
