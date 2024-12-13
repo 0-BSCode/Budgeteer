@@ -11,6 +11,8 @@ import { emojifyTransactionCategory } from "~/features/transaction/lib/emojify-t
 export function TransactionSection() {
   const { transactions } = useTransactionContext()
 
+  console.log({ transactions })
+
   return (
     <section className="flex flex-col">
       <div className="mb-8 flex w-full flex-col gap-4">
@@ -34,8 +36,12 @@ export function TransactionSection() {
           </div>
         </div>
       </div>
-      {!transactions?.length ? (
+      {!transactions ? (
         <Skeleton className="h-[370px] w-full" />
+      ) : transactions.length === 0 ? (
+        <div className="gap-2 pr-4">
+          <span className="text-muted-foreground">No transactions recorded yet.</span>
+        </div>
       ) : (
         <div className="h-[370px] gap-2 overflow-y-scroll pr-4">
           {transactions.map(t => (
