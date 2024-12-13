@@ -21,7 +21,7 @@ export function TransactionSection() {
             description="A summary of your recent activity"
           />
           <div className="flex gap-2">
-            <Button variant="outline">
+            <Button variant="outline" asChild>
               <Link href="/transaction">
                 <TableIcon className="inline h-4 w-4" />
               </Link>
