@@ -52,7 +52,7 @@ export default function DashboardPageContent({ initialTimeRange }: Props) {
           <DashboardSectionHeading title="Analytics 📊" description="Overview of your financial performance" />
           <div className="grid gap-8">
             <NetIncomeChart timeRange={initialTimeRange} />
-            <DistributionPieChart />
+            <DistributionPieChart timeRange={initialTimeRange} />
           </div>
         </section>
         <div className="flex flex-col gap-8 md:w-2/5">

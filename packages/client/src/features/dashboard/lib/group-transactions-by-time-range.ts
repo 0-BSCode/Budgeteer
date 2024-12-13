@@ -7,7 +7,7 @@ dayjs.extend(isoWeek)
 export function groupTransactionsByTimeRange(
   transactions: TransactionDto[],
   timeRange: TimeRangeEnum,
-): { day: string; "Net Income": number }[] {
+): { time: string; "Net Income": number }[] {
   if (!transactions || transactions.length === 0) return []
 
   const groupedData: Record<string, number> = {}
@@ -17,11 +17,11 @@ export function groupTransactionsByTimeRange(
 
     let key: string
     if (timeRange === "daily") {
-      key = date.format("YYYY-MM-DD") // YYYY-MM-DD
+      key = date.format("YYYY-MM-DD") // Group by exact date
     } else if (timeRange === "weekly") {
-      key = date.startOf("isoWeek").format("YYYY-MM-DD") // Start of the ISO week
+      key = date.format("YYYY-MM-DD") // Group by day within the week
     } else if (timeRange === "monthly") {
-      key = date.format("YYYY-MM") // YYYY-MM
+      key = date.format("YYYY-MM-DD") // Group by day within the month
     } else {
       throw new Error("Invalid time range")
     }
@@ -31,7 +31,7 @@ export function groupTransactionsByTimeRange(
   })
 
   return Object.entries(groupedData).map(([key, value]) => ({
-    day: key,
+    time: key,
     "Net Income": value,
   }))
 }

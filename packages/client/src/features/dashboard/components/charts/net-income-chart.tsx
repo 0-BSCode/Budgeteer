@@ -28,7 +28,7 @@ function calculatePreviousRange(timeRange: TimeRangeEnum): { startDate: Date; en
       return { startDate: now.subtract(2, "day").toDate(), endDate: now.subtract(1, "day").toDate() }
     case TimeRangeEnumSchema.Values.weekly:
       return { startDate: now.subtract(2, "week").toDate(), endDate: now.subtract(1, "week").toDate() }
-    case TimeRangeEnumSchema.Values.daily:
+    case TimeRangeEnumSchema.Values.monthly:
       return {
         startDate: now.subtract(2, "month").startOf("month").toDate(),
         endDate: now.subtract(1, "month").endOf("month").toDate(),
@@ -41,21 +41,53 @@ function calculatePreviousRange(timeRange: TimeRangeEnum): { startDate: Date; en
 export function NetIncomeChart({ timeRange }: Props) {
   const { transactions } = useTransactionContext()
 
-  const dataPoints = groupTransactionsByTimeRange(transactions ?? [], timeRange).sort((a, b) =>
-    dayjs(a.day).diff(dayjs(b.day)),
+  // Determine the current time range
+  const now = dayjs()
+  let startDate: dayjs.Dayjs
+  let endDate: dayjs.Dayjs
+  let footerMessage: string
+
+  switch (timeRange) {
+    case TimeRangeEnumSchema.Values.daily:
+      startDate = now.startOf("day")
+      endDate = now.endOf("day")
+      footerMessage = `Today, ${startDate.format("MMMM DD, YYYY")}`
+      break
+    case TimeRangeEnumSchema.Values.weekly:
+      startDate = now.subtract(6, "days").startOf("day")
+      endDate = now.endOf("day")
+      footerMessage = "Last 7 days"
+      break
+    case TimeRangeEnumSchema.Values.monthly:
+      startDate = now.startOf("month")
+      endDate = now.endOf("month")
+      footerMessage = startDate.format("MMMM YYYY")
+      break
+    default:
+      throw new Error("Invalid time range")
+  }
+
+  // Filter transactions based on the current time range
+  const filteredTransactions = transactions?.filter(t => dayjs(t.date).isBetween(startDate, endDate, "day", "[]")) ?? []
+
+  // Group and sort the filtered transactions by day
+  const dataPoints = groupTransactionsByTimeRange(filteredTransactions, timeRange).sort((a, b) =>
+    dayjs(a.time).diff(dayjs(b.time)),
   )
 
-  // Current time range total
+  // Calculate the current total
   const currentTotal = dataPoints.reduce((acc, point) => acc + point["Net Income"], 0)
 
-  // Previous time range
-  const { startDate, endDate } = calculatePreviousRange(timeRange)
-  const previousTransactions = transactions?.filter(t => dayjs(t.date).isBetween(startDate, endDate, "day", "[]")) ?? []
+  // Calculate the previous time range and total
+  const previousRange = calculatePreviousRange(timeRange)
+  const previousTransactions =
+    transactions?.filter(t => dayjs(t.date).isBetween(previousRange.startDate, previousRange.endDate, "day", "[]")) ??
+    []
   const previousDataPoints = groupTransactionsByTimeRange(previousTransactions, timeRange)
   const previousTotal = previousDataPoints.reduce((acc, point) => acc + point["Net Income"], 0)
 
   // Calculate trend
-  const trend = ((currentTotal - previousTotal) / (previousTotal || 1)) * 100 // Avoid division by zero
+  const trend = ((currentTotal - previousTotal) / (previousTotal || 1)) * 100
   const isTrendingUp = trend >= 0
 
   return (
@@ -88,16 +120,30 @@ export function NetIncomeChart({ timeRange }: Props) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="day"
+              dataKey="time"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={value => dayjs(value).format("MMM DD")}
+              tickFormatter={
+                value =>
+                  timeRange === TimeRangeEnumSchema.Values.daily
+                    ? dayjs(value).format("HH:mm") // Show hours for daily
+                    : timeRange === TimeRangeEnumSchema.Values.weekly
+                      ? dayjs(value).format("MMM DD") // Show date for weekly
+                      : dayjs(value).format("MMM DD") // Show date for monthly (since grouping by day)
+              }
             />
             <ChartTooltip
               cursor={false}
               content={
-                <ChartTooltipContent labelFormatter={label => dayjs(label).format("MMM DD, YYYY")} indicator="dot" />
+                <ChartTooltipContent
+                  labelFormatter={label =>
+                    timeRange === TimeRangeEnumSchema.Values.daily
+                      ? dayjs(label).format("HH:mm")
+                      : dayjs(label).format("MMM DD")
+                  }
+                  indicator="dot"
+                />
               }
             />
             <Area
@@ -112,11 +158,7 @@ export function NetIncomeChart({ timeRange }: Props) {
       </CardContent>
       <CardFooter>
         {dataPoints.length > 0 ? (
-          <p className="ml-auto text-sm text-muted-foreground">
-            {dayjs(dataPoints[0].day).isSame(dayjs(dataPoints[dataPoints.length - 1].day), "month")
-              ? dayjs(dataPoints[0].day).format("MMMM YYYY")
-              : `${dayjs(dataPoints[0].day).format("MMM YYYY")} - ${dayjs(dataPoints[dataPoints.length - 1].day).format("MMM YYYY")}`}
-          </p>
+          <p className="ml-auto text-sm text-muted-foreground">{footerMessage}</p>
         ) : (
           <p className="ml-auto text-sm text-muted-foreground">No data available</p>
         )}
