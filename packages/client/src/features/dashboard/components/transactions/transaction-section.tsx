@@ -11,8 +11,6 @@ import { emojifyTransactionCategory } from "~/features/transaction/lib/emojify-t
 export function TransactionSection() {
   const { transactions } = useTransactionContext()
 
-  console.log({ transactions })
-
   return (
     <section className="flex flex-col">
       <div className="mb-8 flex w-full flex-col gap-4">

@@ -4,6 +4,7 @@ import { useTransactionContext } from "~/features/transaction/providers/transact
 import { Skeleton } from "~/components/ui/skeleton"
 import { createStatCardsReport } from "../../lib/create-stat-cards-report"
 import { getStatDescription } from "../../lib/get-stat-description"
+import { useGoalContext } from "~/features/goal/providers/goal-provider"
 
 interface Props {
   timeRange: TimeRangeEnum
@@ -11,6 +12,15 @@ interface Props {
 
 export function StatCardGridSection({ timeRange }: Props) {
   const { transactions } = useTransactionContext()
+  const { goals } = useGoalContext()
+
+  const pendingGoals = goals?.filter(g => !g.isAccomplished)
+  const pendingCount = pendingGoals?.length || 0
+
+  const goalsReport = {
+    value: pendingCount ? `${pendingCount} goal${pendingCount !== 1 ? "s" : ""}` : "None yet",
+    description: pendingCount ? "Need funding" : "You have no pending goals",
+  }
 
   if (!transactions) {
     return (
@@ -34,7 +44,16 @@ export function StatCardGridSection({ timeRange }: Props) {
           description={getStatDescription(r.percentDifference, timeRange)}
         />
       ))}
-      <Skeleton className="h-36 w-full" /> {/* GOAL API NOT YET INTEGRATED */}
+      {pendingGoals ? (
+        <StatCard
+          key={`stat-card-pending-goals`}
+          title={"Pending goals"}
+          value={goalsReport.value}
+          description={goalsReport.description}
+        />
+      ) : (
+        <Skeleton className="h-36 w-full" />
+      )}
     </section>
   )
 }
