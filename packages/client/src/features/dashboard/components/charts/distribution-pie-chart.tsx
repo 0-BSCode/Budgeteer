@@ -87,30 +87,28 @@ export function DistributionPieChart({ timeRange }: Props) {
       </CardHeader>
       <CardContent>
         <ChartContainer className="max-h-[216px] w-full" config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              left: 0,
-            }}
-          >
+          <BarChart accessibilityLayer data={chartData} layout="vertical">
             <YAxis
               dataKey="category"
               type="category"
               tickLine={false}
+              width={72}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={value => chartConfig[value as keyof typeof chartConfig]?.label}
+              tickFormatter={value => {
+                const label = chartConfig[value as keyof typeof chartConfig]?.label || value
+                return label
+              }}
             />
-            <XAxis dataKey="visitors" type="number" tickFormatter={formatToPhp} hide={false} />
+            <XAxis dataKey="visitors" type="number" tickFormatter={formatToPhp} hide={true} />
             <ChartTooltip
               cursor={false}
               content={
                 <ChartTooltipContent
-                  labelFormatter={undefined}
-                  formatter={value => formatToPhp(Number(value))}
-                  hideLabel
+                  labelFormatter={label => label}
+                  formatter={value => {
+                    return [formatToPhp(Number(value))]
+                  }}
                 />
               }
             />
