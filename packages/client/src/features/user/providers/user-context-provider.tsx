@@ -34,11 +34,11 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
         const fetchedUser = UserPublicDtoSchema.parse(await userService.fetchUserDetails(authToken))
 
         setUser(fetchedUser)
-      } catch (e) {
+      } catch (_) {
         toast({
           variant: "destructive",
           title: "An error occured while fetching user details.",
-          description: (e as Error).message,
+          description: "Your session expired. Please log in again.",
         })
         router.replace("/auth/login")
       }
