@@ -19,7 +19,7 @@ export function formatValueWithPeso(value: number, type?: TransactionTypeEnum): 
   if (!type) {
     return value < 0 ? `- ₱${absoluteValue}` : `₱${absoluteValue}`
   } else {
-    if (value > 1000000) absoluteValue = abbreviateLargeNumbers(Number(absoluteValue))
+    if (value >= 1000000) absoluteValue = abbreviateLargeNumbers(Number(absoluteValue))
 
     return type === TransactionTypeEnumSchema.Values.EXPENSE ? `- ₱${absoluteValue}` : `₱${absoluteValue}`
   }
