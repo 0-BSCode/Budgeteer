@@ -9,6 +9,7 @@ import { useTransactionContext } from "~/features/transaction/providers/transact
 import { TimeRangeEnum, TimeRangeEnumSchema } from "~/types/enums/TimeRangeEnum"
 import { groupTransactionsByTimeRange } from "../../lib/group-transactions-by-time-range"
 import dayjs from "dayjs"
+import { cn } from "~/lib/utils"
 
 const chartConfig = {
   desktop: {
@@ -94,17 +95,28 @@ export function NetIncomeChart({ timeRange }: Props) {
       <CardHeader>
         <CardTitle>Net Income</CardTitle>
         <CardDescription>
-          <div className="ml-auto flex items-center gap-2 text-sm font-medium leading-none text-muted-foreground dark:text-primary">
-            {isTrendingUp ? (
-              <>
-                Trending up by {trend.toFixed(1)}% <TrendingUp className="h-4 w-4" />
-              </>
-            ) : (
-              <>
-                Trending down by {Math.abs(trend).toFixed(1)}% <TrendingDown className="h-4 w-4" />
-              </>
-            )}
-          </div>
+          {currentTotal === previousTotal ? (
+            <div className="ml-auto flex items-center gap-2 text-sm font-medium leading-none text-muted-foreground">
+              Your net income over time
+            </div>
+          ) : (
+            <div
+              className={cn(
+                "ml-auto flex items-center gap-2 text-sm font-medium leading-none",
+                isTrendingUp ? "text-primary" : "text-destructive",
+              )}
+            >
+              {isTrendingUp ? (
+                <>
+                  Trending up by {trend.toFixed(1)}% <TrendingUp className="h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  Trending down by {Math.abs(trend).toFixed(1)}% <TrendingDown className="h-4 w-4" />
+                </>
+              )}
+            </div>
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent>
