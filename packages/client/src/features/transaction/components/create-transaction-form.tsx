@@ -20,6 +20,7 @@ import { format } from "date-fns"
 import { RawTransactionCreateDto, RawTransactionCreateDtoSchema } from "~/types/entities/raw-transaction-create.dto"
 import { useTransactionContext } from "../providers/transaction-provider"
 import { TimePicker } from "~/components/ui/datetime-picker"
+import { emojifyTransactionCategory } from "../lib/emojify-transaction-category"
 
 export default function CreateTransactionForm() {
   const router = useRouter()
@@ -184,13 +185,13 @@ export default function CreateTransactionForm() {
                     {form.getValues("type") === TransactionTypeEnumValues.EXPENSE &&
                       Object.values(ExpenseCategoryEnumValues).map(category => (
                         <SelectItem key={category} value={category}>
-                          {convertToTitleCase(category)}
+                          {emojifyTransactionCategory(category)}
                         </SelectItem>
                       ))}
                     {form.getValues("type") === TransactionTypeEnumValues.INCOME &&
                       Object.values(IncomeCategoryEnumValues).map(category => (
                         <SelectItem key={category} value={category}>
-                          {convertToTitleCase(category)}
+                          {emojifyTransactionCategory(category)}
                         </SelectItem>
                       ))}
                   </SelectContent>
