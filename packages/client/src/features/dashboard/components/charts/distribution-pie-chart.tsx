@@ -25,6 +25,22 @@ const chartConfig = {
     label: "Other",
     color: "hsl(var(--chart-4))",
   },
+  FOOD: {
+    label: "Food",
+    color: "hsl(var(--chart-1))",
+  },
+  ENTERTAINMENT: {
+    label: "Entertainment",
+    color: "hsl(var(--chart-2))",
+  },
+  TRANSPORTATION: {
+    label: "Transportation",
+    color: "hsl(var(--chart-3))",
+  },
+  UTILITIES: {
+    label: "Utilities",
+    color: "hsl(var(--chart-4))",
+  },
 } satisfies ChartConfig
 
 interface Props {
