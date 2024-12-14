@@ -20,7 +20,7 @@ export function TransactionItem({ id, type, description, category, value }: Prop
     <Card className="mb-2 rounded-md p-4 transition-colors hover:bg-muted">
       <Link href={`/transaction/${id}`} className="flex w-full items-center justify-between gap-4 px-1">
         <div className="flex items-center gap-4">
-          <div className="max-w-ch-[] flex flex-col lg:max-w-64">
+          <div className="flex max-w-[15ch] flex-col truncate lg:max-w-64">
             <p className="truncate font-semibold text-foreground">{convertToTitleCase(description)}</p>
             <p className="hidden truncate text-xs font-normal text-muted-foreground lg:block">{category}</p>
             {category.split("•").map((category, index) => (
