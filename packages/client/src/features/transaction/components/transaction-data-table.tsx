@@ -237,7 +237,7 @@ export function TransactionsDataTable() {
             </p>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="ml-6 flex flex-col space-y-5 overflow-x-auto py-4">
+            <div className="ml-6 flex flex-col space-y-5 overflow-x-auto px-2 py-4">
               <div className="flex flex-col space-y-2">
                 <p className="font-bold">Amount Range</p>
                 <div className="flex items-center space-x-5">
