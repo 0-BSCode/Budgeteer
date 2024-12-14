@@ -45,8 +45,16 @@ const userService = {
       }
 
       return user
-    } catch (_) {
-      throw new Error("Invalid input. Please try again with different values.")
+    } catch (e) {
+      if (credentials.password.length < 8) {
+        throw new Error("Invalid input. Password must contain at least 8 characters.")
+      } else if (credentials.username.length < 3) {
+        throw new Error("Invalid input. Username must contain at least 3 characters.")
+      } else if ((e as Error).message.includes("duplicate")) {
+        throw new Error("Invalid input. That username is taken. Please use another name.")
+      } else {
+        throw new Error("Invalid input. Please try again with different values.")
+      }
     }
   },
   updateUserProfilePicture: async (token: string, newProfilePicture: string): Promise<UserPublicDto> => {
