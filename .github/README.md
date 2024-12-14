@@ -1,5 +1,6 @@
 # Budgeteer
-A personal finance tracker.
+
+![](../screenshots/Social%20Banner.png)
 
 ## Prerequisites
 
