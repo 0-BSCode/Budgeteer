@@ -32,8 +32,10 @@ export function GoalSection() {
         </Button>
       </div>
       <div className="grid max-h-[370px] gap-4 overflow-y-auto pr-3">
-        {!sortedGoals?.length ? (
+        {!sortedGoals ? (
           <Skeleton className="h-[370px] w-full" />
+        ) : sortedGoals.length === 0 ? (
+          <span className="text-muted-foreground">No goals set yet.</span>
         ) : (
           sortedGoals.map(g => <GoalCard goalsList={sortedGoals} goal={g} key={`goal-card-${g.id}`} />)
         )}
