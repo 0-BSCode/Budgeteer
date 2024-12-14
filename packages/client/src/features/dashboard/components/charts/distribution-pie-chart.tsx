@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "~/components/ui/chart"
 import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
 import { TimeRangeEnum, TimeRangeEnumSchema } from "~/types/enums/TimeRangeEnum"
+import { IncomeCategoryEnumSchema, ExpenseCategoryEnumSchema } from "@budgeteer/types"
 import dayjs from "dayjs"
 
 const chartConfig = {
@@ -49,11 +50,13 @@ export function DistributionPieChart({ timeRange }: Props) {
 
   const { startDate, endDate } = calculateTimeRange(timeRange)
 
+  const CATEGORY_VALUES = [...IncomeCategoryEnumSchema._def.values, ...ExpenseCategoryEnumSchema._def.values]
+
   const filteredTransactions =
     transactions?.filter(
       t =>
         dayjs(t.date).isBetween(startDate, endDate, "day", "[]") &&
-        ["ALLOWANCE", "SALARY", "BONUS", "OTHER"].includes(t.category) &&
+        CATEGORY_VALUES.includes(t.category) &&
         t.amount > 0,
     ) ?? []
 
