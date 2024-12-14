@@ -249,7 +249,7 @@ export function TransactionsDataTable() {
                       const newValue = [Number(event.target.value) || undefined, amountRange[1]]
                       setAmountRange(newValue)
                     }}
-                    className="max-w-sm"
+                    className="max-w-sm text-sm"
                   />
                   <p>to</p>
                   <Input
@@ -260,7 +260,7 @@ export function TransactionsDataTable() {
                       const newValue = [amountRange[0], Number(event.target.value) || undefined]
                       setAmountRange(newValue)
                     }}
-                    className="max-w-sm"
+                    className="max-w-sm text-sm"
                   />
                 </div>
               </div>
