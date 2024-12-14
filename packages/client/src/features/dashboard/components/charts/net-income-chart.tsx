@@ -10,6 +10,7 @@ import { TimeRangeEnum, TimeRangeEnumSchema } from "~/types/enums/TimeRangeEnum"
 import { groupTransactionsByTimeRange } from "../../lib/group-transactions-by-time-range"
 import dayjs from "dayjs"
 import { cn } from "~/lib/utils"
+import { formatValueWithPeso } from "~/features/transaction/lib/format-value-with-peso"
 
 const chartConfig = {
   desktop: {
@@ -108,11 +109,12 @@ export function NetIncomeChart({ timeRange }: Props) {
             >
               {isTrendingUp ? (
                 <>
-                  Trending up by {trend.toFixed(1)}% <TrendingUp className="h-4 w-4" />
+                  Trending up by {formatValueWithPeso(Number(trend.toFixed(1)))}% <TrendingUp className="h-4 w-4" />
                 </>
               ) : (
                 <>
-                  Trending down by {Math.abs(trend).toFixed(1)}% <TrendingDown className="h-4 w-4" />
+                  Trending down by {formatValueWithPeso(Number(Math.abs(trend).toFixed(1)))}%{" "}
+                  <TrendingDown className="h-4 w-4" />
                 </>
               )}
             </div>
