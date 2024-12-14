@@ -162,9 +162,9 @@ const renderCellContent = (cell: Cell<TransactionDto, unknown>) => {
   switch (tag) {
     case "description":
       return (
-        <Link key={cell.id} href={`/transaction/${cell.row.original.id}`} className="pl-4 hover:underline">
+        <Link key={cell.id} href={`/transaction/${cell.row.original.id}`} className="flex pl-4">
           <ExternalLinkIcon className="mr-2 inline h-4 w-4" />
-          {content}
+          <p className="max-w-[30ch] truncate hover:underline">{content}</p>
         </Link>
       )
     case "type":
@@ -227,7 +227,7 @@ export function TransactionsDataTable() {
   }, [amountRange, dateRange, type, categories])
 
   return (
-    <div className="flex min-w-[600px] max-w-[1200px] flex-col space-y-5">
+    <div className="flex flex-col space-y-5">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>
@@ -237,7 +237,7 @@ export function TransactionsDataTable() {
             </p>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="ml-6 flex flex-col space-y-5 py-4">
+            <div className="ml-6 flex flex-col space-y-5 overflow-x-auto py-4">
               <div className="flex flex-col space-y-2">
                 <p className="font-bold">Amount Range</p>
                 <div className="flex items-center space-x-5">
@@ -249,7 +249,7 @@ export function TransactionsDataTable() {
                       const newValue = [Number(event.target.value) || undefined, amountRange[1]]
                       setAmountRange(newValue)
                     }}
-                    className="max-w-sm"
+                    className="max-w-sm text-sm"
                   />
                   <p>to</p>
                   <Input
@@ -260,7 +260,7 @@ export function TransactionsDataTable() {
                       const newValue = [amountRange[0], Number(event.target.value) || undefined]
                       setAmountRange(newValue)
                     }}
-                    className="max-w-sm"
+                    className="max-w-sm text-sm"
                   />
                 </div>
               </div>

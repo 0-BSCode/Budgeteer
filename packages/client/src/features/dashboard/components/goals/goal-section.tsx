@@ -35,7 +35,7 @@ export function GoalSection() {
         {!sortedGoals ? (
           <Skeleton className="h-[370px] w-full" />
         ) : sortedGoals.length === 0 ? (
-          <span className="text-xs italic text-muted-foreground">No goals yet!</span>
+          <span className="text-center text-muted-foreground">No goals set yet.</span>
         ) : (
           sortedGoals.map(g => <GoalCard goalsList={sortedGoals} goal={g} key={`goal-card-${g.id}`} />)
         )}

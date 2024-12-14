@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LoaderCircle } from "lucide-react"
+import { EyeOffIcon, EyeIcon, LoaderCircle } from "lucide-react"
 import Link from "next/link"
 
 import { cn } from "~/lib/utils"
@@ -23,6 +23,7 @@ interface LoginFormProps {
 
 export function LoginForm({ className }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuth()
   const { toast } = useToast()
   const router = useRouter()
@@ -78,7 +79,25 @@ export function LoginForm({ className }: LoginFormProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" autoCapitalize="none" autoCorrect="off" {...field} />
+                  <div className="relative flex items-center">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      {...field}
+                    />
+                    {showPassword ? (
+                      <EyeIcon
+                        className="absolute right-3 h-4 w-4 hover:cursor-pointer"
+                        onClick={() => setShowPassword(false)}
+                      />
+                    ) : (
+                      <EyeOffIcon
+                        className="absolute right-3 h-4 w-4 hover:cursor-pointer"
+                        onClick={() => setShowPassword(true)}
+                      />
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
