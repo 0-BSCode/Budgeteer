@@ -5,7 +5,10 @@ import { cn } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import Link from "next/link"
 
-const navLinks = [{ label: "Dashboard", path: "/" }]
+const navLinks = [
+  { label: "Dashboard", path: "/" },
+  { label: "Transactions", path: "/transaction" },
+]
 
 export default function NavbarLinks({ className }: { className?: string }) {
   const pathname = usePathname()
