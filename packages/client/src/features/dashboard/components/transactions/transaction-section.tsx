@@ -1,6 +1,6 @@
 import { Button } from "~/components/ui/button"
 import { TransactionItem } from "./transaction-item"
-import { Plus, TableIcon } from "lucide-react"
+import { Plus } from "lucide-react"
 import Link from "next/link"
 import { DashboardSectionHeading } from "../dashboard-section-heading"
 import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
@@ -20,18 +20,11 @@ export function TransactionSection() {
             title="Transactions 🧾"
             description="A summary of your recent activity"
           />
-          <div className="flex gap-2">
-            <Button variant="outline">
-              <Link href="/transaction">
-                <TableIcon className="inline h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild>
-              <Link href="/transaction/new">
-                <Plus /> Create
-              </Link>
-            </Button>
-          </div>
+          <Button asChild>
+            <Link href="/transaction/new">
+              <Plus /> Create
+            </Link>
+          </Button>
         </div>
       </div>
       {!transactions ? (
