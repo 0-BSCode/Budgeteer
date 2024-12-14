@@ -22,10 +22,12 @@ export function TransactionItem({ id, type, description, category, value }: Prop
         <div className="flex items-center gap-4">
           <div className="flex max-w-64 flex-col">
             <p className="truncate font-semibold text-foreground">{convertToTitleCase(description)}</p>
-            <p className="truncate text-xs font-normal text-muted-foreground">{category}</p>
+            <p className="hidden truncate text-xs font-normal text-muted-foreground lg:block">{category}</p>
           </div>
         </div>
-        <p className="text-lg font-bold text-foreground lg:text-2xl">{formatValueWithPeso(value, transactionType)}</p>
+        <p className="line-clamp-1 text-base font-bold text-foreground">
+          {formatValueWithPeso(value, transactionType)}
+        </p>
       </Link>
     </Card>
   )
