@@ -12,7 +12,7 @@ const authService = {
     })
 
     if (typeof response.data !== "string") {
-      throw new Error("The server sent malformatted data. Please contact the website admin.")
+      throw new Error(response.message)
     }
 
     return response.data
@@ -24,7 +24,7 @@ const authService = {
     })
 
     if (typeof response.data !== "string") {
-      throw new Error("The server sent malformatted data. Please contact the website admin.")
+      throw new Error(response.message)
     }
 
     return response.data

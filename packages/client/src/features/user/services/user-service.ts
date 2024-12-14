@@ -17,33 +17,37 @@ const userService = {
       const { data: user, success } = UserPublicDtoSchema.safeParse(response.data)
 
       if (!success) {
-        throw new Error("The server sent malformatted data. Please contact the website admin.")
+        throw new Error(response.message)
       }
 
       return user
     } catch (e) {
       if ((e as Error).name === "AxiosError") {
         if ((e as AxiosError).status) {
-          throw new Error("User session has expired. Please log in again.")
+          throw new Error((e as AxiosError).message)
         }
       }
     }
   },
   updateUserCredentials: async (token: string, credentials: UserUpdateDto): Promise<UserPublicDto> => {
-    const { data: response } = await axios.patch<ResponseDto<UserPublicDto>>(`${BASE_URL}`, credentials, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
+    try {
+      const { data: response } = await axios.patch<ResponseDto<UserPublicDto>>(`${BASE_URL}`, credentials, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
 
-    const { data: user, success } = UserPublicDtoSchema.safeParse(response.data)
+      const { data: user, success } = UserPublicDtoSchema.safeParse(response.data)
 
-    if (!success) {
-      throw new Error("The server sent malformatted data. Please contact the website admin.")
+      if (!success) {
+        throw new Error(response.message)
+      }
+
+      return user
+    } catch (_) {
+      throw new Error("Invalid input. Please try again with different values.")
     }
-
-    return user
   },
   updateUserProfilePicture: async (token: string, newProfilePicture: string): Promise<UserPublicDto> => {
     const { data: response } = await axios.patch<ResponseDto<UserPublicDto>>(
@@ -60,7 +64,7 @@ const userService = {
     const { data: user, success } = UserPublicDtoSchema.safeParse(response.data)
 
     if (!success) {
-      throw new Error("The server sent malformatted data. Please contact the website admin.")
+      throw new Error("The profile picture was malformatted!")
     }
 
     return user
