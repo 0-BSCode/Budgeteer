@@ -50,7 +50,8 @@
     "server:start": "bun run --cwd=\"packages/server\" start",
     "all:build": "docker-compose build",
     "all:up": "docker-compose -f docker-compose.yml up",
-    "all:down": "docker-compose -f docker-compose.yml down"
+    "all:down": "docker-compose -f docker-compose.yml down",
+    "all:dev": "bun run runner.ts"
   },
   "workspaces": [
     "packages/*"
