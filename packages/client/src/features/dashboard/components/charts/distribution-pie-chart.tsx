@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "~/components/ui/chart"
 import { useTransactionContext } from "~/features/transaction/providers/transaction-provider"
 import { TimeRangeEnum, TimeRangeEnumSchema } from "~/types/enums/TimeRangeEnum"
-import { IncomeCategoryEnumSchema, ExpenseCategoryEnumSchema } from "@budgeteer/types"
+import { IncomeCategoryEnumSchema, ExpenseCategoryEnumSchema, TransactionTypeEnumSchema } from "@budgeteer/types"
 import dayjs from "dayjs"
 
 const chartConfig = {
@@ -23,6 +23,22 @@ const chartConfig = {
   },
   OTHER: {
     label: "Other",
+    color: "hsl(var(--chart-4))",
+  },
+  FOOD: {
+    label: "Food",
+    color: "hsl(var(--chart-1))",
+  },
+  ENTERTAINMENT: {
+    label: "Entertainment",
+    color: "hsl(var(--chart-2))",
+  },
+  TRANSPORTATION: {
+    label: "Transportation",
+    color: "hsl(var(--chart-3))",
+  },
+  UTILITIES: {
+    label: "Utilities",
     color: "hsl(var(--chart-4))",
   },
 } satisfies ChartConfig
@@ -61,7 +77,9 @@ export function DistributionPieChart({ timeRange }: Props) {
     ) ?? []
 
   const groupedData = filteredTransactions.reduce<Record<string, number>>((acc, transaction) => {
-    acc[transaction.category] = (acc[transaction.category] || 0) + transaction.amount
+    if (transaction.type === TransactionTypeEnumSchema.Values.INCOME) {
+      acc[transaction.category] = (acc[transaction.category] || 0) + transaction.amount
+    }
     return acc
   }, {})
 
