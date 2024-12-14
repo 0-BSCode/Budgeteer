@@ -38,7 +38,7 @@ export function TransactionSection() {
         <Skeleton className="h-[370px] w-full" />
       ) : transactions.length === 0 ? (
         <div className="gap-2 pr-4">
-          <span className="text-muted-foreground">No transactions recorded yet.</span>
+          <span className="text-xs italic text-muted-foreground">No transactions yet!</span>
         </div>
       ) : (
         <div className="h-[370px] gap-2 overflow-y-scroll pr-4">
