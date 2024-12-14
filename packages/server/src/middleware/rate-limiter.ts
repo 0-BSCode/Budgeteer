@@ -3,7 +3,7 @@ import { getConnInfo } from "hono/bun"
 
 export const limiter = rateLimiter({
   windowMs: 1 * 60 * 1000, // 1 minute
-  limit: 15,
+  limit: 300, // 100 requests per minute (adjust as needed)
   standardHeaders: "draft-7",
   keyGenerator: c => {
     const connInfo = getConnInfo(c)
